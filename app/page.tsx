@@ -1,6 +1,13 @@
 import Link from "next/link";
 import { DeliverableCard } from "@/components/deliverable-card";
-import { getConfig, getDeliverables, getStatusAsOf } from "@/lib/content";
+import { CounterStrip } from "@/components/weekly-update";
+import {
+  getConfig,
+  getDeliverables,
+  getLatestWeeklyUpdate,
+  getStatusAsOf,
+} from "@/lib/content";
+import { formatDateRange, weekParts } from "@/lib/format";
 import type { DeliverableStatus } from "@/lib/types";
 
 function formatAda(amount: number): string {
@@ -12,6 +19,7 @@ export default function Home() {
   const config = getConfig();
   const deliverables = getDeliverables();
   const asOf = getStatusAsOf();
+  const latest = getLatestWeeklyUpdate();
 
   const counts = deliverables.reduce<Record<DeliverableStatus, number>>(
     (acc, d) => {
@@ -93,6 +101,39 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* Latest weekly update — the living proof-of-work (FR-1). */}
+      {latest && (
+        <section className="border-t border-border py-14">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground">
+                Latest update
+              </h2>
+              <p className="mt-1 text-sm text-muted">
+                {weekParts(latest.week).label} · {formatDateRange(latest.weekStart, latest.weekEnd)}
+              </p>
+            </div>
+            <Link
+              href="/updates"
+              className="shrink-0 font-mono text-xs uppercase tracking-wider text-[color:var(--on-primary-link)] hover:underline"
+            >
+              All updates ↗
+            </Link>
+          </div>
+
+          <div className="mt-6">
+            <CounterStrip counters={latest.counters} />
+          </div>
+
+          <Link
+            href={`/updates/${latest.slug}/`}
+            className="mt-4 inline-block font-mono text-xs uppercase tracking-wider text-[color:var(--on-primary-link)] hover:underline"
+          >
+            Read {weekParts(latest.week).label} ↗
+          </Link>
+        </section>
+      )}
     </div>
   );
 }

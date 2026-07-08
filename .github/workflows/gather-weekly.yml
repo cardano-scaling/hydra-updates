@@ -1,0 +1,53 @@
+# Weekly activity gatherer (docs/ARCHITECTURE.md ADR-8).
+#
+# Runs every Monday 08:00 UTC, covering the prior Mon–Sun calendar week, and
+# opens a DRAFT PR with the pre-filled weekly update. A human writes the
+# narrative and merges; merging is the publish action (deploy.yml takes over).
+name: gather-weekly
+
+on:
+  schedule:
+    - cron: "0 8 * * 1" # Mondays 08:00 UTC
+  workflow_dispatch:
+    inputs:
+      week:
+        description: "ISO week to gather (e.g. 2026-W28). Defaults to the prior week."
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  gather:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Gather activity
+        env:
+          # Built-in token is enough: all tracked repos are public (ADR-10).
+          GITHUB_TOKEN: ${{ github.token }}
+        run: npx tsx scripts/gather.ts ${{ inputs.week && format('--week {0}', inputs.week) || '' }}
+
+      - name: Open draft PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: weekly-update
+          draft: true
+          add-paths: content/weekly/*.md
+          commit-message: "chore(weekly): gather activity"
+          title: "Weekly update"
+          body: |
+            Auto-gathered weekly activity, grouped by deliverable.
+
+            **Before merging:** fill in the **Highlights** section with the
+            week's narrative. Nothing publishes until this PR is merged (ADR-8).

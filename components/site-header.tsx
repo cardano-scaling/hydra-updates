@@ -1,19 +1,31 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ThemeToggle } from "./theme-toggle";
 
-// Only routes that exist in this slice are linked, to avoid dead nav.
-// Roadmap / Updates / Proposal / Links are added in later slices.
 const NAV = [
   { href: "/", label: "Overview" },
   { href: "/deliverables", label: "Deliverables" },
+  { href: "/roadmap", label: "Roadmap" },
+  { href: "/updates", label: "Updates" },
+  { href: "/proposal", label: "Proposal" },
+  { href: "/links", label: "Links" },
 ];
 
+function isActive(pathname: string, href: string): boolean {
+  const path = pathname.replace(/\/+$/, "") || "/"; // normalize trailing slash
+  return href === "/" ? path === "/" : path === href || path.startsWith(`${href}/`);
+}
+
 export function SiteHeader() {
+  const pathname = usePathname();
+
   return (
     <header className="sticky top-0 z-10 border-b border-border bg-background/85 backdrop-blur">
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-6">
-        <Link href="/" className="group flex items-baseline gap-2">
-          <span className="font-mono text-xs uppercase tracking-[0.2em] text-primary">
+      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-3 px-6">
+        <Link href="/" className="group flex shrink-0 items-baseline gap-2">
+          <span className="hidden font-mono text-xs uppercase tracking-[0.2em] text-primary sm:inline">
             cardano
           </span>
           <span className="font-display text-lg font-semibold tracking-tight text-foreground group-hover:text-primary">
@@ -21,20 +33,29 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="flex items-center gap-1">
-          {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="rounded-md px-3 py-2 font-mono text-xs uppercase tracking-wider text-muted transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-            >
-              {item.label}
-            </Link>
-          ))}
-          <span className="ml-2">
+        <div className="flex min-w-0 items-center gap-1">
+          {/* Scrolls horizontally on narrow screens rather than wrapping the header. */}
+          <nav className="no-scrollbar flex items-center gap-1 overflow-x-auto">
+            {NAV.map((item) => {
+              const active = isActive(pathname, item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  aria-current={active ? "page" : undefined}
+                  className={`whitespace-nowrap rounded-md px-3 py-2 font-mono text-xs uppercase tracking-wider transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
+                    active ? "text-primary" : "text-muted hover:text-foreground"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+          <span className="ml-1 shrink-0">
             <ThemeToggle />
           </span>
-        </nav>
+        </div>
       </div>
     </header>
   );

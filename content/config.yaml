@@ -18,19 +18,26 @@ proposal:
     - TxPipe
 
 # GitHub logins of team members. Used to attribute contributions in shared
-# repos (ADR-5). Placeholder.
-team:
+# repos (ADR-5). Placeholder — replace with the real roster.
+roster:
   - rober-m
 
-# Curated repositories to track. Each declares which deliverable it belongs to
-# and whether only team-authored activity counts (teamOnly: true for shared /
-# external repos). Placeholder list — the gatherer is not built yet.
+# Curated repositories the gatherer tracks (ADR-4). Each declares:
+#   deliverable: which deliverable (D1…D8) its activity rolls up to, or null
+#                to fall into the "Other / Reactive" bucket (ADR-6).
+#   teamOnly:    true for shared/external repos — count only activity authored
+#                by a roster member (ADR-5); false (default) for owned repos.
+# Placeholder list — replace URLs with the initiative's real public repos.
 repos:
-  [
-    "https://github.com/input-output-hk/cardano-init",
-    "https://github.com/input-output-hk/contracts-library",
-    "https://github.com/cardano-foundation/developer-portal",
-  ]
+  - url: "https://github.com/input-output-hk/cardano-init"
+    deliverable: D3
+    teamOnly: false
+  - url: "https://github.com/input-output-hk/contracts-library"
+    deliverable: D5
+    teamOnly: false
+  - url: "https://github.com/cardano-foundation/developer-portal"
+    deliverable: D4
+    teamOnly: true
 
 # Curated jump-off points shown on the Links hub (built in a later slice).
 links:

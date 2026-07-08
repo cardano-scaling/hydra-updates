@@ -28,6 +28,19 @@ export interface Deliverable {
   links: DeliverableLink[];
 }
 
+/**
+ * A curated repository the gatherer tracks (ADR-4/5/6). `deliverable` is the id
+ * of the deliverable it maps to (D1…D8) or null to fall into the Reactive bucket.
+ * `teamOnly` (ADR-5): for shared/external repos, count only roster-authored work.
+ */
+export interface TrackedRepo {
+  url: string;
+  owner: string;
+  name: string;
+  deliverable: string | null;
+  teamOnly: boolean;
+}
+
 export interface SiteConfig {
   site: {
     title: string;
@@ -43,7 +56,58 @@ export interface SiteConfig {
     lead: string;
     collaborators: string[];
   };
-  team: string[];
-  repos: unknown[];
+  /** GitHub logins used to attribute contributions in shared repos (ADR-5). */
+  roster: string[];
+  repos: TrackedRepo[];
   links: DeliverableLink[];
+}
+
+// --- Weekly updates (gathered activity, ADR-6/7) ---------------------------
+
+export const ACTIVITY_TYPES = [
+  "pr",
+  "issue-opened",
+  "issue-closed",
+  "release",
+] as const;
+export type ActivityType = (typeof ACTIVITY_TYPES)[number];
+
+/** The special group key for activity that maps to no deliverable (ADR-6). */
+export const REACTIVE_GROUP = "reactive";
+
+export interface ActivityItem {
+  type: ActivityType;
+  title: string;
+  url: string;
+  repo: string; // "owner/name"
+  author: string;
+}
+
+export interface WeeklyGroup {
+  /** A deliverable id (D1…D8) or REACTIVE_GROUP. */
+  deliverable: string;
+  items: ActivityItem[];
+  /** Per-repo raw commit counts — noise summarized, not itemized (ADR-7). */
+  commitCounts: Record<string, number>;
+}
+
+export interface WeeklyCounters {
+  prsMerged: number;
+  issuesClosed: number;
+  issuesOpened: number;
+  releases: number;
+  reposTouched: number;
+  commits: number;
+}
+
+export interface WeeklyUpdate {
+  week: string; // ISO week key, e.g. "2026-W28"
+  slug: string; // URL-safe, lowercased, e.g. "2026-w28"
+  weekStart: string; // YYYY-MM-DD (Monday)
+  weekEnd: string; // YYYY-MM-DD (Sunday)
+  generatedAt: string; // YYYY-MM-DD
+  counters: WeeklyCounters;
+  groups: WeeklyGroup[];
+  /** Human-authored narrative (Markdown body below the frontmatter). */
+  body: string;
 }
