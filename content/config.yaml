@@ -1,0 +1,40 @@
+# Site-wide configuration for the DevX Initiative tracker.
+site:
+  title: Cardano DevX Initiative
+  tagline: A transparent, weekly-updated tracker for a funded Cardano Developer Experience program.
+  description: >-
+    Track delivery of Input Output's funded Cardano Developer Experience
+    Initiative: deliverable status, milestones, and weekly progress.
+  repoUrl: "https://github.com/rober-m/devx-updates"
+
+proposal:
+  treasuryAskAda: 3601926
+  treasuryAskUsd: 864462
+  windowStart: Q3-2026
+  windowEnd: Q4-2026
+  lead: Robertino Martinez
+  collaborators:
+    - Intersect Developer Advocate Program
+    - TxPipe
+
+# GitHub logins of team members. Used to attribute contributions in shared
+# repos (ADR-5). Placeholder.
+team:
+  - rober-m
+
+# Curated repositories to track. Each declares which deliverable it belongs to
+# and whether only team-authored activity counts (teamOnly: true for shared /
+# external repos). Placeholder list — the gatherer is not built yet.
+repos:
+  [
+    "https://github.com/input-output-hk/cardano-init",
+    "https://github.com/input-output-hk/contracts-library",
+    "https://github.com/cardano-foundation/developer-portal",
+  ]
+
+# Curated jump-off points shown on the Links hub (built in a later slice).
+links:
+  - label: Cardano Developer Portal
+    url: "https://developers.cardano.org"
+  - label: Cardano Discord
+    url: "https://discord.gg/cardano"

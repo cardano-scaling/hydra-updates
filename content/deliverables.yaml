@@ -1,0 +1,149 @@
+# Deliverables for the Developer Experience Initiative.
+#
+# This file is the MANUAL source of truth for each deliverable's status
+# (see docs/ARCHITECTURE.md ADR-3). Auto-gathered GitHub activity is shown
+# alongside these but never overrides the status set here.
+#
+# status:  not-started | in-progress | done | blocked
+# quarter: Q3-2026 | Q4-2026 | ongoing
+# Update `statusUpdatedAt` (YYYY-MM-DD) whenever you change a status.
+
+- id: D1
+  slug: community-alignment
+  title: Community Alignment
+  quarter: Q3-2026
+  status: in-progress
+  statusUpdatedAt: 2026-07-06
+  summary: >-
+    Align the ecosystem around one DevX strategy and map all existing tooling
+    to create a baseline for collaboration and reactive work.
+  description: >-
+    Bring companies and entities that contribute to Cardano DevX under a shared
+    strategy, and produce a map of ecosystem tooling. This baseline drives the
+    Community Collaboration bounties and the Reactive workstream, and grounds
+    every other deliverable in what already exists.
+  repos: []
+  links:
+    - label: DevX strategy (draft)
+      url: "#"
+
+- id: D2
+  slug: developer-outreach
+  title: Developer Outreach
+  quarter: Q3-2026
+  status: in-progress
+  statusUpdatedAt: 2026-07-06
+  summary: >-
+    Support developers where they already are, turn scattered questions into
+    documentation, and define ideal onboarding for Pentad integrations.
+  description: >-
+    Answer questions in existing channels (e.g. Discord), translate recurring
+    questions and tribal knowledge into issues and documentation PRs, create
+    content about the Contracts Library and Setup CLI, and support Pentad
+    integrations (Stablecoins, Bridges, Oracles) with a focus on developer UX.
+  repos: []
+  links: []
+
+- id: D3
+  slug: cardano-init
+  title: cardano-init (Setup CLI)
+  quarter: Q3-2026
+  status: in-progress
+  statusUpdatedAt: 2026-07-06
+  summary: >-
+    A "create-react-app" for Cardano: pick a stack, get a project set up and
+    ready to build in minutes, with AI/LLM-native commands and a plugin system.
+  description: >-
+    A high-level umbrella CLI that leverages identified tooling so that starting
+    a new Cardano project takes minutes. The initial version ships with a
+    reduced stack but a plugin architecture so anyone can add their tooling
+    without knowing the tool's internals. Everything that can be upstreamed will
+    be upstreamed to improve the underlying tools.
+  repos: []
+  links: []
+
+- id: D4
+  slug: developer-hub
+  title: Developer HUB
+  quarter: Q3-2026
+  status: in-progress
+  statusUpdatedAt: 2026-07-06
+  summary: >-
+    One entry point for developers new to Cardano, built on the Developer Portal
+    with onboarding paths for three personas and content LLMs can consume.
+  description: >-
+    In collaboration with the Cardano Foundation, Intersect, and the community,
+    make the Developer Portal the canonical entry point. Define and create
+    onboarding content for EVM/blockchain developers, Web2 developers, and
+    technical entrepreneurs; add a CI/CD pipeline that keeps code snippets
+    working; and restructure the portal to optimize for onboarding and LLM use.
+  repos: []
+  links: []
+
+- id: D5
+  slug: contracts-library
+  title: Contracts Library
+  quarter: Q3-2026
+  status: not-started
+  statusUpdatedAt: 2026-07-06
+  summary: >-
+    An OpenZeppelin-style library of battle-tested, ready-to-use Cardano smart
+    contracts as building blocks, references, or ready-to-go implementations.
+  description: >-
+    Design and implement standardized, reusable on- and off-chain contracts with
+    an emphasis on DeFi, plus the library's infrastructure and website. The
+    deliverable ships at least five ready-to-audit contracts (e.g. Vesting,
+    Programmable Tokens, DEX, Swap, Lending). A Cardano High Assurance proposal
+    is expected to formally prove properties of these contracts.
+  repos: []
+  links: []
+
+- id: D6
+  slug: community-collaboration
+  title: Community Collaboration
+  quarter: Q4-2026
+  status: not-started
+  statusUpdatedAt: 2026-07-06
+  summary: >-
+    Fund improvements to key DevX tools and libraries via bounties paid to
+    maintainers and contributors, targeting the biggest pain points.
+  description: >-
+    Incentivize improvements to community-maintained DevX tooling through
+    bounties, emphasizing the biggest pain points such as on-chain/off-chain
+    interaction, hard-fork readiness, and introspection/serialization issues.
+  repos: []
+  links: []
+
+- id: D7
+  slug: measurement
+  title: Measurement
+  quarter: Q4-2026
+  status: not-started
+  statusUpdatedAt: 2026-07-06
+  summary: >-
+    A hackathon at the end of the program to measure developer experience and
+    the progress made, designed to control for confounding variables.
+  description: >-
+    Run an end-of-program hackathon structured differently from a typical one so
+    it can control for variables that would otherwise contaminate the data. The
+    results give a clear read on progress made and the next steps for improving
+    developer experience.
+  repos: []
+  links: []
+
+- id: D8
+  slug: reactive
+  title: Reactive
+  quarter: ongoing
+  status: in-progress
+  statusUpdatedAt: 2026-07-06
+  summary: >-
+    Address high-ROI opportunities surfaced through ecosystem alignment, with
+    transparent reporting of what we picked and why.
+  description: >-
+    Targeted contributions to community-maintained tooling, additional SDK
+    integrations, filling key documentation gaps, and building new, currently
+    unidentified tooling. Selection criteria, decisions, and outcomes are
+    reported transparently.
+  repos: []
+  links: []

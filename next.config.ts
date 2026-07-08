@@ -1,7 +1,18 @@
 import type { NextConfig } from "next";
 
+// GitHub Pages serves a project site under a subpath (e.g. /devx-updates).
+// The deploy workflow sets NEXT_PUBLIC_BASE_PATH; local dev leaves it empty so
+// the site works at the root of localhost:3000.
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Fully static export -> ./out, hostable on GitHub Pages (see docs/ARCHITECTURE.md ADR-1).
+  output: "export",
+  // Routes resolve as dir/index.html, which Pages serves without rewrites.
+  trailingSlash: true,
+  basePath,
+  // Static export cannot run the default image optimizer.
+  images: { unoptimized: true },
 };
 
 export default nextConfig;

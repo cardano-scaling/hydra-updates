@@ -1,26 +1,121 @@
 @import "tailwindcss";
 
+/*
+  DevX Initiative tracker — "delivery ledger" design system.
+  Cardano-aligned palette on a deep navy ink; Space Grotesk (display) +
+  Geist Sans (body) + Geist Mono (data). See docs/ARCHITECTURE.md ADR-13.
+*/
+
+/* Manual theme toggle wins over prefers-color-scheme: drive `dark:` from the
+   data-theme attribute set on <html>. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Light theme (cool, blue-tinted — deliberately not cream). */
+  --background: #f5f7fb;
+  --surface: #ffffff;
+  --surface-2: #eef2f9;
+  --foreground: #0a1428;
+  --muted: #5a6b87;
+  --border: #dce3ef;
+  --primary: #0033ad; /* Cardano blue */
+  --primary-strong: #002a8f;
+  --primary-foreground: #ffffff;
+  --on-primary-link: #0033ad;
+
+  --status-done: #1f9d6b;
+  --status-progress: #b8791c;
+  --status-blocked: #c6403b;
+  --status-todo: #7a8aa6;
+}
+
+:root[data-theme="dark"],
+.dark-seed {
+  /* Dark theme (Cardano navy ink, not pure black). */
+  --background: #0a1428;
+  --surface: #111e38;
+  --surface-2: #16264a;
+  --foreground: #e8edf7;
+  --muted: #8b9bb8;
+  --border: #22314f;
+  --primary: #3d7bff; /* brightened Cardano blue for contrast on dark */
+  --primary-strong: #5b8def;
+  --primary-foreground: #06122b;
+  --on-primary-link: #3d7bff;
+
+  --status-done: #3fc98d;
+  --status-progress: #e5a94e;
+  --status-blocked: #f0645e;
+  --status-todo: #8b9bb8;
+}
+
+/* Follow the OS when no explicit choice has been made. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --background: #0a1428;
+    --surface: #111e38;
+    --surface-2: #16264a;
+    --foreground: #e8edf7;
+    --muted: #8b9bb8;
+    --border: #22314f;
+    --primary: #3d7bff;
+    --primary-strong: #5b8def;
+    --primary-foreground: #06122b;
+    --on-primary-link: #3d7bff;
+
+    --status-done: #3fc98d;
+    --status-progress: #e5a94e;
+    --status-blocked: #f0645e;
+    --status-todo: #8b9bb8;
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-strong: var(--primary-strong);
+  --color-primary-foreground: var(--primary-foreground);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-status-done: var(--status-done);
+  --color-status-progress: var(--status-progress);
+  --color-status-blocked: var(--status-blocked);
+  --color-status-todo: var(--status-todo);
+
+  --font-display: var(--font-space-grotesk), var(--font-geist-sans), sans-serif;
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Ledger reveal — a single restrained load animation, staggered per row. */
+@keyframes ledger-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ledger-in {
+  animation: ledger-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ledger-in {
+    animation: none;
+  }
 }
