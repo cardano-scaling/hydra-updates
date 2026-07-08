@@ -22,6 +22,10 @@ export interface Deliverable {
   quarter: Quarter;
   status: DeliverableStatus;
   statusUpdatedAt: string; // YYYY-MM-DD
+  /** Committed milestone deadline (YYYY-MM-DD), or null for ongoing work. */
+  dueDate: string | null;
+  /** When it was actually delivered (YYYY-MM-DD), or null if not yet. */
+  deliveredDate: string | null;
   summary: string;
   description: string;
   repos: string[];

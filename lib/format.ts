@@ -20,6 +20,11 @@ export function formatDate(ymd: string): string {
   });
 }
 
+/** "2026-07-06" -> "Jul 6". */
+export function formatShort(ymd: string): string {
+  return new Date(`${ymd}T00:00:00Z`).toLocaleDateString("en-US", DATE_OPTS);
+}
+
 /** ISO week key "2026-W27" -> { label: "Week 27", year: "2026" }. */
 export function weekParts(week: string): { label: string; year: string } {
   const m = week.match(/^(\d{4})-W(\d+)$/i);

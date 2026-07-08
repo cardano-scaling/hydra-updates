@@ -78,6 +78,8 @@ function normalizeDeliverable(raw: unknown, index: number): Deliverable {
     quarter: d.quarter as Quarter,
     status: d.status as DeliverableStatus,
     statusUpdatedAt: d.statusUpdatedAt as string,
+    dueDate: asString(d.dueDate) ? d.dueDate : null,
+    deliveredDate: asString(d.deliveredDate) ? d.deliveredDate : null,
     summary: d.summary as string,
     description: d.description as string,
     repos,

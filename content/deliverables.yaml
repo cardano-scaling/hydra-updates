@@ -7,13 +7,19 @@
 # status:  not-started | in-progress | done | blocked
 # quarter: Q3-2026 | Q4-2026 | ongoing
 # Update `statusUpdatedAt` (YYYY-MM-DD) whenever you change a status.
+#
+# dueDate:       committed milestone deadline (YYYY-MM-DD), or omit for ongoing work.
+# deliveredDate: when it was actually delivered (YYYY-MM-DD); omit until delivered.
+#                We aim to deliver before the deadline — the home timeline shows both.
 
 - id: D1
   slug: community-alignment
   title: Community Alignment
   quarter: Q3-2026
-  status: in-progress
+  status: done
   statusUpdatedAt: 2026-07-06
+  dueDate: "2026-07-31"
+  deliveredDate: "2026-07-06"
   summary: >-
     Align the ecosystem around one DevX strategy and map all existing tooling
     to create a baseline for collaboration and reactive work.
@@ -33,6 +39,7 @@
   quarter: Q3-2026
   status: in-progress
   statusUpdatedAt: 2026-07-06
+  dueDate: "2026-09-30"
   summary: >-
     Support developers where they already are, turn scattered questions into
     documentation, and define ideal onboarding for Pentad integrations.
@@ -50,6 +57,7 @@
   quarter: Q3-2026
   status: in-progress
   statusUpdatedAt: 2026-07-06
+  dueDate: "2026-09-15"
   summary: >-
     A "create-react-app" for Cardano: pick a stack, get a project set up and
     ready to build in minutes, with AI/LLM-native commands and a plugin system.
@@ -68,6 +76,7 @@
   quarter: Q3-2026
   status: in-progress
   statusUpdatedAt: 2026-07-06
+  dueDate: "2026-09-30"
   summary: >-
     One entry point for developers new to Cardano, built on the Developer Portal
     with onboarding paths for three personas and content LLMs can consume.
@@ -86,6 +95,7 @@
   quarter: Q3-2026
   status: not-started
   statusUpdatedAt: 2026-07-06
+  dueDate: "2026-09-30"
   summary: >-
     An OpenZeppelin-style library of battle-tested, ready-to-use Cardano smart
     contracts as building blocks, references, or ready-to-go implementations.
@@ -104,6 +114,7 @@
   quarter: Q4-2026
   status: not-started
   statusUpdatedAt: 2026-07-06
+  dueDate: "2026-11-30"
   summary: >-
     Fund improvements to key DevX tools and libraries via bounties paid to
     maintainers and contributors, targeting the biggest pain points.
@@ -120,6 +131,7 @@
   quarter: Q4-2026
   status: not-started
   statusUpdatedAt: 2026-07-06
+  dueDate: "2026-12-15"
   summary: >-
     A hackathon at the end of the program to measure developer experience and
     the progress made, designed to control for confounding variables.

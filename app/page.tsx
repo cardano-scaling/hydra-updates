@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { DeliverableCard } from "@/components/deliverable-card";
+import { DeliverableTimeline } from "@/components/deliverable-timeline";
 import { CounterStrip } from "@/components/weekly-update";
 import {
   getConfig,
@@ -78,7 +78,8 @@ export default function Home() {
               Deliverables
             </h2>
             <p className="mt-1 text-sm text-muted">
-              Manually maintained status{asOf ? ` · as of ${asOf}` : ""}.
+              Committed deadlines vs. actual delivery across the program
+              {asOf ? ` · status as of ${asOf}` : ""}.
             </p>
           </div>
           <Link
@@ -89,16 +90,8 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {deliverables.map((d, i) => (
-            <DeliverableCard
-              key={d.id}
-              deliverable={d}
-              as="link"
-              className="ledger-in"
-              style={{ animationDelay: `${i * 60}ms` }}
-            />
-          ))}
+        <div className="mt-8">
+          <DeliverableTimeline deliverables={deliverables} />
         </div>
       </section>
 

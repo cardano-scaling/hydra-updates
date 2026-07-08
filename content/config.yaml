@@ -17,10 +17,15 @@ proposal:
     - Intersect Developer Advocate Program
     - TxPipe
 
-# GitHub logins of team members. Used to attribute contributions in shared
-# repos (ADR-5). Placeholder — replace with the real roster.
 roster:
   - rober-m
+  - alegadea
+  - federicoweill
+  - manugunther
+  - franciscojoray
+  - sofia-bobbiesi
+  - RSoulatIOHK
+  - buddhisthead
 
 # Curated repositories the gatherer tracks (ADR-4). Each declares:
 #   deliverable: which deliverable (D1…D8) its activity rolls up to, or null
