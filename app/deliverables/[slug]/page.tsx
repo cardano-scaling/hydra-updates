@@ -7,6 +7,9 @@ import { getDeliverableBySlug, getDeliverables, getWeeklyUpdates } from "@/lib/c
 import { formatDate, formatDateRange, weekParts } from "@/lib/format";
 import { REACTIVE_GROUP, type Deliverable, type WeeklyGroup, type WeeklyUpdate } from "@/lib/types";
 
+// The deliverable whose full write-up lives on the Strategy page.
+const STRATEGY_DELIVERABLE_SLUG = "community-alignment";
+
 // Static export: one page per deliverable, 404 anything else.
 export const dynamicParams = false;
 
@@ -73,6 +76,15 @@ export default async function DeliverablePage({
           {d.title}
         </h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-foreground/80">{d.description}</p>
+
+        {d.slug === STRATEGY_DELIVERABLE_SLUG && (
+          <Link
+            href="/strategy"
+            className="mt-6 inline-flex items-center gap-2 rounded-md border border-border bg-surface px-3 py-2 font-mono text-xs uppercase tracking-wider text-foreground transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          >
+            Read the DevX strategy ↗
+          </Link>
+        )}
 
         {(d.dueDate || d.deliveredDate) && (
           <dl className="mt-6 flex flex-wrap gap-x-10 gap-y-2 font-mono text-xs">

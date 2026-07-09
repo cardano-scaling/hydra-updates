@@ -319,6 +319,17 @@ export function getProposalMarkdown(): string {
   return proposalCache;
 }
 
+let alignmentCache: string | null = null;
+
+/** The Community Alignment / DevX strategy document, as Markdown. */
+export function getCommunityAlignmentMarkdown(): string {
+  if (alignmentCache !== null) return alignmentCache;
+  const raw = readFileSync(join(CONTENT_DIR, "community-alignment.md"), "utf8");
+  if (!raw.trim()) fail("community-alignment.md", "document is empty");
+  alignmentCache = raw;
+  return alignmentCache;
+}
+
 // --- Impact ----------------------------------------------------------------
 
 function asNumberOrNull(v: unknown): number | null {

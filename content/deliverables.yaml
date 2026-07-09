@@ -29,9 +29,7 @@
     Community Collaboration bounties and the Reactive workstream, and grounds
     every other deliverable in what already exists.
   repos: []
-  links:
-    - label: DevX strategy (draft)
-      url: "#"
+  links: []
 
 - id: D2
   slug: developer-outreach
