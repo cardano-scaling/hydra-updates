@@ -9,6 +9,10 @@ import {
   type Deliverable,
   type DeliverableStatus,
   type DeliverableUpdate,
+  type GrowthMetric,
+  type ImpactConfig,
+  type ImpactSeries,
+  type PastMetric,
   type Quarter,
   type SiteConfig,
   type TrackedRepo,
@@ -313,4 +317,96 @@ export function getProposalMarkdown(): string {
   if (!raw.trim()) fail("proposal/proposal.md", "proposal is empty");
   proposalCache = raw;
   return proposalCache;
+}
+
+// --- Impact ----------------------------------------------------------------
+
+function asNumberOrNull(v: unknown): number | null {
+  return typeof v === "number" && Number.isFinite(v) ? v : null;
+}
+
+function normalizeSeries(raw: unknown): ImpactSeries[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.flatMap((s) => {
+    if (typeof s !== "object" || s === null) return [];
+    const obj = s as Record<string, unknown>;
+    if (!asString(obj.name)) return [];
+    const points = Array.isArray(obj.points)
+      ? obj.points.flatMap((p) => {
+          if (typeof p !== "object" || p === null) return [];
+          const pt = p as Record<string, unknown>;
+          if (asString(pt.label) && typeof pt.value === "number" && Number.isFinite(pt.value)) {
+            return [{ label: pt.label, value: pt.value }];
+          }
+          return [];
+        })
+      : [];
+    return [{ name: obj.name, points }];
+  });
+}
+
+function normalizeGrowthMetric(raw: unknown): GrowthMetric[] {
+  if (typeof raw !== "object" || raw === null) return [];
+  const m = raw as Record<string, unknown>;
+  if (!asString(m.name)) return [];
+  return [
+    {
+      name: m.name,
+      yLabel: asString(m.yLabel) ? m.yLabel : "",
+      illustrative: m.illustrative !== false,
+      series: normalizeSeries(m.series),
+    },
+  ];
+}
+
+function normalizePastMetric(raw: unknown): PastMetric[] {
+  if (typeof raw !== "object" || raw === null) return [];
+  const m = raw as Record<string, unknown>;
+  if (!asString(m.name)) return [];
+  return [
+    {
+      name: m.name,
+      note: asString(m.note) ? m.note : "",
+      baseline: asNumberOrNull(m.baseline),
+      target: asNumberOrNull(m.target),
+    },
+  ];
+}
+
+let impactCache: ImpactConfig | null = null;
+
+/** Ecosystem impact KPIs. Values may be illustrative until measured. */
+export function getImpact(): ImpactConfig {
+  if (impactCache) return impactCache;
+  const raw = readYaml("impact.yaml");
+  if (typeof raw !== "object" || raw === null) fail("impact.yaml", "expected an object");
+  const c = raw as Record<string, unknown>;
+  const direct = (c.direct ?? {}) as Record<string, unknown>;
+  const ecosystem = (c.ecosystem ?? {}) as Record<string, unknown>;
+  const past = (c.past ?? {}) as Record<string, unknown>;
+
+  impactCache = {
+    direct: {
+      title: asString(direct.title) ? direct.title : "",
+      summary: asString(direct.summary) ? direct.summary : "",
+      method: asString(direct.method) ? direct.method : "",
+      characteristics: Array.isArray(direct.characteristics)
+        ? direct.characteristics.filter(asString)
+        : [],
+    },
+    ecosystem: {
+      note: asString(ecosystem.note) ? ecosystem.note : "",
+      source: asString(ecosystem.source) ? ecosystem.source : "",
+      controls: Array.isArray(ecosystem.controls) ? ecosystem.controls.filter(asString) : [],
+      targetPct: asNumberOrNull(ecosystem.targetPct) ?? 0,
+      metrics: Array.isArray(ecosystem.metrics)
+        ? ecosystem.metrics.flatMap(normalizeGrowthMetric)
+        : [],
+    },
+    past: {
+      note: asString(past.note) ? past.note : "",
+      metrics: Array.isArray(past.metrics) ? past.metrics.flatMap(normalizePastMetric) : [],
+    },
+  };
+  return impactCache;
 }

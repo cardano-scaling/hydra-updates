@@ -34,6 +34,11 @@
   --gh-closed: #8250df;
   --gh-release: #0969da;
   --gh-neutral: #59636e;
+
+  /* Categorical chart series (validated CVD-safe, light). */
+  --viz-1: #2a78d6;
+  --viz-2: #eb6834;
+  --viz-3: #4a3aa7;
 }
 
 :root[data-theme="dark"],
@@ -61,6 +66,11 @@
   --gh-closed: #a371f7;
   --gh-release: #4493f8;
   --gh-neutral: #9198a1;
+
+  /* Categorical chart series (validated CVD-safe, dark). */
+  --viz-1: #3987e5;
+  --viz-2: #d95926;
+  --viz-3: #9085e9;
 }
 
 /* Follow the OS when no explicit choice has been made. */
@@ -87,6 +97,10 @@
     --gh-closed: #a371f7;
     --gh-release: #4493f8;
     --gh-neutral: #9198a1;
+
+    --viz-1: #3987e5;
+    --viz-2: #d95926;
+    --viz-3: #9085e9;
   }
 }
 
