@@ -15,6 +15,17 @@ export interface DeliverableLink {
   url: string;
 }
 
+/**
+ * An intermediate improvement made while working toward a deliverable's
+ * milestone. Shown as a marker on the home timeline; links to the weekly
+ * update that reported it.
+ */
+export interface DeliverableUpdate {
+  date: string; // YYYY-MM-DD
+  description: string;
+  week: string; // ISO week key of the weekly update to link to, e.g. "2026-W27"
+}
+
 export interface Deliverable {
   id: string;
   slug: string;
@@ -26,6 +37,8 @@ export interface Deliverable {
   dueDate: string | null;
   /** When it was actually delivered (YYYY-MM-DD), or null if not yet. */
   deliveredDate: string | null;
+  /** Intermediate improvements along the way, shown on the timeline. */
+  updates: DeliverableUpdate[];
   summary: string;
   description: string;
   repos: string[];

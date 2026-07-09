@@ -8,6 +8,7 @@ import {
   type ActivityType,
   type Deliverable,
   type DeliverableStatus,
+  type DeliverableUpdate,
   type Quarter,
   type SiteConfig,
   type TrackedRepo,
@@ -59,6 +60,17 @@ function normalizeDeliverable(raw: unknown, index: number): Deliverable {
   }
 
   const repos = Array.isArray(d.repos) ? d.repos.filter(asString) : [];
+  const updates: DeliverableUpdate[] = Array.isArray(d.updates)
+    ? d.updates.flatMap((u) => {
+        if (typeof u === "object" && u !== null) {
+          const up = u as Record<string, unknown>;
+          if (asString(up.date) && asString(up.description) && asString(up.week)) {
+            return [{ date: up.date, description: up.description, week: up.week }];
+          }
+        }
+        return [];
+      })
+    : [];
   const links = Array.isArray(d.links)
     ? d.links.flatMap((l) => {
         if (typeof l === "object" && l !== null) {
@@ -80,6 +92,7 @@ function normalizeDeliverable(raw: unknown, index: number): Deliverable {
     statusUpdatedAt: d.statusUpdatedAt as string,
     dueDate: asString(d.dueDate) ? d.dueDate : null,
     deliveredDate: asString(d.deliveredDate) ? d.deliveredDate : null,
+    updates,
     summary: d.summary as string,
     description: d.description as string,
     repos,

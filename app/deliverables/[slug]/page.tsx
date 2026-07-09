@@ -1,0 +1,163 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { ActivityItemList } from "@/components/weekly-update";
+import { StatusBadge } from "@/components/status-badge";
+import { getDeliverableBySlug, getDeliverables, getWeeklyUpdates } from "@/lib/content";
+import { formatDate, formatDateRange, weekParts } from "@/lib/format";
+import { REACTIVE_GROUP, type Deliverable, type WeeklyGroup, type WeeklyUpdate } from "@/lib/types";
+
+// Static export: one page per deliverable, 404 anything else.
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return getDeliverables().map((d) => ({ slug: d.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const d = getDeliverableBySlug(slug);
+  return d ? { title: d.title, description: d.summary } : { title: "Deliverable" };
+}
+
+function quarterLabel(quarter: Deliverable["quarter"]): string {
+  return quarter === "ongoing" ? "Ongoing" : quarter.replace("-", " ");
+}
+
+/** All weekly updates that reported activity for this deliverable, newest first. */
+function activityByWeek(d: Deliverable): { update: WeeklyUpdate; group: WeeklyGroup }[] {
+  // The Reactive deliverable (slug "reactive") maps to the gatherer's Reactive bucket.
+  const groupKey = d.slug === REACTIVE_GROUP ? REACTIVE_GROUP : d.id;
+  return getWeeklyUpdates()
+    .map((update) => ({ update, group: update.groups.find((g) => g.deliverable === groupKey) }))
+    .filter(
+      (x): x is { update: WeeklyUpdate; group: WeeklyGroup } =>
+        !!x.group && (x.group.items.length > 0 || Object.keys(x.group.commitCounts).length > 0),
+    );
+}
+
+export default async function DeliverablePage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const d = getDeliverableBySlug(slug);
+  if (!d) notFound();
+
+  const weeks = activityByWeek(d);
+
+  return (
+    <div className="mx-auto w-full max-w-4xl px-6 py-14">
+      <header className="border-b border-border pb-8">
+        <Link
+          href="/"
+          className="font-mono text-xs uppercase tracking-wider text-muted hover:text-foreground"
+        >
+          ← Overview
+        </Link>
+
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <span className="font-mono text-sm tracking-wider text-primary">{d.id}</span>
+          <span className="font-mono text-xs uppercase tracking-wider text-muted">
+            {quarterLabel(d.quarter)}
+          </span>
+          <StatusBadge status={d.status} />
+        </div>
+
+        <h1 className="mt-3 font-display text-4xl font-bold tracking-tight text-foreground">
+          {d.title}
+        </h1>
+        <p className="mt-4 max-w-2xl text-base leading-7 text-foreground/80">{d.description}</p>
+
+        {(d.dueDate || d.deliveredDate) && (
+          <dl className="mt-6 flex flex-wrap gap-x-10 gap-y-2 font-mono text-xs">
+            {d.dueDate && (
+              <div>
+                <dt className="uppercase tracking-wider text-muted">Deadline</dt>
+                <dd className="mt-0.5 text-foreground">{formatDate(d.dueDate)}</dd>
+              </div>
+            )}
+            {d.deliveredDate && (
+              <div>
+                <dt className="uppercase tracking-wider text-muted">Shipped</dt>
+                <dd className="mt-0.5 text-[color:var(--status-done)]">{formatDate(d.deliveredDate)}</dd>
+              </div>
+            )}
+          </dl>
+        )}
+
+        {d.repos.length > 0 && (
+          <ul className="mt-6 flex flex-wrap gap-2">
+            {d.repos.map((repo) => (
+              <li
+                key={repo}
+                className="rounded border border-border bg-surface-2 px-2 py-0.5 font-mono text-xs text-muted"
+              >
+                {repo}
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {d.links.length > 0 && (
+          <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-1">
+            {d.links.map((link) => (
+              <li key={`${link.label}-${link.url}`}>
+                <a
+                  href={link.url}
+                  className="font-mono text-xs text-[color:var(--on-primary-link)] hover:underline"
+                  target={link.url.startsWith("http") ? "_blank" : undefined}
+                  rel={link.url.startsWith("http") ? "noopener noreferrer" : undefined}
+                >
+                  {link.label} ↗
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </header>
+
+      <section className="mt-10">
+        <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground">Activity</h2>
+        <p className="mt-1 text-sm text-muted">
+          Gathered GitHub activity for this deliverable, week by week — the same evidence that
+          appears in the weekly updates.
+        </p>
+
+        {weeks.length === 0 ? (
+          <p className="mt-6 rounded-lg border border-dashed border-border bg-surface p-6 text-sm text-muted">
+            No gathered activity is linked to this deliverable yet. It will appear here as weekly
+            updates are published.
+          </p>
+        ) : (
+          <div className="mt-6 flex flex-col gap-5">
+            {weeks.map(({ update, group }) => (
+              <section key={update.slug} className="rounded-lg border border-border bg-surface p-5">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border pb-3">
+                  <h3 className="font-display text-base font-semibold text-foreground">
+                    {weekParts(update.week).label}{" "}
+                    <span className="text-muted">· {formatDateRange(update.weekStart, update.weekEnd)}</span>
+                  </h3>
+                  <Link
+                    href={`/updates/${update.slug}/`}
+                    className="font-mono text-xs uppercase tracking-wider text-[color:var(--on-primary-link)] hover:underline"
+                  >
+                    Weekly update ↗
+                  </Link>
+                </div>
+                <div className="pt-1">
+                  <ActivityItemList items={group.items} commitCounts={group.commitCounts} />
+                </div>
+              </section>
+            ))}
+          </div>
+        )}
+      </section>
+    </div>
+  );
+}

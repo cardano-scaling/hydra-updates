@@ -6,8 +6,6 @@ import { ThemeToggle } from "./theme-toggle";
 
 const NAV = [
   { href: "/", label: "Overview" },
-  { href: "/deliverables", label: "Deliverables" },
-  { href: "/roadmap", label: "Roadmap" },
   { href: "/updates", label: "Updates" },
   { href: "/proposal", label: "Proposal" },
   { href: "/links", label: "Links" },
@@ -25,9 +23,6 @@ export function SiteHeader() {
     <header className="sticky top-0 z-10 border-b border-border bg-background/85 backdrop-blur">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-3 px-6">
         <Link href="/" className="group flex shrink-0 items-baseline gap-2">
-          <span className="hidden font-mono text-xs uppercase tracking-[0.2em] text-primary sm:inline">
-            cardano
-          </span>
           <span className="font-display text-lg font-semibold tracking-tight text-foreground group-hover:text-primary">
             DevX Initiative
           </span>

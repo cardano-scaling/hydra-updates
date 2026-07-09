@@ -27,6 +27,13 @@
   --status-progress: #b8791c;
   --status-blocked: #c6403b;
   --status-todo: #7a8aa6;
+
+  /* GitHub's own semantic colors, for gathered-activity iconography (light). */
+  --gh-open: #1a7f37;
+  --gh-merged: #8250df;
+  --gh-closed: #8250df;
+  --gh-release: #0969da;
+  --gh-neutral: #59636e;
 }
 
 :root[data-theme="dark"],
@@ -47,6 +54,13 @@
   --status-progress: #e5a94e;
   --status-blocked: #f0645e;
   --status-todo: #8b9bb8;
+
+  /* GitHub's own semantic colors (dark). */
+  --gh-open: #3fb950;
+  --gh-merged: #a371f7;
+  --gh-closed: #a371f7;
+  --gh-release: #4493f8;
+  --gh-neutral: #9198a1;
 }
 
 /* Follow the OS when no explicit choice has been made. */
@@ -67,6 +81,12 @@
     --status-progress: #e5a94e;
     --status-blocked: #f0645e;
     --status-todo: #8b9bb8;
+
+    --gh-open: #3fb950;
+    --gh-merged: #a371f7;
+    --gh-closed: #a371f7;
+    --gh-release: #4493f8;
+    --gh-neutral: #9198a1;
   }
 }
 

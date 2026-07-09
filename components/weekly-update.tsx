@@ -1,23 +1,38 @@
+import Link from "next/link";
+import type { FC, SVGProps } from "react";
 import type { ActivityItem, ActivityType, Deliverable, WeeklyCounters, WeeklyGroup } from "@/lib/types";
 import { REACTIVE_GROUP } from "@/lib/types";
 import { StatusBadge } from "./status-badge";
+import {
+  GitCommitIcon,
+  GitMergeIcon,
+  IssueClosedIcon,
+  IssueOpenedIcon,
+  RepoIcon,
+  TagIcon,
+} from "./octicons";
 
-const COUNTER_LABELS: { key: keyof WeeklyCounters; label: string }[] = [
-  { key: "prsMerged", label: "PRs merged" },
-  { key: "issuesClosed", label: "Issues closed" },
-  { key: "issuesOpened", label: "Issues opened" },
-  { key: "releases", label: "Releases" },
-  { key: "reposTouched", label: "Repos touched" },
-  { key: "commits", label: "Commits" },
+type IconType = FC<SVGProps<SVGSVGElement>>;
+
+const COUNTER_LABELS: { key: keyof WeeklyCounters; label: string; Icon: IconType; color: string }[] = [
+  { key: "prsMerged", label: "PRs merged", Icon: GitMergeIcon, color: "var(--gh-merged)" },
+  { key: "issuesClosed", label: "Issues closed", Icon: IssueClosedIcon, color: "var(--gh-closed)" },
+  { key: "issuesOpened", label: "Issues opened", Icon: IssueOpenedIcon, color: "var(--gh-open)" },
+  { key: "releases", label: "Releases", Icon: TagIcon, color: "var(--gh-release)" },
+  { key: "reposTouched", label: "Repos touched", Icon: RepoIcon, color: "var(--gh-neutral)" },
+  { key: "commits", label: "Commits", Icon: GitCommitIcon, color: "var(--gh-neutral)" },
 ];
 
 /** Proof-of-work counters as a mono "data" strip (mirrors the home fact strip). */
 export function CounterStrip({ counters }: { counters: WeeklyCounters }) {
   return (
     <dl className="grid grid-cols-3 gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-6">
-      {COUNTER_LABELS.map(({ key, label }) => (
+      {COUNTER_LABELS.map(({ key, label, Icon, color }) => (
         <div key={key} className="bg-surface px-4 py-4">
-          <dt className="font-mono text-[0.6rem] uppercase tracking-wider text-muted">{label}</dt>
+          <dt className="flex items-center gap-1.5 font-mono text-[0.6rem] uppercase tracking-wider text-muted">
+            <Icon className="text-[0.85rem]" style={{ color }} />
+            {label}
+          </dt>
           <dd className="mt-1 font-display text-2xl font-semibold text-foreground">
             {counters[key]}
           </dd>
@@ -27,19 +42,20 @@ export function CounterStrip({ counters }: { counters: WeeklyCounters }) {
   );
 }
 
-const ACTIVITY_META: Record<ActivityType, { label: string; color: string }> = {
-  pr: { label: "PR merged", color: "var(--status-done)" },
-  release: { label: "Release", color: "var(--primary)" },
-  "issue-closed": { label: "Issue closed", color: "var(--status-done)" },
-  "issue-opened": { label: "Issue opened", color: "var(--status-todo)" },
+const ACTIVITY_META: Record<ActivityType, { label: string; color: string; Icon: IconType }> = {
+  pr: { label: "Merged", color: "var(--gh-merged)", Icon: GitMergeIcon },
+  release: { label: "Release", color: "var(--gh-release)", Icon: TagIcon },
+  "issue-closed": { label: "Issue closed", color: "var(--gh-closed)", Icon: IssueClosedIcon },
+  "issue-opened": { label: "Issue opened", color: "var(--gh-open)", Icon: IssueOpenedIcon },
 };
 
 function ActivityRow({ item }: { item: ActivityItem }) {
   const meta = ACTIVITY_META[item.type];
+  const Icon = meta.Icon;
   return (
     <li className="flex flex-col gap-1 py-3 sm:flex-row sm:items-baseline sm:gap-3">
-      <span className="inline-flex shrink-0 items-center gap-2 font-mono text-[0.65rem] uppercase tracking-wider text-muted sm:w-28">
-        <span aria-hidden className="h-2 w-2 rounded-full" style={{ backgroundColor: meta.color }} />
+      <span className="inline-flex shrink-0 items-center gap-1.5 font-mono text-[0.65rem] uppercase tracking-wider text-muted sm:w-28">
+        <Icon className="text-[0.95rem]" style={{ color: meta.color }} />
         {meta.label}
       </span>
       <span className="min-w-0">
@@ -57,6 +73,34 @@ function ActivityRow({ item }: { item: ActivityItem }) {
         </span>
       </span>
     </li>
+  );
+}
+
+/** The list of activity items + per-repo commit summary for one group/week. */
+export function ActivityItemList({
+  items,
+  commitCounts,
+}: {
+  items: ActivityItem[];
+  commitCounts: Record<string, number>;
+}) {
+  const commits = Object.entries(commitCounts);
+  return (
+    <>
+      {items.length > 0 && (
+        <ul className="divide-y divide-border">
+          {items.map((item) => (
+            <ActivityRow key={item.url} item={item} />
+          ))}
+        </ul>
+      )}
+      {commits.length > 0 && (
+        <p className="mt-3 flex items-center gap-1.5 font-mono text-xs text-muted">
+          <GitCommitIcon className="shrink-0 text-[0.95rem]" style={{ color: "var(--gh-neutral)" }} />
+          {commits.map(([repo, n]) => `${n} commit${n === 1 ? "" : "s"} · ${repo}`).join("  ·  ")}
+        </p>
+      )}
+    </>
   );
 }
 
@@ -79,7 +123,6 @@ export function ActivityGroups({
       {groups.map((group) => {
         const reactive = group.deliverable === REACTIVE_GROUP;
         const deliverable = reactive ? undefined : byId.get(group.deliverable);
-        const commits = Object.entries(group.commitCounts);
         return (
           <section key={group.deliverable} className="rounded-lg border border-border bg-surface p-5">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border pb-3">
@@ -89,31 +132,23 @@ export function ActivityGroups({
                     <span className="font-mono text-xs uppercase tracking-wider text-muted">Other</span>{" "}
                     / Reactive
                   </>
+                ) : deliverable ? (
+                  <Link href={`/deliverables/${deliverable.slug}/`} className="hover:text-primary">
+                    <span className="font-mono text-xs tracking-wider text-primary">{deliverable.id}</span>{" "}
+                    {deliverable.title}
+                  </Link>
                 ) : (
                   <>
-                    <span className="font-mono text-xs tracking-wider text-primary">
-                      {group.deliverable}
-                    </span>{" "}
-                    {deliverable?.title ?? group.deliverable}
+                    <span className="font-mono text-xs tracking-wider text-primary">{group.deliverable}</span>
                   </>
                 )}
               </h3>
               {deliverable && <StatusBadge status={deliverable.status} />}
             </div>
 
-            {group.items.length > 0 && (
-              <ul className="divide-y divide-border">
-                {group.items.map((item) => (
-                  <ActivityRow key={item.url} item={item} />
-                ))}
-              </ul>
-            )}
-
-            {commits.length > 0 && (
-              <p className="mt-3 font-mono text-xs text-muted">
-                {commits.map(([repo, n]) => `${n} commit${n === 1 ? "" : "s"} · ${repo}`).join("  ·  ")}
-              </p>
-            )}
+            <div className="pt-1">
+              <ActivityItemList items={group.items} commitCounts={group.commitCounts} />
+            </div>
           </section>
         );
       })}

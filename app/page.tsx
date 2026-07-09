@@ -32,10 +32,7 @@ export default function Home() {
   // Data-derived facts only — no fabricated GitHub numbers (PRD non-goal).
   const facts: { label: string; value: string }[] = [
     { label: "Treasury ask", value: formatAda(config.proposal.treasuryAskAda) },
-    {
-      label: "Window",
-      value: `${config.proposal.windowStart.replace("-", " ")} → ${config.proposal.windowEnd.replace("-", " ")}`,
-    },
+    { label: "Window", value: "July–Dec 2026" },
     { label: "Deliverables", value: String(deliverables.length) },
     { label: "In progress", value: String(counts["in-progress"]) },
     { label: "Done", value: String(counts.done) },
@@ -44,7 +41,7 @@ export default function Home() {
   return (
     <div className="mx-auto w-full max-w-6xl px-6">
       {/* Hero — the delivery manifest header. */}
-      <section className="border-b border-border py-16 sm:py-24">
+      <section className="border-b border-border pt-16 pb-8 sm:pt-24 sm:pb-10">
         <p className="font-mono text-xs uppercase tracking-[0.25em] text-primary">
           Delivery ledger
         </p>
@@ -70,24 +67,16 @@ export default function Home() {
         </dl>
       </section>
 
-      {/* Deliverable status grid. */}
+      {/* Deliverable timeline. */}
       <section className="py-14">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground">
-              Deliverables
-            </h2>
-            <p className="mt-1 text-sm text-muted">
-              Committed deadlines vs. actual delivery across the program
-              {asOf ? ` · status as of ${asOf}` : ""}.
-            </p>
-          </div>
-          <Link
-            href="/deliverables"
-            className="shrink-0 font-mono text-xs uppercase tracking-wider text-[color:var(--on-primary-link)] hover:underline"
-          >
-            View all ↗
-          </Link>
+        <div>
+          <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground">
+            Deliverables
+          </h2>
+          <p className="mt-1 text-sm text-muted">
+            Committed deadlines vs. actual delivery across the program
+            {asOf ? ` · status as of ${asOf}` : ""}. Select one for its full activity.
+          </p>
         </div>
 
         <div className="mt-8">

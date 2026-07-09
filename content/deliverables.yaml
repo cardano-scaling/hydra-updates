@@ -58,6 +58,13 @@
   status: in-progress
   statusUpdatedAt: 2026-07-06
   dueDate: "2026-09-15"
+  updates:
+    - date: "2026-07-01"
+      description: Aiken + Mesh stack template now scaffolds a buildable project end to end.
+      week: "2026-W27"
+    - date: "2026-07-04"
+      description: Plugin manifest schema and loader landed — the first step toward third-party tooling.
+      week: "2026-W27"
   summary: >-
     A "create-react-app" for Cardano: pick a stack, get a project set up and
     ready to build in minutes, with AI/LLM-native commands and a plugin system.
@@ -77,6 +84,10 @@
   status: in-progress
   statusUpdatedAt: 2026-07-06
   dueDate: "2026-09-30"
+  updates:
+    - date: "2026-07-02"
+      description: Drafted the Web2 developer onboarding path on the Developer Portal.
+      week: "2026-W27"
   summary: >-
     One entry point for developers new to Cardano, built on the Developer Portal
     with onboarding paths for three personas and content LLMs can consume.
@@ -96,6 +107,10 @@
   status: not-started
   statusUpdatedAt: 2026-07-06
   dueDate: "2026-09-30"
+  updates:
+    - date: "2026-07-03"
+      description: Shipped v0.2.0 — Vesting and Programmable Tokens, the first two audit-ready contracts.
+      week: "2026-W27"
   summary: >-
     An OpenZeppelin-style library of battle-tested, ready-to-use Cardano smart
     contracts as building blocks, references, or ready-to-go implementations.
@@ -149,6 +164,10 @@
   quarter: ongoing
   status: in-progress
   statusUpdatedAt: 2026-07-06
+  updates:
+    - date: "2026-07-02"
+      description: Fixed CBOR round-trip for inline datums in Pallas — flows back to every downstream tool.
+      week: "2026-W27"
   summary: >-
     Address high-ROI opportunities surfaced through ecosystem alignment, with
     transparent reporting of what we picked and why.
