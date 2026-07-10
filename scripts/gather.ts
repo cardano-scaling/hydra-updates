@@ -156,6 +156,7 @@ async function searchIssues(
 interface RepoActivity {
   items: ActivityItem[];
   commits: number;
+  comments: number;
   touched: boolean;
 }
 
@@ -225,7 +226,31 @@ async function gatherRepo(
     }
   }
 
-  return { items, commits, touched: items.length > 0 || commits > 0 };
+  // Issue & PR conversation comments (REST) — summarized as a per-repo count
+  // like commits (ADR-7: noise, not itemized). The endpoint returns comments on
+  // both issues and pull requests (a PR is an issue in GitHub's model), so it
+  // covers "comments in both". `since` filters by *updated* time, so re-filter
+  // to comments actually created in the window. Bots excluded; teamOnly limits
+  // to roster authors. (Inline PR review comments are a separate endpoint and
+  // deliberately not counted here — the conversation is the meaningful signal.)
+  let comments = 0;
+  interface IssueComment {
+    user: { login: string } | null;
+    created_at: string;
+  }
+  const commentsPage = await gh<IssueComment[]>(
+    `/repos/${slug}/issues/comments?per_page=100&since=${encodeURIComponent(start.toISOString())}`,
+  );
+  for (const cm of commentsPage) {
+    const when = new Date(cm.created_at);
+    if (when < start || when > endOfDay(end)) continue;
+    const login = cm.user?.login ?? "";
+    if (isBot(login)) continue;
+    if (repo.teamOnly && !roster.includes(login)) continue;
+    comments++;
+  }
+
+  return { items, commits, comments, touched: items.length > 0 || commits > 0 || comments > 0 };
 }
 
 function endOfDay(d: Date): Date {
@@ -263,6 +288,7 @@ async function main() {
     releases: 0,
     reposTouched: 0,
     commits: 0,
+    comments: 0,
   };
 
   for (const repo of repos) {
@@ -281,8 +307,11 @@ async function main() {
       else if (it.type === "release") counters.releases++;
     }
     counters.commits += activity.commits;
+    counters.comments += activity.comments;
     if (activity.touched) counters.reposTouched++;
-    console.error(`  ${slug}: ${activity.items.length} item(s), ${activity.commits} commit(s)`);
+    console.error(
+      `  ${slug}: ${activity.items.length} item(s), ${activity.commits} commit(s), ${activity.comments} comment(s)`,
+    );
   }
 
   const frontmatter = {

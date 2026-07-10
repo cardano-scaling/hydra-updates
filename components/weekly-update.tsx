@@ -4,6 +4,7 @@ import type { ActivityItem, ActivityType, Deliverable, WeeklyCounters, WeeklyGro
 import { REACTIVE_GROUP } from "@/lib/types";
 import { StatusBadge } from "./status-badge";
 import {
+  CommentIcon,
   GitCommitIcon,
   GitMergeIcon,
   IssueClosedIcon,
@@ -21,12 +22,13 @@ const COUNTER_LABELS: { key: keyof WeeklyCounters; label: string; Icon: IconType
   { key: "releases", label: "Releases", Icon: TagIcon, color: "var(--gh-release)" },
   { key: "reposTouched", label: "Repos touched", Icon: RepoIcon, color: "var(--gh-neutral)" },
   { key: "commits", label: "Commits", Icon: GitCommitIcon, color: "var(--gh-neutral)" },
+  { key: "comments", label: "Comments", Icon: CommentIcon, color: "var(--gh-neutral)" },
 ];
 
 /** Proof-of-work counters as a mono "data" strip (mirrors the home fact strip). */
 export function CounterStrip({ counters }: { counters: WeeklyCounters }) {
   return (
-    <dl className="grid grid-cols-3 gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-6">
+    <dl className="grid grid-cols-3 gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-7">
       {COUNTER_LABELS.map(({ key, label, Icon, color }) => (
         <div key={key} className="bg-surface px-4 py-4">
           <dt className="flex items-center gap-1.5 font-mono text-[0.6rem] uppercase tracking-wider text-muted">

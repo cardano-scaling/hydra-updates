@@ -1,13 +1,8 @@
 # Community Alignment — DevX Strategy
 
-> Working draft. This document is the living source of truth for the initiative's
-> developer-experience strategy. Edit it here (`content/community-alignment.md`)
-> and it re-renders on the next build.
+The first deliverable of the initiative is to align the ecosystem around a single developer-experience (DevX) strategy and to map the tooling that already exists, so every other deliverable builds on shared foundations rather than reinventing them.
 
-The first deliverable of the initiative is to align the ecosystem around a single
-developer-experience (DevX) strategy and to map the tooling that already exists,
-so every other deliverable builds on shared foundations rather than reinventing
-them.
+We beliveve that Cardano's developer experience is not good enough, and that the solution won't come from a single company/organization.
 
 ## Why alignment first
 

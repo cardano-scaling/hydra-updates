@@ -98,7 +98,7 @@ export default function Home() {
                         </div>
                         <Link
                             href="/updates"
-                            className="shrink-0 font-mono text-xs uppercase tracking-wider text-[color:var(--on-primary-link)] hover:underline"
+                            className="shrink-0 font-mono text-xs uppercase tracking-wider text-(--on-primary-link) hover:underline"
                         >
                             All updates ↗
                         </Link>
@@ -110,7 +110,7 @@ export default function Home() {
 
                     <Link
                         href={`/updates/${latest.slug}/`}
-                        className="mt-4 inline-block font-mono text-xs uppercase tracking-wider text-[color:var(--on-primary-link)] hover:underline"
+                        className="mt-4 inline-block font-mono text-xs uppercase tracking-wider text-(--on-primary-link) hover:underline"
                     >
                         Read {weekParts(latest.week).label} ↗
                     </Link>

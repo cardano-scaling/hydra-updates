@@ -213,6 +213,7 @@ function normalizeCounters(fileName: string, raw: unknown): WeeklyCounters {
     releases: num("releases"),
     reposTouched: num("reposTouched"),
     commits: num("commits"),
+    comments: num("comments"),
   };
 }
 

@@ -167,6 +167,8 @@ export interface WeeklyCounters {
   releases: number;
   reposTouched: number;
   commits: number;
+  /** Issue + PR conversation comments authored in-window — noise, summarized (ADR-7). */
+  comments: number;
 }
 
 export interface WeeklyUpdate {
