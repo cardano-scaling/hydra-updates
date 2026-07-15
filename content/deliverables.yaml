@@ -37,7 +37,6 @@
       acceptanceCriteria: "N/A"
       team: "N/A"
       thirdPartyAssurance: "N/A"
-  repos: []
   links: []
 
 - id: D1
@@ -73,7 +72,6 @@
         Internal
         Community
       thirdPartyAssurance: "(non-SME req)"
-  repos: ["https://github.com/input-output-hk/devx-updates"]
   links: ["https://input-output-hk.github.io/devx-updates"]
 
 - id: D3
@@ -126,7 +124,6 @@
         2.a Documentation and website are publicly accessible.
       team: ""
       thirdPartyAssurance: "BlinkLabs"
-  repos: []
   links: []
 
 - id: D5
@@ -180,7 +177,6 @@
         2.a Documentation live and accessible
       team: ""
       thirdPartyAssurance: "Sundae or NoWitness"
-  repos: []
   links: []
 
 - id: D4
@@ -221,7 +217,6 @@
       thirdPartyAssurance: |-
         Dquadrant?
         (non-SME req)
-  repos: []
   links: []
 
 - id: D2
@@ -256,7 +251,6 @@
       thirdPartyAssurance: |-
         Dquadrant?
         (non-SME req)
-  repos: []
   links: []
 
 - id: D7
@@ -283,7 +277,6 @@
         close-out accepted
       team: "Internal"
       thirdPartyAssurance: "Community"
-  repos: []
   links: []
 
 - id: D8
@@ -305,5 +298,4 @@
     unidentified tooling. Selection criteria, decisions, and outcomes are
     reported transparently.
   milestones: []
-  repos: []
   links: []

@@ -3,7 +3,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ActivityItemList } from "@/components/weekly-update";
 import { StatusBadge } from "@/components/status-badge";
-import { getDeliverableBySlug, getDeliverables, getWeeklyUpdates } from "@/lib/content";
+import {
+  getDeliverableBySlug,
+  getDeliverables,
+  getReposForDeliverable,
+  getWeeklyUpdates,
+} from "@/lib/content";
 import { formatDate, formatDateRange, weekParts } from "@/lib/format";
 import { REACTIVE_GROUP, type Deliverable, type WeeklyGroup, type WeeklyUpdate } from "@/lib/types";
 
@@ -53,6 +58,9 @@ export default async function DeliverablePage({
   if (!d) notFound();
 
   const weeks = activityByWeek(d);
+  // Tracked repos are derived from config.yaml (the gatherer's source), so the
+  // chips shown here always match the repos whose activity rolls up below.
+  const repos = getReposForDeliverable(d.id);
 
   return (
     <div className="mx-auto w-full max-w-4xl px-6 py-14">
@@ -113,14 +121,18 @@ export default async function DeliverablePage({
           </ul>
         )}
 
-        {d.repos.length > 0 && (
+        {repos.length > 0 && (
           <ul className="mt-6 flex flex-wrap gap-2">
-            {d.repos.map((repo) => (
-              <li
-                key={repo}
-                className="rounded border border-border bg-surface-2 px-2 py-0.5 font-mono text-xs text-muted"
-              >
-                {repo}
+            {repos.map((repo) => (
+              <li key={repo.url}>
+                <a
+                  href={repo.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded border border-border bg-surface-2 px-2 py-0.5 font-mono text-xs text-muted transition-colors hover:border-primary hover:text-foreground"
+                >
+                  {repo.owner}/{repo.name}
+                </a>
               </li>
             ))}
           </ul>

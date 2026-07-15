@@ -68,7 +68,6 @@ export interface Deliverable {
   updates: DeliverableUpdate[];
   summary: string;
   description: string;
-  repos: string[];
   links: DeliverableLink[];
 }
 

@@ -99,7 +99,6 @@ function normalizeDeliverable(raw: unknown, index: number): Deliverable {
   const milestones: Milestone[] = Array.isArray(d.milestones)
     ? d.milestones.map((m, i) => normalizeMilestone(m, `${where} milestones[${i}]`))
     : [];
-  const repos = Array.isArray(d.repos) ? d.repos.filter(asString) : [];
   const updates: DeliverableUpdate[] = Array.isArray(d.updates)
     ? d.updates.flatMap((u) => {
         if (typeof u === "object" && u !== null) {
@@ -134,7 +133,6 @@ function normalizeDeliverable(raw: unknown, index: number): Deliverable {
     updates,
     summary: d.summary as string,
     description: d.description as string,
-    repos,
     links,
   };
 }
@@ -206,6 +204,15 @@ export function getConfig(): SiteConfig {
 /** The curated repositories the gatherer tracks (ADR-4). */
 export function getTrackedRepos(): TrackedRepo[] {
   return getConfig().repos;
+}
+
+/**
+ * Tracked repos that roll up to a given deliverable id — derived from the same
+ * `config.yaml` list the gatherer reads, so the deliverable page and the
+ * gathered activity can never drift out of sync.
+ */
+export function getReposForDeliverable(deliverableId: string): TrackedRepo[] {
+  return getTrackedRepos().filter((r) => r.deliverable === deliverableId);
 }
 
 /** Latest statusUpdatedAt across all deliverables — the site's "status as of" date. */
