@@ -59,7 +59,7 @@
       title: Community Alignment
       dueDate: "2026-07-31"
       deliveredDate: "2026-07-06"
-      status: done
+      status: in-progress
       description: >-
         The community of builders largely agrees with our strategy and is
         willing to adjust their work to accommodate it when needed.
@@ -73,8 +73,8 @@
         Internal
         Community
       thirdPartyAssurance: "(non-SME req)"
-  repos: []
-  links: []
+  repos: ["https://github.com/input-output-hk/devx-updates"]
+  links: ["https://input-output-hk.github.io/devx-updates"]
 
 - id: D3
   slug: cardano-init
