@@ -48,7 +48,10 @@ repos:
     deliverable: D4
     teamOnly: true
   - url: "https://github.com/cardano-foundation/cardano-template-and-ecosystem-monitoring"
-    deliverable: D4
+    deliverable: D8
+    teamOnly: true
+  - url: "https://github.com/blinklabs-io/cardano-up"
+    deliverable: D3
     teamOnly: true
 
 # Curated jump-off points shown on the Links hub (built in a later slice).

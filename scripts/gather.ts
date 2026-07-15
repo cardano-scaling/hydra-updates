@@ -10,9 +10,12 @@
  * Run:  GITHUB_TOKEN=$(gh auth token) npx tsx scripts/gather.ts [options]
  * Options:
  *   --week 2026-W28      gather a specific ISO week instead of the prior one
+ *   --from 2026-06-01    backfill a date range: gather every ISO week that
+ *   --to   2026-07-12    overlaps [from, to] (both YYYY-MM-DD, used together).
+ *                        Weeks with no activity are skipped, not written.
  *   --repo owner/name    override the tracked repo list (repeatable); for
  *                        testing. Uses deliverable=null, teamOnly=false.
- *   --dry-run            print the generated file to stdout, don't write it
+ *   --dry-run            print the generated file(s) to stdout, don't write them
  */
 
 import { writeFileSync, mkdirSync } from "node:fs";
@@ -34,6 +37,8 @@ const isBot = (login: string) => login.endsWith("[bot]") || BOT_LOGINS.has(login
 
 interface Args {
   week?: string;
+  from?: string;
+  to?: string;
   repos: string[];
   dryRun: boolean;
 }
@@ -43,6 +48,8 @@ function parseArgs(argv: string[]): Args {
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === "--week") args.week = argv[++i];
+    else if (a === "--from") args.from = argv[++i];
+    else if (a === "--to") args.to = argv[++i];
     else if (a === "--repo") args.repos.push(argv[++i]);
     else if (a === "--dry-run") args.dryRun = true;
     else throw new Error(`Unknown argument: ${a}`);
@@ -97,24 +104,92 @@ function resolveWeek(explicit?: string): { key: string; start: Date; end: Date }
   return { key: weekKey(year, week), start, end };
 }
 
+interface Week {
+  key: string;
+  start: Date;
+  end: Date;
+}
+
+/** The full ISO week (Mon–Sun) that a given date falls in. */
+function weekOf(d: Date): Week {
+  const { year, week } = isoWeekOf(d);
+  const start = mondayOfISOWeek(year, week);
+  const end = new Date(start);
+  end.setUTCDate(start.getUTCDate() + 6);
+  return { key: weekKey(year, week), start, end };
+}
+
+function parseDate(s: string, flag: string): Date {
+  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) throw new Error(`${flag} must look like 2026-06-01, got "${s}"`);
+  return new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3])));
+}
+
+/** Every ISO week that overlaps [from, to], inclusive of the weeks at each end. */
+function weeksBetween(from: Date, to: Date): Week[] {
+  const weeks: Week[] = [];
+  let cursor = weekOf(from).start; // Monday of the first week
+  while (cursor <= to) {
+    weeks.push(weekOf(cursor));
+    cursor = new Date(cursor);
+    cursor.setUTCDate(cursor.getUTCDate() + 7);
+  }
+  return weeks;
+}
+
+/** The list of weeks to gather, from --from/--to (a range) or --week / default (one). */
+function resolveWeeks(args: Args): { weeks: Week[]; range: boolean } {
+  if (args.from || args.to) {
+    if (!args.from || !args.to) throw new Error("--from and --to must be used together");
+    if (args.week) throw new Error("--week cannot be combined with --from/--to");
+    const from = parseDate(args.from, "--from");
+    const to = parseDate(args.to, "--to");
+    if (from > to) throw new Error(`--from (${args.from}) must be on or before --to (${args.to})`);
+    return { weeks: weeksBetween(from, to), range: true };
+  }
+  return { weeks: [resolveWeek(args.week)], range: false };
+}
+
 // --- GitHub API ------------------------------------------------------------
 
 const token = process.env.GITHUB_TOKEN;
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 async function gh<T>(path: string): Promise<T> {
-  const res = await fetch(path.startsWith("http") ? path : `${API}${path}`, {
-    headers: {
-      Accept: "application/vnd.github+json",
-      "X-GitHub-Api-Version": "2022-11-28",
-      "User-Agent": "devx-updates-gatherer",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-  });
-  if (!res.ok) {
+  const url = path.startsWith("http") ? path : `${API}${path}`;
+  // The Search API caps at 30 req/min, so a multi-week backfill routinely trips
+  // the rate limit. On a 403/429, wait until the limit resets (per the response
+  // headers) and retry rather than aborting the whole run.
+  for (let attempt = 0; ; attempt++) {
+    const res = await fetch(url, {
+      headers: {
+        Accept: "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+        "User-Agent": "devx-updates-gatherer",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+    if (res.ok) return res.json() as Promise<T>;
+
+    const rateLimited = res.status === 403 || res.status === 429;
+    if (rateLimited && attempt < 6) {
+      const retryAfter = res.headers.get("retry-after");
+      const remaining = res.headers.get("x-ratelimit-remaining");
+      const reset = res.headers.get("x-ratelimit-reset");
+      let waitMs = 0;
+      if (retryAfter) waitMs = Number(retryAfter) * 1000;
+      else if (remaining === "0" && reset) waitMs = Number(reset) * 1000 - Date.now();
+      if (waitMs > 0 && waitMs <= 120_000) {
+        console.error(`  ⏳ rate limited; waiting ${Math.ceil(waitMs / 1000)}s before retrying…`);
+        await sleep(waitMs + 1000); // small buffer past the reset instant
+        continue;
+      }
+    }
+
     const body = await res.text();
     throw new Error(`GitHub API ${res.status} for ${path}: ${body.slice(0, 300)}`);
   }
-  return res.json() as Promise<T>;
 }
 
 interface SearchIssue {
@@ -261,22 +336,13 @@ function endOfDay(d: Date): Date {
 
 // --- main ------------------------------------------------------------------
 
-async function main() {
-  const args = parseArgs(process.argv.slice(2));
-  if (!token) console.warn("⚠ No GITHUB_TOKEN set — unauthenticated requests are heavily rate-limited.");
-
-  const config = getConfig();
-  const roster = config.roster;
-  const repos: TrackedRepo[] =
-    args.repos.length > 0
-      ? args.repos.map((r) => {
-          const [owner, name] = r.split("/");
-          if (!owner || !name) throw new Error(`--repo must be owner/name, got "${r}"`);
-          return { url: `https://github.com/${r}`, owner, name, deliverable: null, teamOnly: false };
-        })
-      : config.repos;
-
-  const { key, start, end } = resolveWeek(args.week);
+/** Gather one week across all repos and render its Markdown file. */
+async function gatherWeek(
+  week: Week,
+  repos: TrackedRepo[],
+  roster: string[],
+): Promise<{ file: string; hasActivity: boolean }> {
+  const { key, start, end } = week;
   console.error(`Gathering ${key} (${ymd(start)} … ${ymd(end)}) across ${repos.length} repo(s)…`);
 
   // Group activity by deliverable id (or the Reactive bucket), tracking per-repo commit counts.
@@ -314,15 +380,17 @@ async function main() {
     );
   }
 
+  const activity = [...groups.entries()]
+    .filter(([, g]) => g.items.length > 0 || Object.keys(g.commitCounts).length > 0)
+    .map(([deliverable, g]) => ({ deliverable, items: g.items, commitCounts: g.commitCounts }));
+
   const frontmatter = {
     week: key,
     weekStart: ymd(start),
     weekEnd: ymd(end),
     generatedAt: ymd(new Date()),
     counters,
-    activity: [...groups.entries()]
-      .filter(([, g]) => g.items.length > 0 || Object.keys(g.commitCounts).length > 0)
-      .map(([deliverable, g]) => ({ deliverable, items: g.items, commitCounts: g.commitCounts })),
+    activity,
   };
 
   const file =
@@ -331,16 +399,48 @@ async function main() {
     `<!-- Write the week's narrative here before merging. What shipped, why it\n` +
     `matters, and what's next. The activity above is auto-gathered evidence. -->\n`;
 
-  if (args.dryRun) {
-    process.stdout.write(file);
-    return;
-  }
+  return { file, hasActivity: activity.length > 0 };
+}
+
+async function main() {
+  const args = parseArgs(process.argv.slice(2));
+  if (!token) console.warn("⚠ No GITHUB_TOKEN set — unauthenticated requests are heavily rate-limited.");
+
+  const config = getConfig();
+  const roster = config.roster;
+  const repos: TrackedRepo[] =
+    args.repos.length > 0
+      ? args.repos.map((r) => {
+          const [owner, name] = r.split("/");
+          if (!owner || !name) throw new Error(`--repo must be owner/name, got "${r}"`);
+          return { url: `https://github.com/${r}`, owner, name, deliverable: null, teamOnly: false };
+        })
+      : config.repos;
+
+  const { weeks, range } = resolveWeeks(args);
+  if (range) console.error(`Backfilling ${weeks.length} week(s): ${weeks[0].key} … ${weeks[weeks.length - 1].key}`);
 
   const dir = join(process.cwd(), "content", "weekly");
-  mkdirSync(dir, { recursive: true });
-  const outPath = join(dir, `${key}.md`);
-  writeFileSync(outPath, file);
-  console.error(`Wrote ${outPath}`);
+  if (!args.dryRun) mkdirSync(dir, { recursive: true });
+
+  for (const week of weeks) {
+    const { file, hasActivity } = await gatherWeek(week, repos, roster);
+
+    if (args.dryRun) {
+      process.stdout.write(file);
+      continue;
+    }
+
+    // In range mode a quiet week is expected — skip it rather than write an empty file.
+    if (range && !hasActivity) {
+      console.error(`Skipped ${week.key} — no activity.`);
+      continue;
+    }
+
+    const outPath = join(dir, `${week.key}.md`);
+    writeFileSync(outPath, file);
+    console.error(`Wrote ${outPath}`);
+  }
 }
 
 main().catch((err) => {
