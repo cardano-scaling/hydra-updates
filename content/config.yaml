@@ -19,6 +19,7 @@ proposal:
 
 roster:
   - rober-m
+  - paulobressan
   - alegadea
   - federicoweill
   - manugunther
@@ -44,6 +45,9 @@ repos:
     deliverable: D5
     teamOnly: false
   - url: "https://github.com/cardano-foundation/developer-portal"
+    deliverable: D4
+    teamOnly: true
+  - url: "https://github.com/cardano-foundation/cardano-template-and-ecosystem-monitoring"
     deliverable: D4
     teamOnly: true
 
