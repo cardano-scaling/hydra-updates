@@ -26,6 +26,35 @@ export interface DeliverableUpdate {
   week: string; // ISO week key of the weekly update to link to, e.g. "2026-W27"
 }
 
+/**
+ * A committed milestone within a workstream (from the contract's milestone
+ * schedule, DX.xx). A workstream may hold more than one. `dueDate` is null for
+ * milestones with no calendar deadline (e.g. "on signing of contract").
+ *
+ * `evidence`, `acceptanceCriteria`, `team`, and `thirdPartyAssurance` are
+ * carried from the contract schedule and stored for later use — not yet
+ * surfaced in the UI.
+ */
+export interface Milestone {
+  id: string; // e.g. "DX.02"
+  title: string;
+  /** Committed deadline (YYYY-MM-DD), or null when there is no calendar date. */
+  dueDate: string | null;
+  /** When it was actually delivered (YYYY-MM-DD), or null if not yet. */
+  deliveredDate: string | null;
+  status: DeliverableStatus;
+  description: string;
+  evidence: string;
+  acceptanceCriteria: string;
+  team: string;
+  thirdPartyAssurance: string;
+}
+
+/**
+ * A workstream: a bucket of related work that rolls up gathered GitHub activity
+ * (by `id`, see ADR-6) and holds one or more contract milestones. Ongoing work
+ * (e.g. Reactive) has no milestones.
+ */
 export interface Deliverable {
   id: string;
   slug: string;
@@ -33,10 +62,8 @@ export interface Deliverable {
   quarter: Quarter;
   status: DeliverableStatus;
   statusUpdatedAt: string; // YYYY-MM-DD
-  /** Committed milestone deadline (YYYY-MM-DD), or null for ongoing work. */
-  dueDate: string | null;
-  /** When it was actually delivered (YYYY-MM-DD), or null if not yet. */
-  deliveredDate: string | null;
+  /** Committed milestones on this workstream; empty for ongoing work. */
+  milestones: Milestone[];
   /** Intermediate improvements along the way, shown on the timeline. */
   updates: DeliverableUpdate[];
   summary: string;

@@ -1,13 +1,15 @@
+import { Fragment } from "react";
 import Link from "next/link";
 import type { Deliverable, DeliverableUpdate } from "@/lib/types";
 import { formatShort } from "@/lib/format";
 import { StatusBadge } from "./status-badge";
 
-// The program window the whole timeline is scaled to: Jul 1 → Dec 31 2026.
+// The program window the whole timeline is scaled to: Jul 1 2026 → Jan 31 2027
+// (the last milestone, DX.08, is due 15 Jan 2027).
 const WIN_START = Date.UTC(2026, 6, 1);
-const WIN_END = Date.UTC(2026, 11, 31);
+const WIN_END = Date.UTC(2027, 0, 31);
 const SPAN = WIN_END - WIN_START;
-const MONTHS = ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const MONTHS = ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"];
 
 // Leave a small gutter at each end so markers/labels never sit on the track edge.
 const EDGE = 3;
@@ -44,6 +46,8 @@ function monthMarks() {
     return { m, left, width: right - left };
   });
 }
+// Date.UTC normalizes month overflow (e.g. month 12 → Jan of next year), so the
+// Jul→Jan window maps correctly without special-casing the year boundary.
 
 /** Keep marker labels inside the track edges. */
 function labelStyle(p: number): React.CSSProperties {
@@ -94,12 +98,18 @@ function Marker({
   color,
   label,
   date,
+  centerLabel = false,
 }: {
   at: number;
   color: string;
   label: string;
   date: string;
+  /** Always center the label on the mark, ignoring edge clamping. */
+  centerLabel?: boolean;
 }) {
+  const labelPos = centerLabel
+    ? { left: `${at}%`, transform: "translateX(-50%)" }
+    : labelStyle(at);
   return (
     <>
       <span
@@ -114,7 +124,7 @@ function Marker({
       />
       <span
         className="absolute -top-5 hidden whitespace-nowrap font-mono text-[0.6rem] uppercase tracking-wider sm:block"
-        style={{ ...labelStyle(at), color }}
+        style={{ ...labelPos, color }}
       >
         {label} {formatShort(date)}
       </span>
@@ -123,8 +133,10 @@ function Marker({
 }
 
 function Track({ d, ticks, today }: { d: Deliverable; ticks: number[]; today: number }) {
-  const due = d.dueDate ? pct(d.dueDate) : null;
-  const delivered = d.deliveredDate ? pct(d.deliveredDate) : null;
+  // A workstream carries one or more milestones; each with a date becomes a
+  // marker. Ongoing work (no dated milestone) shows a spanning bar instead.
+  const dated = d.milestones.filter((m) => m.dueDate);
+  const hasDeadline = dated.length > 0;
 
   return (
     <div className="relative mt-7 h-14 rounded-lg border border-border bg-surface-2 shadow-inner">
@@ -138,17 +150,25 @@ function Track({ d, ticks, today }: { d: Deliverable; ticks: number[]; today: nu
         />
       ))}
 
-      {/* today */}
+      {/* today line + a label under each track so the now-line is obvious on every row */}
       {today >= 0 && today <= 100 && (
-        <span
-          aria-hidden
-          className="absolute inset-y-0 w-px bg-primary/50"
-          style={{ left: `${today}%` }}
-        />
+        <>
+          <span
+            aria-hidden
+            className="absolute inset-y-0 w-px bg-primary/50"
+            style={{ left: `${today}%` }}
+          />
+          <span
+            className="absolute top-full mt-0.5 -translate-x-1/2 whitespace-nowrap font-mono text-[0.55rem] uppercase tracking-wider text-primary/80"
+            style={{ left: `${today}%` }}
+          >
+            Today
+          </span>
+        </>
       )}
 
       {/* ongoing work has no single deadline — show a spanning bar instead */}
-      {!d.dueDate && (
+      {!hasDeadline && (
         <span
           aria-hidden
           className="absolute inset-y-5 rounded-full"
@@ -156,24 +176,32 @@ function Track({ d, ticks, today }: { d: Deliverable; ticks: number[]; today: nu
         />
       )}
 
-      {/* progress connector from delivery to deadline, when delivered early */}
-      {due !== null && delivered !== null && delivered < due && (
-        <span
-          aria-hidden
-          className="absolute inset-y-6 rounded-full"
-          style={{
-            left: `${delivered}%`,
-            width: `${due - delivered}%`,
-            backgroundColor: DONE_COLOR,
-            opacity: 0.25,
-          }}
-        />
-      )}
-
-      {due !== null && <Marker at={due} color={DUE_COLOR} label="Due" date={d.dueDate!} />}
-      {delivered !== null && (
-        <Marker at={delivered} color={DONE_COLOR} label="Shipped" date={d.deliveredDate!} />
-      )}
+      {dated.map((m) => {
+        const due = pct(m.dueDate!);
+        const delivered = m.deliveredDate ? pct(m.deliveredDate) : null;
+        return (
+          <Fragment key={m.id}>
+            {/* progress connector from delivery to deadline, when delivered early */}
+            {delivered !== null && delivered < due && (
+              <span
+                aria-hidden
+                className="absolute inset-y-6 rounded-full"
+                style={{
+                  left: `${delivered}%`,
+                  width: `${due - delivered}%`,
+                  backgroundColor: DONE_COLOR,
+                  opacity: 0.25,
+                }}
+              />
+            )}
+            {/* the milestone id labels the deadline so multiple markers stay distinct */}
+            <Marker at={due} color={DUE_COLOR} label={m.id} date={m.dueDate!} />
+            {delivered !== null && (
+              <Marker at={delivered} color={DONE_COLOR} label="Shipped" date={m.deliveredDate!} centerLabel />
+            )}
+          </Fragment>
+        );
+      })}
 
       {/* intermediate improvements along the way */}
       {d.updates.map((u) => (

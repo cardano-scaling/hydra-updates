@@ -32,7 +32,7 @@ export default function Home() {
     // Data-derived facts only — no fabricated GitHub numbers (PRD non-goal).
     const facts: { label: string; value: string }[] = [
         { label: "Treasury ask", value: formatAda(config.proposal.treasuryAskAda) },
-        { label: "Window", value: "July–Dec 2026" },
+        { label: "Window", value: "Jul 2026 – Jan 2027" },
         { label: "Deliverables", value: String(deliverables.length) },
         { label: "In progress", value: String(counts["in-progress"]) },
         { label: "Done", value: String(counts.done) },

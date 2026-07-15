@@ -86,21 +86,31 @@ export default async function DeliverablePage({
           </Link>
         )}
 
-        {(d.dueDate || d.deliveredDate) && (
-          <dl className="mt-6 flex flex-wrap gap-x-10 gap-y-2 font-mono text-xs">
-            {d.dueDate && (
-              <div>
-                <dt className="uppercase tracking-wider text-muted">Deadline</dt>
-                <dd className="mt-0.5 text-foreground">{formatDate(d.dueDate)}</dd>
-              </div>
-            )}
-            {d.deliveredDate && (
-              <div>
-                <dt className="uppercase tracking-wider text-muted">Shipped</dt>
-                <dd className="mt-0.5 text-[color:var(--status-done)]">{formatDate(d.deliveredDate)}</dd>
-              </div>
-            )}
-          </dl>
+        {d.milestones.length > 0 && (
+          <ul className="mt-6 flex flex-col gap-3">
+            {d.milestones.map((m) => (
+              <li
+                key={m.id}
+                className="flex flex-wrap items-baseline gap-x-3 gap-y-1 rounded-md border border-border bg-surface px-3 py-2"
+              >
+                <span className="font-mono text-xs tracking-wider text-primary">{m.id}</span>
+                <span className="text-sm text-foreground">{m.title}</span>
+                <span className="ml-auto flex flex-wrap gap-x-6 gap-y-0.5 font-mono text-xs">
+                  {m.dueDate && (
+                    <span className="text-muted">
+                      Due <span className="text-foreground">{formatDate(m.dueDate)}</span>
+                    </span>
+                  )}
+                  {m.deliveredDate && (
+                    <span className="text-muted">
+                      Shipped{" "}
+                      <span className="text-[color:var(--status-done)]">{formatDate(m.deliveredDate)}</span>
+                    </span>
+                  )}
+                </span>
+              </li>
+            ))}
+          </ul>
         )}
 
         {d.repos.length > 0 && (

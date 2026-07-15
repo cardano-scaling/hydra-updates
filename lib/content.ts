@@ -9,6 +9,7 @@ import {
   type Deliverable,
   type DeliverableStatus,
   type DeliverableUpdate,
+  type Milestone,
   type GrowthMetric,
   type ImpactConfig,
   type ImpactSeries,
@@ -40,6 +41,38 @@ function asString(v: unknown): v is string {
   return typeof v === "string" && v.length > 0;
 }
 
+function normalizeStatus(where: string, raw: unknown, fallback: DeliverableStatus): DeliverableStatus {
+  if (raw == null) return fallback;
+  if (!DELIVERABLE_STATUSES.includes(raw as DeliverableStatus)) {
+    fail(
+      "deliverables.yaml",
+      `${where} has invalid status "${String(raw)}" (expected one of ${DELIVERABLE_STATUSES.join(", ")})`,
+    );
+  }
+  return raw as DeliverableStatus;
+}
+
+function normalizeMilestone(raw: unknown, where: string): Milestone {
+  if (typeof raw !== "object" || raw === null) fail("deliverables.yaml", `${where} is not an object`);
+  const m = raw as Record<string, unknown>;
+  for (const key of ["id", "title"]) {
+    if (!asString(m[key])) fail("deliverables.yaml", `${where} is missing string "${key}"`);
+  }
+  const text = (v: unknown): string => (asString(v) ? v : "");
+  return {
+    id: m.id as string,
+    title: m.title as string,
+    dueDate: asString(m.dueDate) ? m.dueDate : null,
+    deliveredDate: asString(m.deliveredDate) ? m.deliveredDate : null,
+    status: normalizeStatus(`${where} milestone status`, m.status, "not-started"),
+    description: text(m.description),
+    evidence: text(m.evidence),
+    acceptanceCriteria: text(m.acceptanceCriteria),
+    team: text(m.team),
+    thirdPartyAssurance: text(m.thirdPartyAssurance),
+  };
+}
+
 function normalizeDeliverable(raw: unknown, index: number): Deliverable {
   const where = `deliverable #${index + 1}`;
   if (typeof raw !== "object" || raw === null) {
@@ -63,6 +96,9 @@ function normalizeDeliverable(raw: unknown, index: number): Deliverable {
     );
   }
 
+  const milestones: Milestone[] = Array.isArray(d.milestones)
+    ? d.milestones.map((m, i) => normalizeMilestone(m, `${where} milestones[${i}]`))
+    : [];
   const repos = Array.isArray(d.repos) ? d.repos.filter(asString) : [];
   const updates: DeliverableUpdate[] = Array.isArray(d.updates)
     ? d.updates.flatMap((u) => {
@@ -94,8 +130,7 @@ function normalizeDeliverable(raw: unknown, index: number): Deliverable {
     quarter: d.quarter as Quarter,
     status: d.status as DeliverableStatus,
     statusUpdatedAt: d.statusUpdatedAt as string,
-    dueDate: asString(d.dueDate) ? d.dueDate : null,
-    deliveredDate: asString(d.deliveredDate) ? d.deliveredDate : null,
+    milestones,
     updates,
     summary: d.summary as string,
     description: d.description as string,
