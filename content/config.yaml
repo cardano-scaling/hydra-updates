@@ -5,7 +5,7 @@ site:
   description: >-
     Track delivery of Input Output's funded Cardano Developer Experience
     Initiative: deliverable status, milestones, and weekly progress.
-  repoUrl: "https://github.com/rober-m/devx-updates"
+  repoUrl: "https://github.com/input-output-hk/devx-updates"
 
 proposal:
   treasuryAskAda: 3601926
@@ -35,7 +35,7 @@ roster:
 #                by a roster member (ADR-5); false (default) for owned repos.
 # Placeholder list — replace URLs with the initiative's real public repos.
 repos:
-  - url: "https://github.com/rober-m/devx-updates"
+  - url: "https://github.com/input-output-hk/devx-updates"
     deliverable: D1
     teamOnly: false
   - url: "https://github.com/input-output-hk/cardano-init"
