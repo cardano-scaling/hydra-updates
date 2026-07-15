@@ -4,7 +4,7 @@ import { Markdown } from "@/components/markdown";
 import { getCommunityAlignmentMarkdown } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: "Strategy",
+  title: "Pledge",
   description:
     "The Community Alignment deliverable: the initiative's developer-experience strategy and ecosystem tooling map.",
 };
@@ -22,7 +22,7 @@ function buildToc(markdown: string): { text: string; id: string }[] {
   return toc;
 }
 
-export default function StrategyPage() {
+export default function PledgePage() {
   const markdown = getCommunityAlignmentMarkdown();
   const toc = buildToc(markdown);
 
