@@ -4,12 +4,13 @@ import type { Deliverable, DeliverableUpdate } from "@/lib/types";
 import { formatShort } from "@/lib/format";
 import { StatusBadge } from "./status-badge";
 
-// The program window the whole timeline is scaled to: Jul 1 2026 → Jan 31 2027
-// (the last milestone, DX.08, is due 15 Jan 2027).
-const WIN_START = Date.UTC(2026, 6, 1);
+// The program window the whole timeline is scaled to: Jun 1 2026 → Jan 31 2027.
+// Starts in June to cover the pre-funding backfill weeks (the last milestone,
+// DX.08, is due 15 Jan 2027).
+const WIN_START = Date.UTC(2026, 5, 1);
 const WIN_END = Date.UTC(2027, 0, 31);
 const SPAN = WIN_END - WIN_START;
-const MONTHS = ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"];
+const MONTHS = ["Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"];
 
 // Leave a small gutter at each end so markers/labels never sit on the track edge.
 const EDGE = 3;
@@ -41,8 +42,8 @@ function weekTicks(): number[] {
 
 function monthMarks() {
   return MONTHS.map((m, i) => {
-    const left = xFromFrac(fracMs(Date.UTC(2026, 6 + i, 1)));
-    const right = xFromFrac(fracMs(Date.UTC(2026, 6 + i + 1, 1)));
+    const left = xFromFrac(fracMs(Date.UTC(2026, 5 + i, 1)));
+    const right = xFromFrac(fracMs(Date.UTC(2026, 5 + i + 1, 1)));
     return { m, left, width: right - left };
   });
 }
@@ -133,9 +134,10 @@ function Marker({
 }
 
 function Track({ d, ticks, today }: { d: Deliverable; ticks: number[]; today: number }) {
-  // A workstream carries one or more milestones; each with a date becomes a
-  // marker. Ongoing work (no dated milestone) shows a spanning bar instead.
-  const dated = d.milestones.filter((m) => m.dueDate);
+  // A workstream carries one or more milestones; each with a due or delivered
+  // date becomes a marker. Ongoing work (no dated milestone) shows a spanning
+  // bar instead.
+  const dated = d.milestones.filter((m) => m.dueDate || m.deliveredDate);
   const hasDeadline = dated.length > 0;
 
   return (
@@ -177,12 +179,12 @@ function Track({ d, ticks, today }: { d: Deliverable; ticks: number[]; today: nu
       )}
 
       {dated.map((m) => {
-        const due = pct(m.dueDate!);
+        const due = m.dueDate ? pct(m.dueDate) : null;
         const delivered = m.deliveredDate ? pct(m.deliveredDate) : null;
         return (
           <Fragment key={m.id}>
             {/* progress connector from delivery to deadline, when delivered early */}
-            {delivered !== null && delivered < due && (
+            {delivered !== null && due !== null && delivered < due && (
               <span
                 aria-hidden
                 className="absolute inset-y-6 rounded-full"
@@ -195,7 +197,7 @@ function Track({ d, ticks, today }: { d: Deliverable; ticks: number[]; today: nu
               />
             )}
             {/* the milestone id labels the deadline so multiple markers stay distinct */}
-            <Marker at={due} color={DUE_COLOR} label={m.id} date={m.dueDate!} />
+            {due !== null && <Marker at={due} color={DUE_COLOR} label={m.id} date={m.dueDate!} />}
             {delivered !== null && (
               <Marker at={delivered} color={DONE_COLOR} label="Shipped" date={m.deliveredDate!} centerLabel />
             )}
@@ -212,7 +214,7 @@ function Track({ d, ticks, today }: { d: Deliverable; ticks: number[]; today: nu
 }
 
 /**
- * Each deliverable rendered as a track on a shared Jul→Dec 2026 timeline: thin
+ * Each deliverable rendered as a track on a shared Jun 2026→Jan 2027 timeline: thin
  * ticks mark weeks; the amber line is the committed deadline; the green line is
  * when it actually shipped (we aim to ship before the deadline); blue dots are
  * intermediate improvements that link to their weekly update.

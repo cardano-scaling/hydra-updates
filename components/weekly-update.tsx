@@ -17,10 +17,10 @@ type IconType = FC<SVGProps<SVGSVGElement>>;
 
 const COUNTER_LABELS: { key: keyof WeeklyCounters; label: string; Icon: IconType; color: string }[] = [
   { key: "prsMerged", label: "PRs merged", Icon: GitMergeIcon, color: "var(--gh-merged)" },
-  { key: "issuesClosed", label: "Issues closed", Icon: IssueClosedIcon, color: "var(--gh-closed)" },
-  { key: "issuesOpened", label: "Issues opened", Icon: IssueOpenedIcon, color: "var(--gh-open)" },
+  { key: "issuesClosed", label: "Closed", Icon: IssueClosedIcon, color: "var(--gh-closed)" },
+  { key: "issuesOpened", label: "Opened", Icon: IssueOpenedIcon, color: "var(--gh-open)" },
   { key: "releases", label: "Releases", Icon: TagIcon, color: "var(--gh-release)" },
-  { key: "reposTouched", label: "Repos touched", Icon: RepoIcon, color: "var(--gh-neutral)" },
+  { key: "reposTouched", label: "Repos", Icon: RepoIcon, color: "var(--gh-neutral)" },
   { key: "commits", label: "Commits", Icon: GitCommitIcon, color: "var(--gh-neutral)" },
   { key: "comments", label: "Comments", Icon: CommentIcon, color: "var(--gh-neutral)" },
 ];
@@ -30,14 +30,17 @@ export function CounterStrip({ counters }: { counters: WeeklyCounters }) {
   return (
     <dl className="grid grid-cols-3 gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-7">
       {COUNTER_LABELS.map(({ key, label, Icon, color }) => (
-        <div key={key} className="bg-surface px-4 py-4">
-          <dt className="flex items-center gap-1.5 font-mono text-[0.6rem] uppercase tracking-wider text-muted">
-            <Icon className="text-[0.85rem]" style={{ color }} />
-            {label}
-          </dt>
-          <dd className="mt-1 font-display text-2xl font-semibold text-foreground">
+        // Number pinned to the top and label to the bottom: every value aligns
+        // across the strip, and single-line labels don't leave a gap beneath
+        // them (the slack sits between number and label instead).
+        <div key={key} className="flex flex-col items-center justify-between gap-1 bg-surface px-3 py-4 text-center">
+          <dd className="order-1 font-display text-2xl font-semibold text-foreground">
             {counters[key]}
           </dd>
+          <dt className="order-2 flex items-center justify-center gap-1.5 font-mono text-[0.6rem] uppercase tracking-wider text-muted">
+            <Icon className="shrink-0 text-[0.85rem]" style={{ color }} />
+            {label}
+          </dt>
         </div>
       ))}
     </dl>

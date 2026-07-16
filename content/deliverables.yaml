@@ -32,6 +32,7 @@
   milestones:
     - id: DX.00
       title: Project Kickoff
+      deliveredDate: "2026-07-01"
       status: done
       evidence: "N/A"
       acceptanceCriteria: "N/A"
@@ -43,8 +44,12 @@
   slug: community-alignment
   title: Community Alignment
   quarter: Q3-2026
-  status: done
-  statusUpdatedAt: 2026-07-06
+  status: in-progress
+  statusUpdatedAt: 2026-07-16
+  updates:
+    - date: "2026-07-07"
+      description: This public progress tracker went live.
+      week: "2026-W28"
   summary: >-
     Align the ecosystem around one DevX strategy and map all existing tooling
     to create a baseline for collaboration and reactive work.
@@ -57,7 +62,6 @@
     - id: DX.01
       title: Community Alignment
       dueDate: "2026-07-31"
-      deliveredDate: "2026-07-06"
       status: in-progress
       description: >-
         The community of builders largely agrees with our strategy and is
@@ -81,12 +85,15 @@
   status: in-progress
   statusUpdatedAt: 2026-07-06
   updates:
-    - date: "2026-07-01"
-      description: Aiken + Mesh stack template now scaffolds a buildable project end to end.
-      week: "2026-W27"
-    - date: "2026-07-04"
-      description: Plugin manifest schema and loader landed — the first step toward third-party tooling.
-      week: "2026-W27"
+    - date: "2026-06-12"
+      description: First Aiken + MeshJS templates scaffold a buildable project end to end.
+      week: "2026-W24"
+    - date: "2026-06-23"
+      description: Nix installer landed and the full roadmap went public (20+ tracked issues).
+      week: "2026-W26"
+    - date: "2026-07-10"
+      description: Automated release pipeline wired up (cargo dist + npm).
+      week: "2026-W28"
   summary: >-
     A "create-react-app" for Cardano: pick a stack, get a project set up and
     ready to build in minutes, with AI/LLM-native commands and a plugin system.
@@ -130,12 +137,12 @@
   slug: contracts-library
   title: Contracts Library
   quarter: Q3-2026
-  status: not-started
-  statusUpdatedAt: 2026-07-06
+  status: in-progress
+  statusUpdatedAt: 2026-07-16
   updates:
-    - date: "2026-07-03"
-      description: Shipped v0.2.0 — Vesting and Programmable Tokens, the first two audit-ready contracts.
-      week: "2026-W27"
+    - date: "2026-06-17"
+      description: "First complete contract shipped: Linear Vesting (on-chain, off-chain, and specs)."
+      week: "2026-W25"
   summary: >-
     An OpenZeppelin-style library of battle-tested, ready-to-use Cardano smart
     contracts as building blocks, references, or ready-to-go implementations.
@@ -186,9 +193,9 @@
   status: in-progress
   statusUpdatedAt: 2026-07-06
   updates:
-    - date: "2026-07-02"
-      description: Drafted the Web2 developer onboarding path on the Developer Portal.
-      week: "2026-W27"
+    - date: "2026-07-08"
+      description: Proposed a hands-on onboarding flow for the Cardano Developer Portal.
+      week: "2026-W28"
   summary: >-
     One entry point for developers new to Cardano, built on the Developer Portal
     with onboarding paths for three personas and content LLMs can consume.
@@ -285,10 +292,6 @@
   quarter: ongoing
   status: in-progress
   statusUpdatedAt: 2026-07-06
-  updates:
-    - date: "2026-07-02"
-      description: Fixed CBOR round-trip for inline datums in Pallas — flows back to every downstream tool.
-      week: "2026-W27"
   summary: >-
     Address high-ROI opportunities surfaced through ecosystem alignment, with
     transparent reporting of what we picked and why.

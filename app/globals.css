@@ -216,6 +216,15 @@ body {
 .md ol {
   padding-left: 1.4rem;
 }
+/* Tailwind's Preflight resets list-style to none; restore markers for prose.
+   Use the longhand — the `list-style: disc` shorthand gets optimized away to
+   `outside` by the CSS minifier (disc is the initial value), losing the bullet. */
+.md ul {
+  list-style-type: disc;
+}
+.md ol {
+  list-style-type: decimal;
+}
 .md li {
   margin: 0.3rem 0;
 }
