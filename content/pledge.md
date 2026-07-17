@@ -2,8 +2,6 @@
 
 ### A shared intention to build together, not in parallel
 
-*Draft for community review. Version 0.1, July 10, 2026.*
-
 ---
 
 ## Why this pledge exists
@@ -24,20 +22,11 @@ Other ecosystems have faced this and chosen coordination. Editors and language c
 
 We can make the same choice.
 
-
 ## What we ask, and what we do not
 
 We ask builders to collaborate on shared foundations: the interfaces, formats, primitives, and documentation that every application depends on.
 
 We do not ask anyone to stop competing. Healthy ecosystems need both. Collaborate on the foundations, compete on the products built on top. A shared standard for how tools interoperate takes nothing away from the team that builds the best wallet, the fastest indexer, or the clearest SDK.
-
-## What we're aligning around
-Good intentions need a shared direction. This pledge lines the ecosystem up behind one developer experience strategy, so our separate efforts add up instead of scattering. In practice, we pull toward:
-- **One front door:** A single, canonical starting point for new developers, so nobody has to guess where to begin.
-- **A fast start on any stack:** Zero to a working project in minutes, whatever tools a developer prefers, with improvements pushed back upstream to the tools themselves.
-- **Reusable building blocks:** Shared, ready-to-use libraries and components that teams build on instead of rewriting from scratch.
-- **Documentation that stays current:** Consolidated, maintained learning paths and documentation that both people and coding assistants can rely on.
-- **A shared map of the landscape:** A living view of who is building what, so contributions fit together and the gaps are obvious.
 
 ## Our principles
 
@@ -55,6 +44,14 @@ Builders who take this pledge aim, wherever they can, to:
 - **Compose, do not collide:** We support the shared interfaces and formats so our tools work together out of the box.
 - **Declare compatibility openly:** We publish our versions, dependencies, and compatibility so others can build on us with confidence.
 - **Share what we learn:** Documentation, examples, and hard-won fixes belong to the whole ecosystem.
+
+## What we're aligning around
+Good intentions need a shared direction. This pledge lines the ecosystem up behind one developer experience strategy, so our separate efforts add up instead of scattering. In practice, we pull toward:
+- **One front door:** A single, canonical starting point for new developers, so nobody has to guess where to begin.
+- **A fast start on any stack:** Zero to a working project in minutes, whatever tools a developer prefers, with improvements pushed back upstream to the tools themselves.
+- **Reusable building blocks:** Shared, ready-to-use libraries and components that teams build on instead of rewriting from scratch.
+- **Documentation that stays current:** Consolidated, maintained learning paths and documentation that both people and coding assistants can rely on.
+- **A shared map of the landscape:** A living view of who is building what, so contributions fit together and the gaps are obvious.
 
 ## How collaboration is rewarded
 
@@ -89,4 +86,4 @@ Let's build the developer experience Cardano deserves, together.
 | [Robertino Martinez](https://github.com/rober-m) | DevX Lead - [Input Output Global](https://iog.io) |
 
 
-To sign, either add yourself directly by editing this file or comment on this issue and we'll add you.
+To sign, either add yourself directly by [editing this file](https://github.com/input-output-hk/devx-updates/blob/main/content/pledge.md) or [comment on this issue](https://github.com/input-output-hk/devx-updates/issues/1) and we'll add you.
