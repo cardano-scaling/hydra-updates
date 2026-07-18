@@ -47,7 +47,7 @@ Builders who take this pledge aim, wherever they can, to:
 
 ## What we're aligning around
 Good intentions need a shared direction. This pledge lines the ecosystem up behind one developer experience strategy, so our separate efforts add up instead of scattering. In practice, we pull toward:
-- **One front door:** A single, canonical starting point for new developers, so nobody has to guess where to begin.
+- **One front door:** A single, canonical, tooling agnostic, starting point for new developers, so nobody has to guess where to begin.
 - **A fast start on any stack:** Zero to a working project in minutes, whatever tools a developer prefers, with improvements pushed back upstream to the tools themselves.
 - **Reusable building blocks:** Shared, ready-to-use libraries and components that teams build on instead of rewriting from scratch.
 - **Documentation that stays current:** Consolidated, maintained learning paths and documentation that both people and coding assistants can rely on.
