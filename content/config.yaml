@@ -47,7 +47,7 @@ repos:
   - url: "https://github.com/cardano-foundation/developer-portal"
     deliverable: D4
     teamOnly: true
-  - url: "https://github.com/cardano-foundation/cardano-template-and-ecosystem-monitoring"
+  - url: "https://github.com/cardano-foundation/cardano-templates"
     deliverable: D8
     teamOnly: true
   - url: "https://github.com/blinklabs-io/cardano-up"

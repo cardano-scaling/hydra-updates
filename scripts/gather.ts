@@ -192,6 +192,22 @@ async function gh<T>(path: string): Promise<T> {
   }
 }
 
+/**
+ * GET every page of a REST list endpoint. Pages via `?page=N` until a short page
+ * comes back. `path` must NOT already carry a `per_page`/`page` param.
+ */
+async function ghPaged<T>(path: string): Promise<T[]> {
+  const perPage = 100;
+  const out: T[] = [];
+  const sep = path.includes("?") ? "&" : "?";
+  for (let page = 1; ; page++) {
+    const batch = await gh<T[]>(`${path}${sep}per_page=${perPage}&page=${page}`);
+    out.push(...batch);
+    if (batch.length < perPage) break;
+  }
+  return out;
+}
+
 interface SearchIssue {
   title: string;
   html_url: string;
@@ -282,21 +298,39 @@ async function gatherRepo(
   }
 
   // Commits (REST) — summarized as a per-repo count (ADR-7), bots/merges excluded.
+  // Counted across *all* branches, not just the default one: work on feature and
+  // draft-PR branches lives on non-default branches, and the plain `/commits`
+  // endpoint (no `sha`) only walks the default branch. We enumerate every branch,
+  // walk each one's commits in-window, and dedup by SHA so a commit reachable
+  // from several branches is counted once. teamOnly is filtered in code by author
+  // login (as releases/comments already are), which also drops the per-author
+  // query fan-out the default-branch-only version used.
   let commits = 0;
-  const authorList = repo.teamOnly ? roster : [null];
   interface Commit {
+    sha: string;
     author: { login: string } | null;
     commit: { message: string };
     parents: unknown[];
   }
-  for (const author of authorList) {
-    const qs = new URLSearchParams({ since: start.toISOString(), until: endOfDay(end).toISOString(), per_page: "100" });
-    if (author) qs.set("author", author);
-    const commitsPage = await gh<Commit[]>(`/repos/${slug}/commits?${qs}`);
-    for (const c of commitsPage) {
+  interface Branch {
+    name: string;
+  }
+  const branches = await ghPaged<Branch>(`/repos/${slug}/branches`);
+  const seenCommits = new Set<string>();
+  for (const branch of branches) {
+    const qs = new URLSearchParams({
+      sha: branch.name,
+      since: start.toISOString(),
+      until: endOfDay(end).toISOString(),
+    });
+    const branchCommits = await ghPaged<Commit>(`/repos/${slug}/commits?${qs}`);
+    for (const c of branchCommits) {
+      if (seenCommits.has(c.sha)) continue; // reachable from an already-walked branch
+      seenCommits.add(c.sha);
       if (c.parents.length > 1) continue; // merge commit
       const login = c.author?.login ?? "";
       if (isBot(login)) continue;
+      if (repo.teamOnly && !roster.includes(login)) continue;
       commits++;
     }
   }
@@ -357,11 +391,25 @@ async function gatherWeek(
     comments: 0,
   };
 
+  const failed: string[] = [];
+
   for (const repo of repos) {
     const slug = `${repo.owner}/${repo.name}`;
     const groupKey = repo.deliverable ?? REACTIVE_GROUP;
     const group = groups.get(groupKey) ?? { items: [], commitCounts: {} };
-    const activity = await gatherRepo(repo, start, end, roster);
+
+    // Isolate per-repo failures: a renamed/private/missing repo (or a transient
+    // API error that outlives the retry budget) should log a warning and be
+    // skipped, not abort the whole week and discard every other repo's work.
+    let activity: RepoActivity;
+    try {
+      activity = await gatherRepo(repo, start, end, roster);
+    } catch (err) {
+      failed.push(slug);
+      console.error(`  ⚠ ${slug}: skipped — ${err instanceof Error ? err.message : err}`);
+      continue;
+    }
+
     group.items.push(...activity.items);
     if (activity.commits > 0) group.commitCounts[slug] = activity.commits;
     groups.set(groupKey, group);
@@ -377,6 +425,12 @@ async function gatherWeek(
     if (activity.touched) counters.reposTouched++;
     console.error(
       `  ${slug}: ${activity.items.length} item(s), ${activity.commits} commit(s), ${activity.comments} comment(s)`,
+    );
+  }
+
+  if (failed.length > 0) {
+    console.error(
+      `  ⚠ ${key}: ${failed.length} of ${repos.length} repo(s) skipped due to errors: ${failed.join(", ")}`,
     );
   }
 
