@@ -22,6 +22,28 @@ function buildToc(markdown: string): { text: string; id: string }[] {
   return toc;
 }
 
+/**
+ * Prefilled "new issue" so signing means filling blanks, not editing a Markdown
+ * table. A maintainer adds the row (see the signing note at the foot of the pledge).
+ */
+const SIGN_ISSUE_URL =
+  "https://github.com/input-output-hk/devx-updates/issues/new?" +
+  new URLSearchParams({
+    title: "Sign the pledge",
+    labels: "pledge-signature",
+    body: [
+      "I'd like to add my name to the Cardano Tooling Collaboration Pledge.",
+      "",
+      "- Name: ",
+      "- GitHub username: ",
+      "- Team/Position: ",
+      "- Organization: ",
+      "- Organization URL: ",
+      "",
+      "<!-- A maintainer will add your row to content/pledge.md. You can also edit the file directly and open a PR. -->",
+    ].join("\n"),
+  }).toString();
+
 export default function PledgePage() {
   const markdown = getCommunityAlignmentMarkdown();
   const toc = buildToc(markdown);
@@ -32,6 +54,14 @@ export default function PledgePage() {
         <p className="font-mono text-xs uppercase tracking-[0.25em] text-primary">
           Community Alignment · D1
         </p>
+        <a
+          href={SIGN_ISSUE_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-2 rounded-md border border-primary bg-primary px-4 py-2 font-mono text-xs uppercase tracking-wider text-primary-foreground transition-colors hover:bg-transparent hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        >
+          Sign the pledge
+        </a>
       </header>
 
       <div className="mt-8 lg:grid lg:grid-cols-[14rem_1fr] lg:gap-10">
@@ -57,6 +87,20 @@ export default function PledgePage() {
 
         <article className="min-w-0">
           <Markdown>{markdown}</Markdown>
+
+          <div className="mt-10 flex flex-col items-center gap-4 rounded-lg border border-border bg-surface px-6 py-8 text-center">
+            <p className="text-sm text-muted">
+              Ready to build the developer experience Cardano deserves, together?
+            </p>
+            <a
+              href={SIGN_ISSUE_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-md border border-primary bg-primary px-4 py-2 font-mono text-xs uppercase tracking-wider text-primary-foreground transition-colors hover:bg-transparent hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            >
+              Sign the pledge
+            </a>
+          </div>
         </article>
       </div>
     </div>

@@ -71,6 +71,8 @@ It is a living draft, not a rulebook, and no formal governance sits behind it. W
 
 If you build tooling on Cardano, you are already part of this. Taking the pledge means agreeing to a simple idea: we go further building on each other's work than we ever will building around it.
 
+To sign, you can click on the button below the existing signatures, add yourself directly by [editing this file](https://github.com/input-output-hk/devx-updates/blob/main/content/pledge.md), or [comment on this issue](https://github.com/input-output-hk/devx-updates/issues/1). Whatever is more convenient to you.
+
 Let's build the developer experience Cardano deserves, together.
 
 ---
@@ -86,5 +88,3 @@ Let's build the developer experience Cardano deserves, together.
 | [Robertino Martinez](https://github.com/rober-m) | DevX Lead - [Input Output Global](https://iog.io) |
 | [Rupert Whitehead](https://github.com/ruwhitehead) | DevRel Lead - [Input Output Global](https://iog.io) |
 
-
-To sign, either add yourself directly by [editing this file](https://github.com/input-output-hk/devx-updates/blob/main/content/pledge.md) or [comment on this issue](https://github.com/input-output-hk/devx-updates/issues/1) and we'll add you.
