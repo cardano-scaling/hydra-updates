@@ -84,6 +84,7 @@ Let's build the developer experience Cardano deserves, together.
 | Person | Team/Position - Organization |
 |---|---|
 | [Robertino Martinez](https://github.com/rober-m) | DevX Lead - [Input Output Global](https://iog.io) |
+| [Rupert Whitehead](https://github.com/ruwhitehead) | DevRel Lead - [Input Output Global](https://iog.io) |
 
 
 To sign, either add yourself directly by [editing this file](https://github.com/input-output-hk/devx-updates/blob/main/content/pledge.md) or [comment on this issue](https://github.com/input-output-hk/devx-updates/issues/1) and we'll add you.
