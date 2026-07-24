@@ -86,5 +86,9 @@ Let's build the developer experience Cardano deserves, together.
 | Person | Team/Position - Organization |
 |---|---|
 | [Robertino Martinez](https://github.com/rober-m) | DevX Lead - [Input Output Global](https://iog.io) |
+| [Jingles](https://github.com/jinglescode) | Founder - [Mesh SDK](https://meshjs.dev/) |
+| [Felix](https://github.com/Technosophorso) | Admin - [Mesh SDK](https://meshjs.dev/) |
+| [Tsz Wai Wu](https://github.com/twwu123) | Tech lead - [Mesh SDK](https://meshjs.dev/) |
+| [Emmanuel Asaolu](https://github.com/Temasar1) | Core-maintainer and contributor - [Mesh SDK](https://meshjs.dev/) |
 | [Rupert Whitehead](https://github.com/ruwhitehead) | DevRel Lead - [Input Output Global](https://iog.io) |
 
