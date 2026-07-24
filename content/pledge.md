@@ -90,5 +90,8 @@ Let's build the developer experience Cardano deserves, together.
 | [Felix](https://github.com/Technosophorso) | Admin - [Mesh SDK](https://meshjs.dev/) |
 | [Tsz Wai Wu](https://github.com/twwu123) | Tech lead - [Mesh SDK](https://meshjs.dev/) |
 | [Emmanuel Asaolu](https://github.com/Temasar1) | Core-maintainer and contributor - [Mesh SDK](https://meshjs.dev/) |
+| [Mladen Lamesevic](https://github.com/MladenLm) | COO - [No.Witness Labs](https://nowitnesslabs.com/) |
+| [Thiago Nunes](https://github.com/thiago-tsnnst) | CEO - [Tapdano](https://tapdano.com/) |
 | [Rupert Whitehead](https://github.com/ruwhitehead) | DevRel Lead - [Input Output Global](https://iog.io) |
+| [](https://github.com/) | []() |
 
