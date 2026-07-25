@@ -268,7 +268,22 @@ async function gatherRepo(
 
   // Merged PRs, opened issues, closed issues (ADR-7: itemize signal).
   const merged = await searchIssues(repo, `is:pr is:merged merged:${range}`, roster);
-  for (const p of merged) push("pr", { title: p.title, html_url: p.html_url, login: p.user?.login ?? "" });
+  const mergedUrls = new Set<string>();
+  for (const p of merged) {
+    mergedUrls.add(p.html_url);
+    push("pr", { title: p.title, html_url: p.html_url, login: p.user?.login ?? "" });
+  }
+
+  // PRs opened in-window (including drafts), regardless of target branch —
+  // in-progress work on feature/integration branches that the merged search
+  // above can't see because it hasn't landed yet. The Search API's
+  // `is:pr created:` matches drafts and non-drafts alike (no `draft:` qualifier
+  // needed). A PR opened *and* merged in the same window is already itemized as
+  // merged, so skip those to avoid listing the same PR twice.
+  const openedPrs = await searchIssues(repo, `is:pr created:${range}`, roster);
+  for (const p of openedPrs)
+    if (!mergedUrls.has(p.html_url))
+      push("pr-opened", { title: p.title, html_url: p.html_url, login: p.user?.login ?? "" });
 
   const opened = await searchIssues(repo, `is:issue created:${range}`, roster);
   for (const i of opened)
@@ -383,6 +398,7 @@ async function gatherWeek(
   const groups = new Map<string, { items: ActivityItem[]; commitCounts: Record<string, number> }>();
   const counters: WeeklyCounters = {
     prsMerged: 0,
+    prsOpened: 0,
     issuesClosed: 0,
     issuesOpened: 0,
     releases: 0,
@@ -416,6 +432,7 @@ async function gatherWeek(
 
     for (const it of activity.items) {
       if (it.type === "pr") counters.prsMerged++;
+      else if (it.type === "pr-opened") counters.prsOpened++;
       else if (it.type === "issue-closed") counters.issuesClosed++;
       else if (it.type === "issue-opened") counters.issuesOpened++;
       else if (it.type === "release") counters.releases++;

@@ -161,6 +161,7 @@ export interface SiteConfig {
 
 export const ACTIVITY_TYPES = [
   "pr",
+  "pr-opened",
   "issue-opened",
   "issue-closed",
   "release",
@@ -188,6 +189,8 @@ export interface WeeklyGroup {
 
 export interface WeeklyCounters {
   prsMerged: number;
+  /** PRs opened in-window and still open at gather time (incl. drafts) — in-progress work, any target branch (ADR-7). */
+  prsOpened: number;
   issuesClosed: number;
   issuesOpened: number;
   releases: number;

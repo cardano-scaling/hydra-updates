@@ -7,6 +7,7 @@ import {
   CommentIcon,
   GitCommitIcon,
   GitMergeIcon,
+  GitPullRequestIcon,
   IssueClosedIcon,
   IssueOpenedIcon,
   RepoIcon,
@@ -17,6 +18,7 @@ type IconType = FC<SVGProps<SVGSVGElement>>;
 
 const COUNTER_LABELS: { key: keyof WeeklyCounters; label: string; Icon: IconType; color: string }[] = [
   { key: "prsMerged", label: "PRs merged", Icon: GitMergeIcon, color: "var(--gh-merged)" },
+  { key: "prsOpened", label: "PRs opened", Icon: GitPullRequestIcon, color: "var(--gh-open)" },
   { key: "issuesClosed", label: "Closed", Icon: IssueClosedIcon, color: "var(--gh-closed)" },
   { key: "issuesOpened", label: "Opened", Icon: IssueOpenedIcon, color: "var(--gh-open)" },
   { key: "releases", label: "Releases", Icon: TagIcon, color: "var(--gh-release)" },
@@ -28,7 +30,7 @@ const COUNTER_LABELS: { key: keyof WeeklyCounters; label: string; Icon: IconType
 /** Proof-of-work counters as a mono "data" strip (mirrors the home fact strip). */
 export function CounterStrip({ counters }: { counters: WeeklyCounters }) {
   return (
-    <dl className="grid grid-cols-3 gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-7">
+    <dl className="grid grid-cols-3 gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-4 lg:grid-cols-8">
       {COUNTER_LABELS.map(({ key, label, Icon, color }) => (
         // Number pinned to the top and label to the bottom: every value aligns
         // across the strip, and single-line labels don't leave a gap beneath
@@ -49,6 +51,7 @@ export function CounterStrip({ counters }: { counters: WeeklyCounters }) {
 
 const ACTIVITY_META: Record<ActivityType, { label: string; color: string; Icon: IconType }> = {
   pr: { label: "Merged", color: "var(--gh-merged)", Icon: GitMergeIcon },
+  "pr-opened": { label: "PR opened", color: "var(--gh-open)", Icon: GitPullRequestIcon },
   release: { label: "Release", color: "var(--gh-release)", Icon: TagIcon },
   "issue-closed": { label: "Issue closed", color: "var(--gh-closed)", Icon: IssueClosedIcon },
   "issue-opened": { label: "Issue opened", color: "var(--gh-open)", Icon: IssueOpenedIcon },

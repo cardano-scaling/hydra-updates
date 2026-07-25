@@ -250,6 +250,7 @@ function normalizeCounters(fileName: string, raw: unknown): WeeklyCounters {
     typeof c[key] === "number" && Number.isFinite(c[key]) ? (c[key] as number) : 0;
   return {
     prsMerged: num("prsMerged"),
+    prsOpened: num("prsOpened"),
     issuesClosed: num("issuesClosed"),
     issuesOpened: num("issuesOpened"),
     releases: num("releases"),
