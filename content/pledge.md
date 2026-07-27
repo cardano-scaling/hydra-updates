@@ -94,4 +94,5 @@ Let's build the developer experience Cardano deserves, together.
 | [Thiago Nunes](https://github.com/thiago-tsnnst) | CEO - [Tapdano](https://tapdano.com/) |
 | [Rupert Whitehead](https://github.com/ruwhitehead) | DevRel Lead - [Input Output Global](https://iog.io) |
 | [Sharan Konerira](https://github.com/skoniog) | Product Lead - [Input Output Global](https://iog.io) |
+| [Yura Lazaryev](https://github.com/Unisay) | Plutus Core Engineer [Input Output Global](https://iog.io) |
 | [](https://github.com/) | []() |
