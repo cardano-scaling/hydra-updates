@@ -142,6 +142,8 @@ export interface SiteConfig {
     tagline: string;
     description: string;
     repoUrl: string;
+    /** Canonical public base URL incl. Pages subpath; base for LLM-feed links. */
+    url: string;
   };
   proposal: {
     treasuryAskAda: number;

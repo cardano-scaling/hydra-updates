@@ -6,6 +6,10 @@ site:
     Track delivery of Input Output's funded Cardano Developer Experience
     Initiative: deliverable status, milestones, and weekly progress.
   repoUrl: "https://github.com/input-output-hk/devx-updates"
+  # Canonical public base URL (includes the Pages subpath). The single knob to
+  # change if we move to a custom domain (ADR-11). Used to build absolute links
+  # in the LLM-readable feeds (/llms.txt, /llms-full.txt, /api/status.json).
+  url: "https://input-output-hk.github.io/devx-updates"
 
 proposal:
   treasuryAskAda: 3601926

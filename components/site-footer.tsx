@@ -13,6 +13,12 @@ export function SiteFooter() {
         <p className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-xs">
           {asOf && <span>status as of {asOf}</span>}
           <a
+            href={`${config.site.url.replace(/\/+$/, "")}/llms.txt`}
+            className="text-[color:var(--on-primary-link)] hover:underline"
+          >
+            llms.txt
+          </a>
+          <a
             href={config.site.repoUrl}
             className="text-[color:var(--on-primary-link)] hover:underline"
             target="_blank"
