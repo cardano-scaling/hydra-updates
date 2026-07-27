@@ -87,6 +87,7 @@ Let's build the developer experience Cardano deserves, together.
 |---|---|
 | [Robertino Martinez](https://github.com/rober-m) | DevX Lead & PM - [Input Output Global](https://iog.io) |
 | [Jingles](https://github.com/jinglescode) | Founder - [Mesh SDK](https://meshjs.dev/) |
+| [Federico Weill](https://github.com/federicoweill) | COO - [TxPIpe](https://txpipe.io) |
 | [Felix](https://github.com/Technosophorso) | Admin - [Mesh SDK](https://meshjs.dev/) |
 | [Tsz Wai Wu](https://github.com/twwu123) | Tech lead - [Mesh SDK](https://meshjs.dev/) |
 | [Emmanuel Asaolu](https://github.com/Temasar1) | Core-maintainer and contributor - [Mesh SDK](https://meshjs.dev/) |
@@ -94,5 +95,6 @@ Let's build the developer experience Cardano deserves, together.
 | [Thiago Nunes](https://github.com/thiago-tsnnst) | CEO - [Tapdano](https://tapdano.com/) |
 | [Rupert Whitehead](https://github.com/ruwhitehead) | DevRel Lead - [Input Output Global](https://iog.io) |
 | [Sharan Konerira](https://github.com/skoniog) | Product Lead - [Input Output Global](https://iog.io) |
+| [Ziyang Liu](https://github.com/zliu41) | Plutus Compiler Engineer & Team Lead - [Input Output Global](https://iog.io) |
 | [Yura Lazaryev](https://github.com/Unisay) | Plutus Core Engineer [Input Output Global](https://iog.io) |
 | [](https://github.com/) | []() |
