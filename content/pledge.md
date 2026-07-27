@@ -85,7 +85,7 @@ Let's build the developer experience Cardano deserves, together.
 
 | Person | Team/Position - Organization |
 |---|---|
-| [Robertino Martinez](https://github.com/rober-m) | DevX Lead - [Input Output Global](https://iog.io) |
+| [Robertino Martinez](https://github.com/rober-m) | DevX Lead & PM - [Input Output Global](https://iog.io) |
 | [Jingles](https://github.com/jinglescode) | Founder - [Mesh SDK](https://meshjs.dev/) |
 | [Felix](https://github.com/Technosophorso) | Admin - [Mesh SDK](https://meshjs.dev/) |
 | [Tsz Wai Wu](https://github.com/twwu123) | Tech lead - [Mesh SDK](https://meshjs.dev/) |
@@ -93,5 +93,5 @@ Let's build the developer experience Cardano deserves, together.
 | [Mladen Lamesevic](https://github.com/MladenLm) | COO - [No.Witness Labs](https://nowitnesslabs.com/) |
 | [Thiago Nunes](https://github.com/thiago-tsnnst) | CEO - [Tapdano](https://tapdano.com/) |
 | [Rupert Whitehead](https://github.com/ruwhitehead) | DevRel Lead - [Input Output Global](https://iog.io) |
+| [Sharan Konerira](https://github.com/skoniog) | Product Lead - [Input Output Global](https://iog.io) |
 | [](https://github.com/) | []() |
-
