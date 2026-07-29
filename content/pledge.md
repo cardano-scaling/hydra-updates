@@ -96,5 +96,6 @@ Let's build the developer experience Cardano deserves, together.
 | [Rupert Whitehead](https://github.com/ruwhitehead) | DevRel Lead - [Input Output Global](https://iog.io) |
 | [Sharan Konerira](https://github.com/skoniog) | Product Lead - [Input Output Global](https://iog.io) |
 | [Ziyang Liu](https://github.com/zliu41) | Plutus Compiler Engineer & Team Lead - [Input Output Global](https://iog.io) |
-| [Yura Lazaryev](https://github.com/Unisay) | Plutus Core Engineer [Input Output Global](https://iog.io) |
+| [Yura Lazaryev](https://github.com/Unisay) | Plutus Core Engineer - [Input Output Global](https://iog.io) |
+| [Paulo Bressan](https://github.com/paulobressan) | Software Engineer - [Tapdano](https://tapdano.com/) |
 | [](https://github.com/) | []() |
