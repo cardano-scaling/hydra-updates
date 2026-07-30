@@ -14,6 +14,15 @@ export function Markdown({ children, className = "" }: { children: string; class
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeSlug, [rehypeAutolinkHeadings, { behavior: "wrap" }]]}
+        components={{
+          // Wrap tables so wide ones (e.g. long treasury-receipt hashes) scroll
+          // inside their own container instead of overflowing the page.
+          table: ({ node, ...props }) => (
+            <div className="table-wrap">
+              <table {...props} />
+            </div>
+          ),
+        }}
       >
         {children}
       </ReactMarkdown>

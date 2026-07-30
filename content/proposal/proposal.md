@@ -1,6 +1,6 @@
 # Abstract
 
-Proposal as pdf: https://ipnso-com.ipns.dweb.link/?cid=QmQPLwjTwZeGrzsgs2QiC6crJLcMg64fU2kDYZmPZ9o7wf
+[Proposal as PDF](https://ipnso-com.ipns.dweb.link/?cid=QmQPLwjTwZeGrzsgs2QiC6crJLcMg64fU2kDYZmPZ9o7wf)
 
 Cardano's long-term utility depends on attracting and retaining developers — and this proposal accelerates that by making it dramatically easier to build on the platform. The target: a 30%+ improvement in developer growth rate within 12 months.
 

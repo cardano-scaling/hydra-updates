@@ -168,6 +168,15 @@ body {
   color: var(--foreground);
   line-height: 1.7;
 }
+/* Long unbreakable tokens in prose — transaction hashes, stake addresses, raw
+   URLs — would otherwise force horizontal page overflow on narrow screens.
+   Allow them to break so they wrap instead. (Wide tables scroll in their own
+   `.table-wrap` container and are intentionally left alone.) */
+.md p,
+.md li,
+.md a {
+  overflow-wrap: anywhere;
+}
 .md > :first-child {
   margin-top: 0;
 }

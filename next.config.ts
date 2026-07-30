@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
   basePath,
   // Static export cannot run the default image optimizer.
   images: { unoptimized: true },
+  // Allow the Tailscale hostname to reach the dev server's HMR/asset endpoints
+  // (Next 16 blocks cross-origin dev requests by default). Dev-only; ignored by
+  // the static export/build.
+  allowedDevOrigins: ["dev.tail05df27.ts.net"],
 };
 
 export default nextConfig;

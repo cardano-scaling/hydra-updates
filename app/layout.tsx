@@ -47,7 +47,10 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <SiteHeader />
-        <main className="flex-1">{children}</main>
+        {/* Flex column so a page can fill the space between header and footer
+            (the map does this via `.map-view { flex: 1 }`); ordinary pages just
+            flow their content and leave the footer at the bottom. */}
+        <main className="flex flex-1 flex-col min-h-0">{children}</main>
         <SiteFooter />
       </body>
     </html>
