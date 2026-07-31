@@ -233,14 +233,15 @@ export default function AnalysisPage() {
                                                 const cellTools = matrix.m[r.key][l];
                                                 const cnt = cellTools.length;
                                                 const isFocus = focus && focus.role === r.key && focus.lang === l;
-                                                const cross = rowHl || hover?.lang === l;
+                                                const inCol = hover?.lang === l;
+                                                const cross = rowHl || inCol;
                                                 // Flag a cell that has tools but no actively-maintained one;
                                                 // the dot takes the colour of the best-off tool present.
                                                 const flagStatus = bestOffStatus(cellTools);
                                                 return (
                                                     <td
                                                         key={l}
-                                                        className={`mcell ${cnt === 0 ? "gap" : ""} ${isFocus ? "focus" : ""} ${cross ? "cross" : ""}`}
+                                                        className={`mcell ${cnt === 0 ? "gap" : ""} ${isFocus ? "focus" : ""} ${cross ? "cross" : ""} ${inCol ? "col-hl" : ""}`}
                                                         style={{ background: cnt === 0 ? undefined : cellColor(cnt) }}
                                                         onMouseEnter={() => setHover({ role: r.key, lang: l })}
                                                         onClick={() => cnt > 0 && setFocus(isFocus ? null : { role: r.key, lang: l })}

@@ -314,12 +314,21 @@
      the best-off tool present. */
   .matrix .mcell-flag { position: absolute; top: 3px; right: 3px; width: 5px; height: 5px; border-radius: 50%; box-shadow: 0 0 0 1px var(--card); }
   .matrix .mcell.gap { color: var(--line-soft); cursor: default; }
-  /* crosshair: faintly tint the hovered cell's whole row + column in light green */
-  .matrix .mcell.cross { box-shadow: inset 0 0 0 9999px color-mix(in srgb, var(--good) 8%, transparent); }
+  /* Crosshair rule lines: frame the hovered row (top + bottom) and column
+     (left + right) with accent lines drawn as inset box-shadows. No fill or
+     opacity change, so the blue density scale stays intact and nothing collides
+     with the status green. The intersection cell gets the full frame. */
+  /* Single dial for the crosshair line: a slightly transparent accent. */
+  .matrix { --xhair: color-mix(in srgb, var(--accent) 40%, transparent); }
+  .matrix tr.row-hl .mcell { box-shadow: inset 0 1px 0 var(--xhair), inset 0 -1px 0 var(--xhair); }
+  .matrix .mcell.col-hl { box-shadow: inset 1px 0 0 var(--xhair), inset -1px 0 0 var(--xhair); }
+  .matrix tr.row-hl .mcell.col-hl { box-shadow: inset 0 1px 0 var(--xhair), inset 0 -1px 0 var(--xhair), inset 1px 0 0 var(--xhair), inset -1px 0 0 var(--xhair); }
+  /* Keep gap cells legible while framed in the crosshair. */
   .matrix .mcell.cross.gap { color: var(--muted); }
-  .matrix tr.row-hl .mrow { background: var(--good-bg); }
-  .matrix .mcol.hl span, .matrix .mrow.hl { color: var(--good); font-weight: 700; }
-  .matrix .mcol.hl { background: var(--good-bg); }
+  /* Anchor the two hovered headers to complete the crosshair: bold + a faint
+     accent (blue) wash — distinct from the green that means "maintained". */
+  .matrix .mcol.hl span, .matrix .mrow.hl { color: var(--ink); font-weight: 700; }
+  .matrix .mcol.hl, .matrix tr.row-hl .mrow { background: var(--accent-soft); }
   .matrix .mcell:hover:not(.gap) { outline: 2px solid var(--accent); outline-offset: -2px; }
   .matrix .mcell.focus { outline: 2px solid var(--accent); outline-offset: -2px; }
   .matrix .mtot { text-align: center; font-family: var(--mono); font-size: 11px; color: var(--muted); background: var(--paper-2); font-weight: 600; }
