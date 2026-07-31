@@ -24,11 +24,29 @@ const spaceGrotesk = Space_Grotesk({
 const config = getConfig();
 
 export const metadata: Metadata = {
+  // Canonical public URL (incl. the Pages subpath) — the base against which the
+  // generated og:image / twitter:image URLs are resolved to absolute so social
+  // crawlers can fetch them. Sourced from config so it moves with a domain change.
+  metadataBase: new URL(config.site.url),
   title: {
     default: config.site.title,
     template: `%s · ${config.site.title}`,
   },
   description: config.site.description,
+  // og:image / twitter:image are supplied by app/opengraph-image.tsx and
+  // app/twitter-image.tsx (the file conventions), so they're omitted here.
+  openGraph: {
+    type: "website",
+    siteName: config.site.title,
+    title: config.site.title,
+    description: config.site.description,
+    url: config.site.url,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: config.site.title,
+    description: config.site.description,
+  },
 };
 
 // Applies the saved (or OS) theme before first paint to avoid a flash.
