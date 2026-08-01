@@ -3,7 +3,7 @@
     "title": "Cardano Developer Tooling Map",
     "generated": "2026-07-20",
     "source": "developers.cardano.org/tools + GitHub + project docs",
-    "toolCount": 255,
+    "toolCount": 258,
     "note": "Status and stars are a research-time snapshot and drift over time.",
     "enrichedFields": [
       "license",
@@ -21,7 +21,7 @@
       "onOfficialPortal"
     ],
     "communitySource": "State of the Developer Ecosystem 2025 (Cardano Foundation), n=109",
-    "edgeCount": 229
+    "edgeCount": 234
   },
   "categories": [
     {
@@ -32,7 +32,7 @@
     {
       "key": "sdk",
       "label": "SDKs & Libraries",
-      "count": 62
+      "count": 63
     },
     {
       "key": "api",
@@ -42,7 +42,7 @@
     {
       "key": "idx",
       "label": "Indexers & Data",
-      "count": 15
+      "count": 16
     },
     {
       "key": "node",
@@ -62,7 +62,7 @@
     {
       "key": "dev",
       "label": "Dev Tools & Testing",
-      "count": 42
+      "count": 43
     },
     {
       "key": "ops",
@@ -172,7 +172,7 @@
       "lastCommit": "2026-07-22",
       "statusReason": "active — pushed 0mo ago",
       "starsNum": 1600,
-      "degree": 28
+      "degree": 29
     },
     {
       "id": "plinth-plutus-tx",
@@ -4800,7 +4800,7 @@
       "lastCommit": "2026-07-08",
       "statusReason": "active — pushed 0mo ago",
       "starsNum": 326,
-      "degree": 12
+      "degree": 13
     },
     {
       "id": "gouroboros",
@@ -9147,20 +9147,21 @@
     },
     {
       "id": "adastat-api",
-      "name": "AdaStat API",
+      "name": "AdaStat",
       "category": "infra",
       "categoryLabel": "Infrastructure & Integration",
       "languages": [
-        "REST API"
+        "TypeScript",
+        "Vue"
       ],
-      "languageRaw": "REST API",
+      "languageRaw": "TypeScript, Vue",
       "team": "Community",
       "status": "active",
       "statusLabel": "Maintained",
-      "stars": null,
-      "repo": "adastat.net",
-      "repoUrl": null,
-      "description": "Free public REST API from the AdaStat explorer with rich analytics and pool filtering.",
+      "stars": "11",
+      "repo": "CardanoExplorer/adastat",
+      "repoUrl": "https://github.com/CardanoExplorer/adastat",
+      "description": "Open-source Cardano blockchain explorer (adastat.net) covering epochs, blocks, transactions, addresses, pools and assets, backed by a free public REST API with rich analytics, a chart maker and pool filtering.",
       "features": [
         "Epoch/block/tx/pool queries",
         "chart maker",
@@ -9169,7 +9170,7 @@
       "featuresText": "Epoch/block/tx/pool queries, chart maker, pool filtering",
       "dependencies": "Hosted",
       "usedBy": "Yoroi, Eternl, CoinGecko, community apps",
-      "license": null,
+      "license": "Apache-2.0",
       "packageRegistry": "Service",
       "packageName": null,
       "latestVersion": null,
@@ -9191,9 +9192,10 @@
         "Explorer"
       ],
       "devLangs": [
-        "REST API"
+        "TypeScript",
+        "Vue"
       ],
-      "website": null,
+      "website": "https://adastat.net",
       "llmsTxt": false,
       "llmsTxtUrl": null,
       "agentReadiness": "unknown",
@@ -9202,9 +9204,9 @@
       "notes": null,
       "communityUsage": null,
       "communityRank": null,
-      "lastCommit": null,
-      "statusReason": "hosted / no GitHub repo — status not auto-derived",
-      "starsNum": 0,
+      "lastCommit": "2026-07-31",
+      "statusReason": "active — pushed 0mo ago",
+      "starsNum": 11,
       "degree": 0
     },
     {
@@ -10574,7 +10576,71 @@
       "lastCommit": "2026-07-01",
       "statusReason": "active — pushed 1mo ago",
       "starsNum": 38,
-      "degree": 0
+      "degree": 2
+    },
+    {
+      "id": "cquisitor-lib",
+      "name": "cquisitor-lib",
+      "category": "sdk",
+      "categoryLabel": "SDKs & Libraries",
+      "languages": [
+        "Rust",
+        "TypeScript"
+      ],
+      "languageRaw": "Rust, TypeScript",
+      "team": "Cardananium",
+      "status": "active",
+      "statusLabel": "Maintained",
+      "stars": "2",
+      "repo": "cardananium/cquisitor-lib",
+      "repoUrl": "https://github.com/cardananium/cquisitor-lib",
+      "description": "Core Rust library behind CQuisitor: decodes CBOR-encoded Cardano transactions and validates them, exposed to JS/TS via WebAssembly.",
+      "features": [
+        "CBOR decoding",
+        "Transaction validation",
+        "WASM bindings"
+      ],
+      "featuresText": "CBOR decoding, Transaction validation, WASM bindings",
+      "dependencies": "Rust",
+      "usedBy": "CQuisitor",
+      "license": "Apache-2.0",
+      "packageRegistry": null,
+      "packageName": null,
+      "latestVersion": null,
+      "latestReleaseDate": null,
+      "cipSupport": [],
+      "networkSupport": [],
+      "plutusVersions": [],
+      "maintainerType": "community",
+      "fundingSource": null,
+      "docsUrl": null,
+      "productionReadiness": null,
+      "onOfficialPortal": false,
+      "role": "inspector",
+      "roleLabel": "Inspector / mock / decoder",
+      "roles": [
+        "inspector"
+      ],
+      "rolesLabels": [
+        "Inspector / mock / decoder"
+      ],
+      "devLangs": [
+        "Rust",
+        "TypeScript"
+      ],
+      "website": null,
+      "llmsTxt": false,
+      "llmsTxtUrl": null,
+      "agentReadiness": "low",
+      "reviewed": false,
+      "reviewedAt": null,
+      "notes": null,
+      "communityUsage": null,
+      "communityRank": null,
+      "lastCommit": "2026-07-01",
+      "statusReason": "active — pushed 1mo ago",
+      "starsNum": 2,
+      "degree": 1
     },
     {
       "id": "cardano-hw-interop-lib",
@@ -11584,6 +11650,70 @@
       "statusReason": "active — pushed 6mo ago",
       "starsNum": 6,
       "degree": 1
+    },
+    {
+      "id": "de-uplc-web",
+      "name": "de-uplc-web",
+      "category": "dev",
+      "categoryLabel": "Dev Tools & Testing",
+      "languages": [
+        "TypeScript",
+        "Rust"
+      ],
+      "languageRaw": "TypeScript, Rust",
+      "team": "Cardananium",
+      "status": "active",
+      "statusLabel": "Maintained",
+      "stars": "2",
+      "repo": "cardananium/de-uplc-web",
+      "repoUrl": "https://github.com/cardananium/de-uplc-web",
+      "description": "Web-based UPLC debugger for interactive step-through debugging of Plutus scripts in the browser. CQuisitor links out to it to debug a script pulled from a transaction.",
+      "features": [
+        "Web UPLC debugger",
+        "Step debugging",
+        "Browser-based"
+      ],
+      "featuresText": "Web UPLC debugger, Step debugging, Browser-based",
+      "dependencies": "UPLC / Plutus Core",
+      "usedBy": "Plutus/Aiken developers, CQuisitor",
+      "license": "Apache-2.0",
+      "packageRegistry": null,
+      "packageName": null,
+      "latestVersion": null,
+      "latestReleaseDate": null,
+      "cipSupport": [],
+      "networkSupport": [],
+      "plutusVersions": [],
+      "maintainerType": "community",
+      "fundingSource": null,
+      "docsUrl": null,
+      "productionReadiness": null,
+      "onOfficialPortal": false,
+      "role": "contract-debugger",
+      "roleLabel": "Contract debugger",
+      "roles": [
+        "contract-debugger"
+      ],
+      "rolesLabels": [
+        "Contract debugger"
+      ],
+      "devLangs": [
+        "TypeScript",
+        "Rust"
+      ],
+      "website": null,
+      "llmsTxt": false,
+      "llmsTxtUrl": null,
+      "agentReadiness": "low",
+      "reviewed": false,
+      "reviewedAt": null,
+      "notes": null,
+      "communityUsage": null,
+      "communityRank": null,
+      "lastCommit": "2026-07-26",
+      "statusReason": "active — pushed 0mo ago",
+      "starsNum": 2,
+      "degree": 2
     },
     {
       "id": "clb",
@@ -13622,7 +13752,70 @@
       "lastCommit": "2026-06-14",
       "statusReason": "active — pushed 1mo ago",
       "starsNum": 0,
-      "degree": 1
+      "degree": 2
+    },
+    {
+      "id": "ogmiosdotnet-blockchainevents",
+      "name": "OgmiosDotnet.BlockchainEvents",
+      "category": "idx",
+      "categoryLabel": "Indexers & Data",
+      "languages": [
+        "C#"
+      ],
+      "languageRaw": "C#",
+      "team": "ItsDaveB",
+      "status": "active",
+      "statusLabel": "Maintained",
+      "stars": "5",
+      "repo": "ItsDaveB/OgmiosDotnet.BlockchainEvents",
+      "repoUrl": "https://github.com/ItsDaveB/OgmiosDotnet.BlockchainEvents",
+      "description": "Rule-based transaction filtering and event-emission engine for Cardano. Processes live blocks via Ogmios, applies pluggable transaction rules, and emits a standardised event schema for downstream systems.",
+      "features": [
+        "Rule-based tx filtering",
+        "Pluggable transaction rules",
+        "Standardised event schema",
+        "Live block processing via Ogmios"
+      ],
+      "featuresText": "Rule-based tx filtering, Pluggable transaction rules, Standardised event schema, Live block processing via Ogmios",
+      "dependencies": "Ogmios, .NET",
+      "usedBy": "Event-driven .NET / downstream systems",
+      "license": "MIT",
+      "packageRegistry": null,
+      "packageName": null,
+      "latestVersion": "1.0.0",
+      "latestReleaseDate": "2026-07-26",
+      "cipSupport": [],
+      "networkSupport": [],
+      "plutusVersions": [],
+      "maintainerType": "individual",
+      "fundingSource": "Catalyst",
+      "docsUrl": null,
+      "productionReadiness": null,
+      "onOfficialPortal": false,
+      "role": "chain-indexer",
+      "roleLabel": "Chain indexer",
+      "roles": [
+        "chain-indexer"
+      ],
+      "rolesLabels": [
+        "Chain indexer"
+      ],
+      "devLangs": [
+        "C#"
+      ],
+      "website": null,
+      "llmsTxt": false,
+      "llmsTxtUrl": null,
+      "agentReadiness": "low",
+      "reviewed": false,
+      "reviewedAt": null,
+      "notes": null,
+      "communityUsage": null,
+      "communityRank": null,
+      "lastCommit": "2026-08-01",
+      "statusReason": "active — pushed 0mo ago",
+      "starsNum": 5,
+      "degree": 2
     },
     {
       "id": "metis",
@@ -17498,6 +17691,31 @@
       "source": "dab",
       "target": "cardano-node",
       "type": "depends"
+    },
+    {
+      "source": "ogmiosdotnet-blockchainevents",
+      "target": "ogmios",
+      "type": "depends"
+    },
+    {
+      "source": "ogmiosdotnet-blockchainevents",
+      "target": "ogmiosdotnet",
+      "type": "depends"
+    },
+    {
+      "source": "cquisitor",
+      "target": "cquisitor-lib",
+      "type": "depends"
+    },
+    {
+      "source": "de-uplc-web",
+      "target": "plutus-plutus-core",
+      "type": "depends"
+    },
+    {
+      "source": "cquisitor",
+      "target": "de-uplc-web",
+      "type": "connects"
     }
   ]
 }
