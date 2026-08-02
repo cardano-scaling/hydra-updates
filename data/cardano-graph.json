@@ -3,7 +3,7 @@
     "title": "Cardano Developer Tooling Map",
     "generated": "2026-07-20",
     "source": "developers.cardano.org/tools + GitHub + project docs",
-    "toolCount": 258,
+    "toolCount": 262,
     "note": "Status and stars are a research-time snapshot and drift over time.",
     "enrichedFields": [
       "license",
@@ -21,7 +21,7 @@
       "onOfficialPortal"
     ],
     "communitySource": "State of the Developer Ecosystem 2025 (Cardano Foundation), n=109",
-    "edgeCount": 234
+    "edgeCount": 240
   },
   "categories": [
     {
@@ -82,7 +82,7 @@
     {
       "key": "infra",
       "label": "Infrastructure & Integration",
-      "count": 16
+      "count": 20
     }
   ],
   "statuses": {
@@ -320,7 +320,7 @@
       "lastCommit": "2026-07-22",
       "statusReason": "active — pushed 0mo ago",
       "starsNum": 584,
-      "degree": 15
+      "degree": 16
     },
     {
       "id": "plutarch",
@@ -4662,7 +4662,7 @@
       "lastCommit": "2026-07-22",
       "statusReason": "active — pushed 0mo ago",
       "starsNum": 3200,
-      "degree": 37
+      "degree": 38
     },
     {
       "id": "cardano-cli",
@@ -16544,6 +16544,266 @@
       "statusReason": "active — pushed 0mo ago",
       "starsNum": 85,
       "degree": 1
+    },
+    {
+      "id": "masumi",
+      "name": "Masumi",
+      "category": "infra",
+      "categoryLabel": "Infrastructure & Integration",
+      "languages": [
+        "TypeScript"
+      ],
+      "languageRaw": "TypeScript",
+      "team": "Masumi Network",
+      "status": "active",
+      "statusLabel": "Maintained",
+      "stars": "14",
+      "repo": "masumi-network/masumi-payment-service",
+      "repoUrl": "https://github.com/masumi-network/masumi-payment-service",
+      "description": "Decentralized protocol for AI-agent payments and discovery on Cardano. The payment service exposes a REST API for wallet generation, escrow via Aiken smart contracts, payment verification and automated on-chain settlement with refund/dispute handling.",
+      "features": [
+        "Agentic payment protocol",
+        "Aiken escrow smart contracts",
+        "Wallet management",
+        "Refund & dispute handling",
+        "Webhook notifications"
+      ],
+      "featuresText": "Agentic payment protocol, Aiken escrow smart contracts, Wallet management, Refund & dispute handling, Webhook notifications",
+      "dependencies": "Cardano node, Aiken contracts",
+      "usedBy": "AI-agent developers (CrewAI, LangGraph, AutoGen), Sokosumi",
+      "license": "MIT",
+      "packageRegistry": null,
+      "packageName": null,
+      "latestVersion": null,
+      "latestReleaseDate": null,
+      "cipSupport": [],
+      "networkSupport": [
+        "mainnet",
+        "preprod"
+      ],
+      "plutusVersions": [],
+      "maintainerType": "community",
+      "fundingSource": null,
+      "docsUrl": "https://www.masumi.network/dev/masumi/documentation",
+      "productionReadiness": "beta",
+      "onOfficialPortal": false,
+      "role": "integration",
+      "roleLabel": "Integration / middleware",
+      "roles": [
+        "integration"
+      ],
+      "rolesLabels": [
+        "Integration / middleware"
+      ],
+      "devLangs": [
+        "TypeScript"
+      ],
+      "website": "https://www.masumi.network",
+      "llmsTxt": false,
+      "llmsTxtUrl": null,
+      "agentReadiness": "medium",
+      "reviewed": false,
+      "reviewedAt": null,
+      "notes": null,
+      "communityUsage": null,
+      "communityRank": null,
+      "lastCommit": "2026-07-31",
+      "statusReason": "active — pushed 0mo ago",
+      "starsNum": 14,
+      "degree": 5
+    },
+    {
+      "id": "masumi-registry-service",
+      "name": "Masumi Registry Service",
+      "category": "infra",
+      "categoryLabel": "Infrastructure & Integration",
+      "languages": [
+        "TypeScript"
+      ],
+      "languageRaw": "TypeScript",
+      "team": "Masumi Network",
+      "status": "active",
+      "statusLabel": "Maintained",
+      "stars": "6",
+      "repo": "masumi-network/masumi-registry-service",
+      "repoUrl": "https://github.com/masumi-network/masumi-registry-service",
+      "description": "Companion service to the Masumi protocol that queries and filters the on-chain registry of AI agents and nodes, with a REST API, advanced filtering, caching, periodic updates and availability checks.",
+      "features": [
+        "Agent/node discovery",
+        "REST API",
+        "Advanced filtering",
+        "Availability checks"
+      ],
+      "featuresText": "Agent/node discovery, REST API, Advanced filtering, Availability checks",
+      "dependencies": "Masumi, Cardano node",
+      "usedBy": "Masumi agents, Sokosumi",
+      "license": "MIT",
+      "packageRegistry": null,
+      "packageName": null,
+      "latestVersion": null,
+      "latestReleaseDate": null,
+      "cipSupport": [],
+      "networkSupport": [
+        "mainnet",
+        "preprod"
+      ],
+      "plutusVersions": [],
+      "maintainerType": "community",
+      "fundingSource": null,
+      "docsUrl": "https://www.masumi.network/dev/masumi",
+      "productionReadiness": "beta",
+      "onOfficialPortal": false,
+      "role": "integration",
+      "roleLabel": "Integration / middleware",
+      "roles": [
+        "integration"
+      ],
+      "rolesLabels": [
+        "Integration / middleware"
+      ],
+      "devLangs": [
+        "TypeScript"
+      ],
+      "website": "https://www.masumi.network",
+      "llmsTxt": false,
+      "llmsTxtUrl": null,
+      "agentReadiness": "medium",
+      "reviewed": false,
+      "reviewedAt": null,
+      "notes": null,
+      "communityUsage": null,
+      "communityRank": null,
+      "lastCommit": "2026-07-31",
+      "statusReason": "active — pushed 0mo ago",
+      "starsNum": 6,
+      "degree": 2
+    },
+    {
+      "id": "sokosumi",
+      "name": "Sokosumi",
+      "category": "infra",
+      "categoryLabel": "Infrastructure & Integration",
+      "languages": [
+        "TypeScript"
+      ],
+      "languageRaw": "TypeScript",
+      "team": "Masumi Network",
+      "status": "active",
+      "statusLabel": "Maintained",
+      "stars": "11",
+      "repo": "masumi-network/sokosumi",
+      "repoUrl": "https://github.com/masumi-network/sokosumi",
+      "description": "Marketplace for AI agents built on top of the Masumi payment protocol. Next.js/TypeScript monorepo where users discover, hire and pay agentic services.",
+      "features": [
+        "Agent marketplace",
+        "Agentic-payments checkout",
+        "Next.js web app"
+      ],
+      "featuresText": "Agent marketplace, Agentic-payments checkout, Next.js web app",
+      "dependencies": "Masumi, Masumi Registry",
+      "usedBy": "End users hiring AI agents",
+      "license": "MIT",
+      "packageRegistry": null,
+      "packageName": null,
+      "latestVersion": null,
+      "latestReleaseDate": null,
+      "cipSupport": [],
+      "networkSupport": [
+        "mainnet",
+        "preprod"
+      ],
+      "plutusVersions": [],
+      "maintainerType": "community",
+      "fundingSource": null,
+      "docsUrl": null,
+      "productionReadiness": "beta",
+      "onOfficialPortal": false,
+      "role": "integration",
+      "roleLabel": "Integration / middleware",
+      "roles": [
+        "integration"
+      ],
+      "rolesLabels": [
+        "Integration / middleware"
+      ],
+      "devLangs": [
+        "TypeScript"
+      ],
+      "website": "https://sokosumi.com",
+      "llmsTxt": false,
+      "llmsTxtUrl": null,
+      "agentReadiness": "medium",
+      "reviewed": false,
+      "reviewedAt": null,
+      "notes": null,
+      "communityUsage": null,
+      "communityRank": null,
+      "lastCommit": "2026-08-02",
+      "statusReason": "active — pushed 0mo ago",
+      "starsNum": 11,
+      "degree": 2
+    },
+    {
+      "id": "x402-cardano",
+      "name": "x402 Cardano",
+      "category": "infra",
+      "categoryLabel": "Infrastructure & Integration",
+      "languages": [
+        "TypeScript"
+      ],
+      "languageRaw": "TypeScript",
+      "team": "Masumi Network",
+      "status": "active",
+      "statusLabel": "Maintained",
+      "stars": "2",
+      "repo": "masumi-network/x402-cardano",
+      "repoUrl": "https://github.com/masumi-network/x402-cardano",
+      "description": "Cardano implementation of the x402 HTTP-native payments protocol, built by the Masumi team in collaboration with the Cardano Foundation and Coinbase. Lets services charge per-request via standard HTTP 402 responses.",
+      "features": [
+        "HTTP 402 payments",
+        "Per-request micropayments",
+        "Cardano payment rail"
+      ],
+      "featuresText": "HTTP 402 payments, Per-request micropayments, Cardano payment rail",
+      "dependencies": "x402 protocol, Cardano",
+      "usedBy": "Agentic / HTTP services accepting Cardano payments",
+      "license": "Apache-2.0",
+      "packageRegistry": null,
+      "packageName": null,
+      "latestVersion": null,
+      "latestReleaseDate": null,
+      "cipSupport": [],
+      "networkSupport": [],
+      "plutusVersions": [],
+      "maintainerType": "community",
+      "fundingSource": null,
+      "docsUrl": null,
+      "productionReadiness": "experimental",
+      "onOfficialPortal": false,
+      "role": "integration",
+      "roleLabel": "Integration / middleware",
+      "roles": [
+        "integration"
+      ],
+      "rolesLabels": [
+        "Integration / middleware"
+      ],
+      "devLangs": [
+        "TypeScript"
+      ],
+      "website": "https://x402.org",
+      "llmsTxt": false,
+      "llmsTxtUrl": null,
+      "agentReadiness": "low",
+      "reviewed": false,
+      "reviewedAt": null,
+      "notes": null,
+      "communityUsage": null,
+      "communityRank": null,
+      "lastCommit": "2025-10-26",
+      "statusReason": "active — pushed 9mo ago",
+      "starsNum": 2,
+      "degree": 1
     }
   ],
   "links": [
@@ -17715,6 +17975,36 @@
     {
       "source": "cquisitor",
       "target": "de-uplc-web",
+      "type": "connects"
+    },
+    {
+      "source": "sokosumi",
+      "target": "masumi",
+      "type": "depends"
+    },
+    {
+      "source": "sokosumi",
+      "target": "masumi-registry-service",
+      "type": "connects"
+    },
+    {
+      "source": "masumi-registry-service",
+      "target": "masumi",
+      "type": "connects"
+    },
+    {
+      "source": "masumi",
+      "target": "aiken",
+      "type": "depends"
+    },
+    {
+      "source": "masumi",
+      "target": "cardano-node",
+      "type": "depends"
+    },
+    {
+      "source": "masumi",
+      "target": "x402-cardano",
       "type": "connects"
     }
   ]
