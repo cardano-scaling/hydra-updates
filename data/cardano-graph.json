@@ -3,7 +3,7 @@
     "title": "Cardano Developer Tooling Map",
     "generated": "2026-07-20",
     "source": "developers.cardano.org/tools + GitHub + project docs",
-    "toolCount": 262,
+    "toolCount": 263,
     "note": "Status and stars are a research-time snapshot and drift over time.",
     "enrichedFields": [
       "license",
@@ -21,7 +21,7 @@
       "onOfficialPortal"
     ],
     "communitySource": "State of the Developer Ecosystem 2025 (Cardano Foundation), n=109",
-    "edgeCount": 240
+    "edgeCount": 241
   },
   "categories": [
     {
@@ -57,7 +57,7 @@
     {
       "key": "wallet",
       "label": "Wallets & Connectivity",
-      "count": 27
+      "count": 28
     },
     {
       "key": "dev",
@@ -320,7 +320,7 @@
       "lastCommit": "2026-07-22",
       "statusReason": "active — pushed 0mo ago",
       "starsNum": 584,
-      "degree": 16
+      "degree": 17
     },
     {
       "id": "plutarch",
@@ -16804,6 +16804,76 @@
       "statusReason": "active — pushed 9mo ago",
       "starsNum": 2,
       "degree": 1
+    },
+    {
+      "id": "epora-wallet",
+      "name": "Epora",
+      "category": "wallet",
+      "categoryLabel": "Wallets & Connectivity",
+      "languages": [
+        "TypeScript",
+        "Aiken"
+      ],
+      "languageRaw": "TypeScript, Aiken",
+      "team": "schaier-io",
+      "status": "experimental",
+      "statusLabel": "Experimental",
+      "stars": "1",
+      "repo": "schaier-io/epora-wallet",
+      "repoUrl": "https://github.com/schaier-io/epora-wallet",
+      "description": "Self-custodial Cardano wallet governed by an explicit on-chain permission model instead of one all-powerful key. Aiken validators provide daily allowances, weighted multisig, a proof-of-life dead-man-switch with beneficiary recovery, and streaming payments. Catalyst Fund 11.",
+      "features": [
+        "On-chain permission model",
+        "Weighted multisig",
+        "Dead-man-switch recovery",
+        "Daily spending allowances",
+        "Streaming payments"
+      ],
+      "featuresText": "On-chain permission model, Weighted multisig, Dead-man-switch recovery, Daily spending allowances, Streaming payments",
+      "dependencies": "Aiken, CIP-30 / WalletConnect",
+      "usedBy": "Individuals wanting inheritance / joint control / spending limits",
+      "license": "MIT",
+      "packageRegistry": null,
+      "packageName": null,
+      "latestVersion": null,
+      "latestReleaseDate": null,
+      "cipSupport": [
+        "CIP-30"
+      ],
+      "networkSupport": [
+        "preprod"
+      ],
+      "plutusVersions": [],
+      "maintainerType": "individual",
+      "fundingSource": "Catalyst",
+      "docsUrl": null,
+      "productionReadiness": "experimental",
+      "onOfficialPortal": false,
+      "role": "wallet",
+      "roleLabel": "Wallet",
+      "roles": [
+        "wallet"
+      ],
+      "rolesLabels": [
+        "Wallet"
+      ],
+      "devLangs": [
+        "TypeScript",
+        "Aiken"
+      ],
+      "website": "https://epora-wallet.vercel.app",
+      "llmsTxt": false,
+      "llmsTxtUrl": null,
+      "agentReadiness": "low",
+      "reviewed": false,
+      "reviewedAt": null,
+      "notes": null,
+      "communityUsage": null,
+      "communityRank": null,
+      "lastCommit": "2026-07-31",
+      "statusReason": "experimental — pushed 0mo ago",
+      "starsNum": 1,
+      "degree": 1
     }
   ],
   "links": [
@@ -18006,6 +18076,11 @@
       "source": "masumi",
       "target": "x402-cardano",
       "type": "connects"
+    },
+    {
+      "source": "epora-wallet",
+      "target": "aiken",
+      "type": "depends"
     }
   ]
 }
