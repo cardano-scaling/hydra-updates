@@ -44,8 +44,8 @@
   slug: community-alignment
   title: Community Alignment
   quarter: Q3-2026
-  status: in-progress
-  statusUpdatedAt: 2026-07-16
+  status: done
+  statusUpdatedAt: 2026-07-30
   updates:
     - date: "2026-07-07"
       description: This public progress tracker went live.
@@ -53,6 +53,9 @@
     - date: "2026-07-20"
       description: The pledge went live — signing is clearer, it picked up an Apache 2.0 license, and four new signatories came on board (most notably the MeshJS Team).
       week: "2026-W30"
+    - date: "2026-07-30"
+      description: Community Alignment delivered — the public ecosystem map went live and is integrated into the site, and the signatory list kept growing, completing milestone DX.01.
+      week: "2026-W31"
   summary: >-
     Align the ecosystem around one DevX strategy and map all existing tooling
     to create a baseline for collaboration and reactive work.
@@ -65,7 +68,8 @@
     - id: DX.01
       title: Community Alignment
       dueDate: "2026-07-31"
-      status: in-progress
+      deliveredDate: "2026-07-30"
+      status: done
       description: >-
         The community of builders largely agrees with our strategy and is
         willing to adjust their work to accommodate it when needed.
