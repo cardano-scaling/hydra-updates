@@ -3,7 +3,7 @@
     "title": "Cardano Developer Tooling Map",
     "generated": "2026-07-20",
     "source": "developers.cardano.org/tools + GitHub + project docs",
-    "toolCount": 263,
+    "toolCount": 264,
     "note": "Status and stars are a research-time snapshot and drift over time.",
     "enrichedFields": [
       "license",
@@ -21,7 +21,7 @@
       "onOfficialPortal"
     ],
     "communitySource": "State of the Developer Ecosystem 2025 (Cardano Foundation), n=109",
-    "edgeCount": 241
+    "edgeCount": 242
   },
   "categories": [
     {
@@ -82,7 +82,7 @@
     {
       "key": "infra",
       "label": "Infrastructure & Integration",
-      "count": 20
+      "count": 21
     }
   ],
   "statuses": {
@@ -3124,7 +3124,7 @@
       "lastCommit": null,
       "statusReason": "repo unreachable — kept prior status",
       "starsNum": 0,
-      "degree": 9
+      "degree": 10
     },
     {
       "id": "koios",
@@ -9520,7 +9520,7 @@
       "lastCommit": "2026-07-16",
       "statusReason": "active — pushed 0mo ago",
       "starsNum": 11,
-      "degree": 0
+      "degree": 1
     },
     {
       "id": "gimbalabs",
@@ -16874,6 +16874,75 @@
       "statusReason": "experimental — pushed 0mo ago",
       "starsNum": 1,
       "degree": 1
+    },
+    {
+      "id": "odatano",
+      "name": "ODATANO",
+      "category": "infra",
+      "categoryLabel": "Infrastructure & Integration",
+      "languages": [
+        "TypeScript",
+        "CAP CDS"
+      ],
+      "languageRaw": "TypeScript, CAP CDS",
+      "team": "ODATANO",
+      "status": "active",
+      "statusLabel": "Maintained",
+      "stars": "11",
+      "repo": "ODATANO/ODATANO",
+      "repoUrl": "https://github.com/ODATANO/ODATANO",
+      "description": "SAP CAP–based service that exposes the Cardano blockchain through a standardized OData V4 API, giving SAP systems enterprise-grade read/write access and native transaction building. Ships as a CAP plugin (@odatano/core) or standalone. Catalyst Fund 14 (all milestones completed).",
+      "features": [
+        "OData V4 API over Cardano",
+        "SAP CAP plugin",
+        "On-chain read/write & tx building",
+        "Blockfrost-compatible backends"
+      ],
+      "featuresText": "OData V4 API over Cardano, SAP CAP plugin, On-chain read/write & tx building, Blockfrost-compatible backends",
+      "dependencies": "SAP CAP, Blockfrost-compatible backend",
+      "usedBy": "SAP / enterprise integrations bringing Cardano into SAP processes",
+      "license": "Apache-2.0",
+      "packageRegistry": "npm",
+      "packageName": "@odatano/core",
+      "latestVersion": "1.9.0",
+      "latestReleaseDate": "2026-06-14",
+      "cipSupport": [],
+      "networkSupport": [
+        "mainnet",
+        "preprod",
+        "preview"
+      ],
+      "plutusVersions": [],
+      "maintainerType": "community",
+      "fundingSource": "Catalyst",
+      "docsUrl": null,
+      "productionReadiness": "beta",
+      "onOfficialPortal": false,
+      "role": "integration",
+      "roleLabel": "Integration / middleware",
+      "roles": [
+        "integration"
+      ],
+      "rolesLabels": [
+        "Integration / middleware"
+      ],
+      "devLangs": [
+        "TypeScript",
+        "CAP CDS"
+      ],
+      "website": null,
+      "llmsTxt": false,
+      "llmsTxtUrl": null,
+      "agentReadiness": "low",
+      "reviewed": false,
+      "reviewedAt": null,
+      "notes": null,
+      "communityUsage": null,
+      "communityRank": null,
+      "lastCommit": "2026-07-16",
+      "statusReason": "active — pushed 1mo ago",
+      "starsNum": 11,
+      "degree": 1
     }
   ],
   "links": [
@@ -18081,6 +18150,11 @@
       "source": "epora-wallet",
       "target": "aiken",
       "type": "depends"
+    },
+    {
+      "source": "odatano",
+      "target": "blockfrost",
+      "type": "backend"
     }
   ]
 }
