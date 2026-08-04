@@ -102,5 +102,6 @@ Let's build the developer experience Cardano deserves, together.
 | [Paulo Bressan](https://github.com/paulobressan) | Software Engineer - [Tapdano](https://tapdano.com/) |
 | [Evgenii Lisitskii](https://github.com/lisicky) | Contributor - [Mesh SDK](https://meshjs.dev/) |
 | [Adriano Fiorenza](https://github.com/zxpectre) | Founder - [GameChanger Finance](https://github.com/GameChangerFinance) |
+| [Dmytro Stashenko](https://github.com/dmitrystas) | Founder & CTO - [AdaStat](https://adastat.net/) |
+| [Christian Taylor](https://github.com/ThatGuyLLC) | Founder, Open Source Cowboy - [Open Source Cowboy](https://www.opensourcecowboy.com) |
 | [](https://github.com/) | []() |
-
