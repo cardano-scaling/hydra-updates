@@ -3,7 +3,7 @@
     "title": "Cardano Developer Tooling Map",
     "generated": "2026-07-20",
     "source": "developers.cardano.org/tools + GitHub + project docs",
-    "toolCount": 264,
+    "toolCount": 265,
     "note": "Status and stars are a research-time snapshot and drift over time.",
     "enrichedFields": [
       "license",
@@ -21,7 +21,7 @@
       "onOfficialPortal"
     ],
     "communitySource": "State of the Developer Ecosystem 2025 (Cardano Foundation), n=109",
-    "edgeCount": 242
+    "edgeCount": 243
   },
   "categories": [
     {
@@ -82,7 +82,7 @@
     {
       "key": "infra",
       "label": "Infrastructure & Integration",
-      "count": 21
+      "count": 22
     }
   ],
   "statuses": {
@@ -3765,7 +3765,7 @@
       "lastCommit": "2026-07-17",
       "statusReason": "active — pushed 0mo ago",
       "starsNum": 317,
-      "degree": 9
+      "degree": 10
     },
     {
       "id": "cardano-graphql",
@@ -16943,6 +16943,71 @@
       "statusReason": "active — pushed 1mo ago",
       "starsNum": 11,
       "degree": 1
+    },
+    {
+      "id": "adapools-xyz",
+      "name": "adapools.xyz",
+      "category": "infra",
+      "categoryLabel": "Infrastructure & Integration",
+      "languages": [
+        "JavaScript"
+      ],
+      "languageRaw": "JavaScript",
+      "team": "schmidko",
+      "status": "experimental",
+      "statusLabel": "Experimental",
+      "stars": "0",
+      "repo": "schmidko/adapools",
+      "repoUrl": "https://github.com/schmidko/adapools",
+      "description": "Open-source, self-hostable Cardano stake-pool explorer in the Blox family, functionally modeled on pool.pm. React/Vite frontend with a Node/Express + WebSocket backend, fed by aggregation workers and an indexer on top of cardano-db-sync. Live block ticker, epoch/network metrics and per-pool block history.",
+      "features": [
+        "Real-time block ticker (WebSocket)",
+        "Network & epoch metrics",
+        "Per-pool block history",
+        "Self-hostable"
+      ],
+      "featuresText": "Real-time block ticker (WebSocket), Network & epoch metrics, Per-pool block history, Self-hostable",
+      "dependencies": "cardano-db-sync, MongoDB",
+      "usedBy": "Delegators, pool operators exploring Cardano data",
+      "license": null,
+      "packageRegistry": null,
+      "packageName": null,
+      "latestVersion": null,
+      "latestReleaseDate": null,
+      "cipSupport": [],
+      "networkSupport": [
+        "mainnet"
+      ],
+      "plutusVersions": [],
+      "maintainerType": "individual",
+      "fundingSource": null,
+      "docsUrl": null,
+      "productionReadiness": "experimental",
+      "onOfficialPortal": false,
+      "role": "explorer",
+      "roleLabel": "Explorer",
+      "roles": [
+        "explorer"
+      ],
+      "rolesLabels": [
+        "Explorer"
+      ],
+      "devLangs": [
+        "JavaScript"
+      ],
+      "website": "https://adapools.xyz",
+      "llmsTxt": false,
+      "llmsTxtUrl": null,
+      "agentReadiness": "low",
+      "reviewed": false,
+      "reviewedAt": null,
+      "notes": null,
+      "communityUsage": null,
+      "communityRank": null,
+      "lastCommit": "2026-08-04",
+      "statusReason": "experimental — pushed 0mo ago",
+      "starsNum": 0,
+      "degree": 1
     }
   ],
   "links": [
@@ -18154,6 +18219,11 @@
     {
       "source": "odatano",
       "target": "blockfrost",
+      "type": "backend"
+    },
+    {
+      "source": "adapools-xyz",
+      "target": "cardano-db-sync",
       "type": "backend"
     }
   ]
