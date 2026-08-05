@@ -16969,7 +16969,7 @@
       "featuresText": "Real-time block ticker (WebSocket), Network & epoch metrics, Per-pool block history, Self-hostable",
       "dependencies": "cardano-db-sync, MongoDB",
       "usedBy": "Delegators, pool operators exploring Cardano data",
-      "license": null,
+      "license": "MIT",
       "packageRegistry": null,
       "packageName": null,
       "latestVersion": null,
@@ -17004,7 +17004,7 @@
       "notes": null,
       "communityUsage": null,
       "communityRank": null,
-      "lastCommit": "2026-08-04",
+      "lastCommit": "2026-08-05",
       "statusReason": "experimental — pushed 0mo ago",
       "starsNum": 0,
       "degree": 1
