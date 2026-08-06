@@ -324,7 +324,6 @@ function RowGroup({
         <td className="c-name">
           {n.reviewed && <span className="rev-check" title={`manually reviewed${n.reviewedAt ? " " + n.reviewedAt : ""}`}>✓</span>}
           <span className="tw">{n.name}</span>
-          {isOSS(n) && <span className="oss-tag" title={`Verified open source · ${n.license}`}>OSS</span>}
         </td>
         <td>
           <span className="cat-tag" style={{ color: CATEGORY_COLORS[n.category] }}>
