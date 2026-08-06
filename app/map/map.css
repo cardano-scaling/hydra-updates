@@ -219,8 +219,20 @@
   .nav-link[aria-current="page"] { color: var(--accent); border-bottom-color: var(--accent); }
 
   /* ---------- Table view ---------- */
-  &.table-page { display: flex; flex-direction: column; }
-  .table-wrap { flex: 1; overflow: auto; padding: 0 0 60px; }
+  /* Pin the table view to the viewport (minus the 64px sticky site header) so
+     the masthead — search box + filter chips — and the sticky `thead` stay put
+     while only the rows scroll. `flex: none` + an explicit height is required
+     because the base `.map-view` rule sets `flex: 1 1 0%`, whose `0%` basis
+     otherwise wins over `height` and lets the view grow to the full table
+     height (which made the whole document scroll and carried the masthead off
+     screen). Keyed to the header's `h-16`; keep in sync if that changes. */
+  &.table-page {
+    display: flex; flex-direction: column;
+    flex: none; height: calc(100dvh - 64px);
+  }
+  /* `min-height: 0` lets this flex child shrink below the table's intrinsic
+     height so it — not the document — becomes the scroll container. */
+  .table-wrap { flex: 1; min-height: 0; overflow: auto; padding: 0 0 60px; }
   .tools-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
   .tools-table thead th {
     position: sticky; top: 0; z-index: 2;
