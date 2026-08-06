@@ -3,7 +3,7 @@
     "title": "Cardano Developer Tooling Map",
     "generated": "2026-07-20",
     "source": "developers.cardano.org/tools + GitHub + project docs",
-    "toolCount": 265,
+    "toolCount": 266,
     "note": "Status and stars are a research-time snapshot and drift over time.",
     "enrichedFields": [
       "license",
@@ -21,7 +21,7 @@
       "onOfficialPortal"
     ],
     "communitySource": "State of the Developer Ecosystem 2025 (Cardano Foundation), n=109",
-    "edgeCount": 243
+    "edgeCount": 245
   },
   "categories": [
     {
@@ -57,7 +57,7 @@
     {
       "key": "wallet",
       "label": "Wallets & Connectivity",
-      "count": 28
+      "count": 29
     },
     {
       "key": "dev",
@@ -4662,7 +4662,7 @@
       "lastCommit": "2026-07-22",
       "statusReason": "active — pushed 0mo ago",
       "starsNum": 3200,
-      "degree": 38
+      "degree": 39
     },
     {
       "id": "cardano-cli",
@@ -5244,7 +5244,7 @@
       "lastCommit": "2026-07-22",
       "statusReason": "curated: officially maintenance mode (CF, since 2025)",
       "starsNum": 822,
-      "degree": 4
+      "degree": 5
     },
     {
       "id": "hydra",
@@ -17008,6 +17008,73 @@
       "statusReason": "experimental — pushed 0mo ago",
       "starsNum": 0,
       "degree": 1
+    },
+    {
+      "id": "daedalus",
+      "name": "Daedalus",
+      "category": "wallet",
+      "categoryLabel": "Wallets & Connectivity",
+      "languages": [
+        "TypeScript"
+      ],
+      "languageRaw": "TypeScript",
+      "team": "IntersectMBO (IOG)",
+      "status": "active",
+      "statusLabel": "Maintained",
+      "stars": "1.2k",
+      "repo": "input-output-hk/daedalus",
+      "repoUrl": "https://github.com/input-output-hk/daedalus",
+      "description": "IOG's official open-source full-node desktop wallet for ada. Bundles cardano-node and cardano-wallet to validate the chain locally, giving users a fully self-verifying, trustless wallet on Windows, macOS and Linux.",
+      "features": [
+        "Full-node desktop wallet",
+        "Local chain validation",
+        "Hardware-wallet support",
+        "Native & multi-asset tokens"
+      ],
+      "featuresText": "Full-node desktop wallet, Local chain validation, Hardware-wallet support, Native & multi-asset tokens",
+      "dependencies": "cardano-node, cardano-wallet",
+      "usedBy": "End users wanting a trustless full-node wallet",
+      "license": "Apache-2.0",
+      "packageRegistry": null,
+      "packageName": null,
+      "latestVersion": null,
+      "latestReleaseDate": null,
+      "cipSupport": [],
+      "networkSupport": [
+        "mainnet",
+        "preprod",
+        "preview"
+      ],
+      "plutusVersions": [],
+      "maintainerType": "foundation",
+      "fundingSource": "IOG",
+      "docsUrl": null,
+      "productionReadiness": "production",
+      "onOfficialPortal": false,
+      "role": "wallet",
+      "roleLabel": "Wallet",
+      "roles": [
+        "wallet"
+      ],
+      "rolesLabels": [
+        "Wallet"
+      ],
+      "devLangs": [
+        "TypeScript"
+      ],
+      "website": "https://daedaluswallet.io",
+      "llmsTxt": false,
+      "llmsTxtUrl": null,
+      "agentReadiness": "low",
+      "reviewed": false,
+      "reviewedAt": null,
+      "notes": null,
+      "communityUsage": null,
+      "communityRank": null,
+      "lastCommit": "2026-08-06",
+      "statusReason": "active — pushed 0mo ago",
+      "starsNum": 1243,
+      "degree": 2
     }
   ],
   "links": [
@@ -18225,6 +18292,16 @@
       "source": "adapools-xyz",
       "target": "cardano-db-sync",
       "type": "backend"
+    },
+    {
+      "source": "daedalus",
+      "target": "cardano-wallet",
+      "type": "backend"
+    },
+    {
+      "source": "daedalus",
+      "target": "cardano-node",
+      "type": "depends"
     }
   ]
 }
