@@ -121,6 +121,19 @@ export const AGENT_READINESS: Record<string, { label: string; color: string; ran
   unknown: { label: "Unknown", color: "var(--faint)", rank: 0 },
 };
 
+// Recognised open-source (OSI-approved) software licenses. A tool counts as
+// "verified OSS" only when it carries one of these — a public repo with no
+// license is all-rights-reserved by default, so `null`/`unknown` do NOT qualify.
+// Content licenses (e.g. CC-BY) are intentionally excluded: they aren't OSS.
+export const OSS_LICENSES: ReadonlySet<string> = new Set([
+  "Apache-2.0", "MIT", "BSD-2-Clause", "BSD-3-Clause", "MPL-2.0", "ISC",
+  "GPL-2.0", "GPL-3.0", "LGPL-2.1", "LGPL-3.0", "AGPL-3.0", "Unlicense",
+  "0BSD", "BSL-1.0", "EPL-2.0", "CC0-1.0",
+]);
+
+export const isOSS = (n: Pick<ToolNode, "license">): boolean =>
+  !!n.license && OSS_LICENSES.has(n.license);
+
 export const LINK_COLORS: Record<LinkType, string> = {
   compiles: "#8b8577",
   depends: "#a8a294",

@@ -254,6 +254,16 @@
   .data-row td.c-name { padding-left: 26px; position: relative; }
   .data-row td.c-name .tw { font-weight: 600; color: var(--ink); font-size: 14px; }
   .rev-check { color: var(--good); font-size: 11px; margin-right: 4px; font-weight: 700; }
+  /* "Verified open source" marker — small green pill next to the tool name. */
+  .oss-tag {
+    font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: 0.04em;
+    color: var(--good); background: var(--good-bg);
+    border: 1px solid color-mix(in srgb, var(--good) 35%, transparent);
+    border-radius: 4px; padding: 1px 4px; margin-left: 7px; vertical-align: middle;
+  }
+  /* Keep the OSS filter chip legible when active (chip-btn dims when off). */
+  .oss-toggle { font-family: var(--mono); }
+  .oss-toggle[aria-pressed="true"] { border-color: var(--good); color: var(--good); }
   .data-row.open td.c-name::before,
   .data-row td.c-name::before {
     content: "▸"; position: absolute; left: 10px; color: var(--faint); font-size: 10px; top: 13px;

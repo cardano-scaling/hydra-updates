@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Nav from "@/components/Nav";
 import rawGraph from "@/data/cardano-graph.json";
-import { Graph, ToolNode, Status, STATUS_COLORS, CATEGORY_COLORS, READINESS_LABEL, AGENT_READINESS } from "@/lib/map-types";
+import { Graph, ToolNode, Status, STATUS_COLORS, CATEGORY_COLORS, READINESS_LABEL, AGENT_READINESS, isOSS } from "@/lib/map-types";
 
 const GRAPH = rawGraph as unknown as Graph;
 
@@ -30,6 +30,7 @@ export default function TablePage() {
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [expanded, setExpanded] = useState<string | null>(null);
   const [portalOnly, setPortalOnly] = useState(false);
+  const [ossOnly, setOssOnly] = useState(false);
   const READY_KEYS = ["high", "medium", "low", "unknown"];
   const [readyOn, setReadyOn] = useState<Set<string>>(new Set(READY_KEYS));
   const [reviewState, setReviewState] = useState<"all" | "reviewed" | "unreviewed">("all");
@@ -53,6 +54,7 @@ export default function TablePage() {
       if (reviewState === "unreviewed" && n.reviewed) return false;
       if (cat && n.category !== cat) return false;
       if (portalOnly && !n.onOfficialPortal) return false;
+      if (ossOnly && !isOSS(n)) return false;
       if (lang && !n.languages.some((l) => l.toLowerCase() === lang.toLowerCase()))
         return false;
       if (q) {
@@ -100,7 +102,7 @@ export default function TablePage() {
       return a.name.localeCompare(b.name);
     });
     return out;
-  }, [query, lang, cat, statusOn, readyOn, reviewState, sortKey, sortDir, portalOnly]);
+  }, [query, lang, cat, statusOn, readyOn, reviewState, sortKey, sortDir, portalOnly, ossOnly]);
 
   const setSort = (k: SortKey) => {
     if (k === sortKey) {
@@ -128,6 +130,7 @@ export default function TablePage() {
     setSortKey("starsNum");
     setSortDir("desc");
     setPortalOnly(false);
+    setOssOnly(false);
   };
   const toggleReady = (k: string) => {
     const next = new Set(readyOn);
@@ -231,6 +234,15 @@ export default function TablePage() {
             ★ on portal
           </button>
 
+          <button
+            className="chip-btn oss-toggle"
+            aria-pressed={ossOnly}
+            onClick={() => setOssOnly((v) => !v)}
+            title="Show only verified open-source tools (a recognised OSS license)"
+          >
+            &lt;/&gt; OSS
+          </button>
+
           <button className="reset" onClick={reset}>
             reset
           </button>
@@ -312,6 +324,7 @@ function RowGroup({
         <td className="c-name">
           {n.reviewed && <span className="rev-check" title={`manually reviewed${n.reviewedAt ? " " + n.reviewedAt : ""}`}>✓</span>}
           <span className="tw">{n.name}</span>
+          {isOSS(n) && <span className="oss-tag" title={`Verified open source · ${n.license}`}>OSS</span>}
         </td>
         <td>
           <span className="cat-tag" style={{ color: CATEGORY_COLORS[n.category] }}>
