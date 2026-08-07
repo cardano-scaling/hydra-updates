@@ -104,4 +104,5 @@ Let's build the developer experience Cardano deserves, together.
 | [Adriano Fiorenza](https://github.com/zxpectre) | Founder - [GameChanger Finance](https://github.com/GameChangerFinance) |
 | [Dmytro Stashenko](https://github.com/dmitrystas) | Founder & CTO - [AdaStat](https://adastat.net/) |
 | [Christian Taylor](https://github.com/ThatGuyLLC) | Founder, Open Source Cowboy - [Open Source Cowboy](https://www.opensourcecowboy.com) |
+| [Oleksii Khodakivskyi](https://github.com/fernweh0) | CEO - [Lantr Engineering](https://lantr.io/) |
 | [](https://github.com/) | []() |
