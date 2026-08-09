@@ -3,7 +3,7 @@
     "title": "Cardano Developer Tooling Map",
     "generated": "2026-07-20",
     "source": "developers.cardano.org/tools + GitHub + project docs",
-    "toolCount": 265,
+    "toolCount": 269,
     "note": "Status and stars are a research-time snapshot and drift over time.",
     "enrichedFields": [
       "license",
@@ -21,18 +21,18 @@
       "onOfficialPortal"
     ],
     "communitySource": "State of the Developer Ecosystem 2025 (Cardano Foundation), n=109",
-    "edgeCount": 245
+    "edgeCount": 248
   },
   "categories": [
     {
       "key": "sc",
       "label": "Smart Contracts",
-      "count": 31
+      "count": 32
     },
     {
       "key": "sdk",
       "label": "SDKs & Libraries",
-      "count": 63
+      "count": 65
     },
     {
       "key": "api",
@@ -42,7 +42,7 @@
     {
       "key": "idx",
       "label": "Indexers & Data",
-      "count": 16
+      "count": 17
     },
     {
       "key": "node",
@@ -2182,7 +2182,7 @@
       "lastCommit": "2026-07-22",
       "statusReason": "active — pushed 0mo ago",
       "starsNum": 132,
-      "degree": 6
+      "degree": 7
     },
     {
       "id": "pallas",
@@ -7528,8 +7528,8 @@
       "status": "active",
       "statusLabel": "Maintained",
       "stars": null,
-      "repo": "intelliada.bloxbean.com",
-      "repoUrl": null,
+      "repo": "bloxbean/intelliada",
+      "repoUrl": "https://github.com/bloxbean/intelliada",
       "description": "IntelliJ IDEA plugin for Cardano: accounts, transfers, minting and transaction inspection from the IDE.",
       "features": [
         "IDE accounts/transfers/minting",
@@ -13388,7 +13388,7 @@
       "lastCommit": "2026-07-19",
       "statusReason": "active — pushed 0mo ago",
       "starsNum": 32,
-      "degree": 3
+      "degree": 5
     },
     {
       "id": "ouroboros-miniprotocols-ts",
@@ -17010,6 +17010,252 @@
       "statusReason": "active — pushed 0mo ago",
       "starsNum": 1243,
       "degree": 2
+    },
+    {
+      "id": "yano",
+      "name": "Yano",
+      "category": "idx",
+      "categoryLabel": "Indexers & Data",
+      "languages": [
+        "Java"
+      ],
+      "languageRaw": "Java",
+      "team": "BloxBean",
+      "status": "active",
+      "statusLabel": "Maintained",
+      "stars": "3",
+      "repo": "bloxbean/yano",
+      "repoUrl": "https://github.com/bloxbean/yano",
+      "description": "A Cardano data node written in Java, powered by Yaci — indexes chain data for application backends.",
+      "features": [
+        "Yaci-powered indexing",
+        "application data node"
+      ],
+      "featuresText": "Yaci-powered indexing, application data node",
+      "dependencies": "Yaci",
+      "usedBy": "JVM app backends",
+      "license": null,
+      "packageRegistry": null,
+      "packageName": null,
+      "latestVersion": "v0.1.0-pre12",
+      "latestReleaseDate": "2026-07-27",
+      "cipSupport": [],
+      "networkSupport": [],
+      "plutusVersions": [],
+      "maintainerType": "community",
+      "fundingSource": null,
+      "docsUrl": null,
+      "productionReadiness": "experimental",
+      "onOfficialPortal": false,
+      "role": "chain-indexer",
+      "roleLabel": "Chain indexer",
+      "roles": [
+        "chain-indexer"
+      ],
+      "rolesLabels": [
+        "Chain indexer"
+      ],
+      "devLangs": [
+        "Java"
+      ],
+      "website": null,
+      "llmsTxt": false,
+      "llmsTxtUrl": null,
+      "agentReadiness": "low",
+      "reviewed": false,
+      "reviewedAt": null,
+      "notes": "Enriched 2026-08-08 from GitHub (unauthenticated); not yet published to a package registry.",
+      "communityUsage": null,
+      "communityRank": null,
+      "lastCommit": "2026-08-08",
+      "statusReason": "active — latest v0.1.0-pre12 (2026-07-27), pushed 2026-08-08",
+      "starsNum": 3,
+      "degree": 1
+    },
+    {
+      "id": "zeroj",
+      "name": "ZeroJ",
+      "category": "sc",
+      "categoryLabel": "Smart Contracts",
+      "languages": [
+        "Java"
+      ],
+      "languageRaw": "Java",
+      "team": "BloxBean",
+      "status": "active",
+      "statusLabel": "Maintained",
+      "stars": "2",
+      "repo": "bloxbean/zeroj",
+      "repoUrl": "https://github.com/bloxbean/zeroj",
+      "description": "A Java library for building zero-knowledge proofs on Cardano.",
+      "features": [
+        "ZK proof construction",
+        "Cardano-targeted"
+      ],
+      "featuresText": "ZK proof construction, Cardano-targeted",
+      "dependencies": null,
+      "usedBy": "JVM dApps",
+      "license": "MIT",
+      "packageRegistry": null,
+      "packageName": null,
+      "latestVersion": "v0.1.0-pre11",
+      "latestReleaseDate": "2026-07-29",
+      "cipSupport": [],
+      "networkSupport": [],
+      "plutusVersions": [],
+      "maintainerType": "community",
+      "fundingSource": null,
+      "docsUrl": null,
+      "productionReadiness": "experimental",
+      "onOfficialPortal": false,
+      "role": "zk-tooling",
+      "roleLabel": "Zero-knowledge tooling",
+      "roles": [
+        "zk-tooling"
+      ],
+      "rolesLabels": [
+        "Zero-knowledge tooling"
+      ],
+      "devLangs": [
+        "Java"
+      ],
+      "website": null,
+      "llmsTxt": false,
+      "llmsTxtUrl": null,
+      "agentReadiness": "low",
+      "reviewed": false,
+      "reviewedAt": null,
+      "notes": "Enriched 2026-08-08 from GitHub (unauthenticated); not yet published to a package registry.",
+      "communityUsage": null,
+      "communityRank": null,
+      "lastCommit": "2026-08-04",
+      "statusReason": "active — latest v0.1.0-pre11 (2026-07-29), pushed 2026-08-04",
+      "starsNum": 2,
+      "degree": 0
+    },
+    {
+      "id": "cardano-client-bindings",
+      "name": "Cardano Client Lib Native Bindings",
+      "category": "sdk",
+      "categoryLabel": "SDKs & Libraries",
+      "languages": [
+        "Rust"
+      ],
+      "languageRaw": "Rust",
+      "team": "BloxBean",
+      "status": "active",
+      "statusLabel": "Maintained",
+      "stars": "3",
+      "repo": "bloxbean/cardano-client-bindings",
+      "repoUrl": "https://github.com/bloxbean/cardano-client-bindings",
+      "description": "Native (Rust) bindings for the Cardano Client Library, exposing transaction building to non-JVM languages.",
+      "features": [
+        "FFI bindings",
+        "non-JVM access to CCL"
+      ],
+      "featuresText": "FFI bindings, non-JVM access to CCL",
+      "dependencies": "Cardano Client Lib",
+      "usedBy": "non-JVM dApps",
+      "license": "MIT",
+      "packageRegistry": null,
+      "packageName": null,
+      "latestVersion": "v0.1.0-pre6",
+      "latestReleaseDate": "2026-07-28",
+      "cipSupport": [],
+      "networkSupport": [],
+      "plutusVersions": [],
+      "maintainerType": "community",
+      "fundingSource": null,
+      "docsUrl": null,
+      "productionReadiness": "experimental",
+      "onOfficialPortal": false,
+      "role": "tx-builder",
+      "roleLabel": "Transaction builder / off-chain SDK",
+      "roles": [
+        "tx-builder"
+      ],
+      "rolesLabels": [
+        "Transaction builder / off-chain SDK"
+      ],
+      "devLangs": [
+        "Rust"
+      ],
+      "website": null,
+      "llmsTxt": false,
+      "llmsTxtUrl": null,
+      "agentReadiness": "low",
+      "reviewed": false,
+      "reviewedAt": null,
+      "notes": "Enriched 2026-08-08 from GitHub (unauthenticated); not yet published to a package registry.",
+      "communityUsage": null,
+      "communityRank": null,
+      "lastCommit": "2026-07-28",
+      "statusReason": "active — latest v0.1.0-pre6 (2026-07-28), pushed 2026-07-28",
+      "starsNum": 3,
+      "degree": 1
+    },
+    {
+      "id": "yaci-bridge",
+      "name": "Yaci Bridge",
+      "category": "sdk",
+      "categoryLabel": "SDKs & Libraries",
+      "languages": [
+        "Python",
+        "Java"
+      ],
+      "languageRaw": "Python",
+      "team": "BloxBean",
+      "status": "active",
+      "statusLabel": "Maintained",
+      "stars": "2",
+      "repo": "bloxbean/yaci-bridge",
+      "repoUrl": "https://github.com/bloxbean/yaci-bridge",
+      "description": "A native shared library that exposes Yaci (Cardano mini-protocols) to non-Java languages.",
+      "features": [
+        "native shared library",
+        "non-Java Yaci access"
+      ],
+      "featuresText": "native shared library, non-Java Yaci access",
+      "dependencies": "Yaci",
+      "usedBy": "non-JVM dApps",
+      "license": "MIT",
+      "packageRegistry": null,
+      "packageName": null,
+      "latestVersion": null,
+      "latestReleaseDate": null,
+      "cipSupport": [],
+      "networkSupport": [],
+      "plutusVersions": [],
+      "maintainerType": "community",
+      "fundingSource": null,
+      "docsUrl": null,
+      "productionReadiness": "experimental",
+      "onOfficialPortal": false,
+      "role": "node-access",
+      "roleLabel": "Node access / RPC",
+      "roles": [
+        "node-access"
+      ],
+      "rolesLabels": [
+        "Node access / RPC"
+      ],
+      "devLangs": [
+        "Python",
+        "Java"
+      ],
+      "website": null,
+      "llmsTxt": false,
+      "llmsTxtUrl": null,
+      "agentReadiness": "low",
+      "reviewed": false,
+      "reviewedAt": null,
+      "notes": "Enriched 2026-08-08 from GitHub (unauthenticated); not yet published to a package registry.",
+      "communityUsage": null,
+      "communityRank": null,
+      "lastCommit": "2026-03-04",
+      "statusReason": "active — no tagged release; pushed 2026-03-04",
+      "starsNum": 2,
+      "degree": 1
     }
   ],
   "links": [
@@ -18236,6 +18482,21 @@
     {
       "source": "daedalus",
       "target": "cardano-node",
+      "type": "depends"
+    },
+    {
+      "source": "yano",
+      "target": "yaci",
+      "type": "depends"
+    },
+    {
+      "source": "yaci-bridge",
+      "target": "yaci",
+      "type": "depends"
+    },
+    {
+      "source": "cardano-client-bindings",
+      "target": "bloxbean-cardano-client-library",
       "type": "depends"
     }
   ]
