@@ -5,7 +5,7 @@ import { REACTIVE_GROUP } from "@/lib/types";
 export const metadata: Metadata = {
   title: "Links",
   description:
-    "Curated jump-off points for the Cardano Developer Experience Initiative: tracked repositories and key ecosystem resources.",
+    "Curated jump-off points for Hydra: tracked repositories and key ecosystem resources.",
 };
 
 function host(url: string): string {

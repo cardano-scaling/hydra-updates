@@ -1,4 +1,4 @@
-// LLM-readable feeds for the DevX Initiative tracker (PRD G4 / NFR-5).
+// LLM-readable feeds for the Hydra tracker (PRD G4 / NFR-5).
 //
 // One place that turns the site's committed content (the same loaders the pages
 // use — so these can never drift from what's rendered) into three machine
@@ -12,13 +12,7 @@
 // Everything is a build-time snapshot of committed data (ADR-1); the feeds are
 // labelled with the "as of" dates so consumers know their freshness.
 
-import {
-  getConfig,
-  getDeliverables,
-  getProposalMarkdown,
-  getStatusAsOf,
-  getWeeklyUpdates,
-} from "./content";
+import { getConfig, getDeliverables, getStatusAsOf, getWeeklyUpdates } from "./content";
 import { formatDateRange } from "./format";
 import { REACTIVE_GROUP, type Deliverable, type WeeklyUpdate } from "./types";
 
@@ -27,7 +21,7 @@ function base(): string {
   return getConfig().site.url.replace(/\/+$/, "");
 }
 
-/** Order deliverables D1…D8 numerically for a stable, readable feed. */
+/** Order deliverables M2…M6 numerically for a stable, readable feed. */
 function byDeliverableNumber(a: Deliverable, b: Deliverable): number {
   const n = (id: string) => Number(id.replace(/^\D+/, "")) || 0;
   return n(a.id) - n(b.id);
@@ -100,7 +94,6 @@ export function buildLlmsTxt(): string {
   const statusAsOf = getStatusAsOf();
   const dataAsOf = activityAsOf();
   const ada = proposal.treasuryAskAda.toLocaleString("en-US");
-  const usd = proposal.treasuryAskUsd.toLocaleString("en-US");
 
   const lines: string[] = [];
   lines.push(`# ${site.title}`);
@@ -108,17 +101,13 @@ export function buildLlmsTxt(): string {
   lines.push(`> ${site.tagline} Manual deliverable status backed by automatically gathered GitHub evidence.`);
   lines.push("");
   lines.push(
-    `Treasury ask: ₳${ada} (~$${usd}). Window: ${proposal.windowStart} – ${proposal.windowEnd}. Lead: ${proposal.lead}.`,
+    `Treasury ask: ₳${ada}. Window: ${proposal.windowStart} – ${proposal.windowEnd}. Lead: ${proposal.lead}.`,
   );
   if (statusAsOf) lines.push(`Deliverable status as of ${statusAsOf}. Activity data as of ${dataAsOf}.`);
   lines.push("");
   lines.push(
     "For the entire corpus as one document, fetch /llms-full.txt. For structured data, fetch /api/status.json.",
   );
-
-  lines.push("");
-  lines.push("## Proposal");
-  lines.push(`- [Developer Experience Initiative proposal](${b}/proposal/): the full funded proposal, rendered as Markdown.`);
 
   lines.push("");
   lines.push("## Deliverables");
@@ -134,7 +123,7 @@ export function buildLlmsTxt(): string {
 
   lines.push("");
   lines.push("## Machine-readable");
-  lines.push(`- [Full corpus (Markdown)](${b}/llms-full.txt): proposal, all deliverable status, and every weekly update in one file.`);
+  lines.push(`- [Full corpus (Markdown)](${b}/llms-full.txt): all deliverable status and every weekly update in one file.`);
   lines.push(`- [Status snapshot (JSON)](${b}/api/status.json): structured deliverable status and cumulative proof-of-work.`);
   lines.push(`- [Source repository](${site.repoUrl}): the committed YAML/Markdown behind everything here.`);
   lines.push("");
@@ -216,7 +205,6 @@ export function buildLlmsFullTxt(): string {
   const dataAsOf = activityAsOf();
   const titles = deliverableTitleMap();
   const ada = proposal.treasuryAskAda.toLocaleString("en-US");
-  const usd = proposal.treasuryAskUsd.toLocaleString("en-US");
 
   const parts: string[] = [];
   parts.push(`# ${site.title} — Full Snapshot`);
@@ -226,7 +214,7 @@ export function buildLlmsFullTxt(): string {
   parts.push(
     [
       `Source: ${base()}`,
-      `Treasury ask: ₳${ada} (~$${usd})`,
+      `Treasury ask: ₳${ada}`,
       `Window: ${proposal.windowStart} – ${proposal.windowEnd}`,
       `Lead: ${proposal.lead}`,
       proposal.collaborators.length ? `Collaborators: ${proposal.collaborators.join(", ")}` : "",
@@ -240,10 +228,6 @@ export function buildLlmsFullTxt(): string {
   parts.push(
     "This document is generated from the tracker's committed content (see docs/ARCHITECTURE.md ADR-3): deliverable status is authored by hand; the weekly activity is gathered from GitHub as supporting evidence. All figures are snapshots as of the dates above, not real-time.",
   );
-
-  parts.push("\n---\n");
-  parts.push("## Proposal\n");
-  parts.push(getProposalMarkdown().trim());
 
   parts.push("\n---\n");
   parts.push("## Deliverable status\n");
@@ -270,7 +254,6 @@ export function buildStatusJson() {
     site: { title: site.title, url: b, repoUrl: site.repoUrl },
     proposal: {
       treasuryAskAda: proposal.treasuryAskAda,
-      treasuryAskUsd: proposal.treasuryAskUsd,
       windowStart: proposal.windowStart,
       windowEnd: proposal.windowEnd,
       lead: proposal.lead,

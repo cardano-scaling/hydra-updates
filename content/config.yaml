@@ -1,65 +1,66 @@
-# Site-wide configuration for the DevX Initiative tracker.
+# Site-wide configuration for the Hydra tracker.
 site:
-  title: Cardano DevX Initiative
-  tagline: A transparent, weekly-updated tracker for a funded Cardano Developer Experience program.
+  title: Hydra
+  tagline: A transparent, weekly-updated tracker for Hydra.
   description: >-
-    Track delivery of Input Output's funded Cardano Developer Experience
-    Initiative: deliverable status, milestones, and weekly progress.
-  repoUrl: "https://github.com/input-output-hk/devx-updates"
-  # Canonical public base URL (includes the Pages subpath). The single knob to
-  # change if we move to a custom domain (ADR-11). Used to build absolute links
-  # in the LLM-readable feeds (/llms.txt, /llms-full.txt, /api/status.json).
-  url: "https://input-output-hk.github.io/devx-updates"
+    Track delivery of Hydra: deliverable status, milestones, and weekly progress.
+  repoUrl: "https://github.com/cardano-scaling/hydra-updates"
+  url: "https://cardano-scaling.github.io/hydra-updates"
 
 proposal:
-  treasuryAskAda: 3601926
-  treasuryAskUsd: 864462
+  treasuryAskAda: 5100781
   windowStart: Q3-2026
   windowEnd: Q4-2026
-  lead: Robertino Martinez
-  collaborators:
-    - Intersect Developer Advocate Program
-    - TxPipe
+  lead: Noon van der Silk and Sharan Konerira
+  collaborators: []
 
 roster:
-  - rober-m
-  - paulobressan
-  - alegadea
-  - federicoweill
-  - manugunther
-  - franciscojoray
-  - sofia-bobbiesi
-  - RSoulatIOHK
-  - buddhisthead
+  - noonio
+  - v0d1ch
+  - vrom911
+  - ch1bo
 
-# Curated repositories the gatherer tracks (ADR-4). Each declares:
-#   deliverable: which deliverable (D1…D8) its activity rolls up to, or null
-#                to fall into the "Other / Reactive" bucket (ADR-6).
-#   teamOnly:    true for shared/external repos — count only activity authored
-#                by a roster member (ADR-5); false (default) for owned repos.
-# Placeholder list — replace URLs with the initiative's real public repos.
+# Curated repositories the gatherer tracks (ADR-4). Feeds scripts/gather.ts,
+# the Links page, and the repo chips on each deliverable page. Each declares:
+#   deliverable:  which deliverable (M2…M6) its activity rolls up to, or null
+#                 to fall into the "Other / Reactive" bucket (ADR-6).
+#   teamOnly:     true for shared/external repos — count only activity authored
+#                 by a roster member (ADR-5); false (default) for owned repos.
+#   milestoneMap: optional GitHub-milestone-title → deliverable id. Routes an
+#                 individual PR/issue away from `deliverable`, so one repo can
+#                 feed several workstreams (ADR-6). Unmilestoned items, and
+#                 release milestones like "2.2.1", fall back to `deliverable`.
 repos:
-  - url: "https://github.com/input-output-hk/devx-updates"
-    deliverable: D1
+  # Almost all Hydra work lands here and spans M2…M5, so it defaults to the
+  # Reactive bucket and relies on milestones for per-workstream attribution.
+  - url: "https://github.com/cardano-scaling/hydra"
+    deliverable: null
     teamOnly: false
-  - url: "https://github.com/input-output-hk/cardano-init"
-    deliverable: D3
+    milestoneMap:
+      Performance: M2
+      "Operational Excellence": M3
+      "Ecosystem Support": M4
+      "Maintenance and DevX": M5
+      # No workstream is named "Developer Experience"; it folds into M5, whose
+      # title is "Maintenance and DevX".
+      "Developer Experience": M5
+  - url: "https://github.com/cardano-scaling/hydra-explorer"
+    deliverable: M4
     teamOnly: false
-  - url: "https://github.com/input-output-hk/contracts-library"
-    deliverable: D5
+  - url: "https://github.com/cardano-scaling/hydra-tracker"
+    deliverable: M4
     teamOnly: false
-  - url: "https://github.com/cardano-foundation/developer-portal"
-    deliverable: D4
-    teamOnly: true
-  - url: "https://github.com/cardano-foundation/cardano-templates"
-    deliverable: D8
-    teamOnly: true
-  - url: "https://github.com/blinklabs-io/cardano-up"
-    deliverable: D3
-    teamOnly: true
+  - url: "https://github.com/cardano-scaling/hydra-team-config"
+    deliverable: M3
+    teamOnly: false
+  - url: "https://github.com/cardano-scaling/hydra-updates"
+    deliverable: M6
+    teamOnly: false
 
-# Curated jump-off points shown on the Links hub (built in a later slice).
+# Curated jump-off points shown on the Links hub.
 links:
+  - label: Hydra documentation
+    url: "https://hydra.family/head-protocol/"
   - label: Cardano Developer Portal
     url: "https://developers.cardano.org"
   - label: Cardano Discord

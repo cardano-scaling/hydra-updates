@@ -15,6 +15,13 @@ function formatAda(amount: number): string {
     return `₳${millions.toFixed(1)}M`;
 }
 
+/** "Q3-2026" + "Q4-2026" -> "Q3–Q4 2026"; spans two years -> "Q3 2026 – Q1 2027". */
+function formatWindow(start: string, end: string): string {
+    const [q1, y1] = start.split("-");
+    const [q2, y2] = end.split("-");
+    return y1 === y2 ? `${q1}–${q2} ${y1}` : `${q1} ${y1} – ${q2} ${y2}`;
+}
+
 export default function Home() {
     const config = getConfig();
     const deliverables = getDeliverables();
@@ -32,7 +39,10 @@ export default function Home() {
     // Data-derived facts only — no fabricated GitHub numbers (PRD non-goal).
     const facts: { label: string; value: string }[] = [
         { label: "Treasury ask", value: formatAda(config.proposal.treasuryAskAda) },
-        { label: "Window", value: "Jul '26 – Jan '27" },
+        {
+            label: "Window",
+            value: formatWindow(config.proposal.windowStart, config.proposal.windowEnd),
+        },
         { label: "Deliverables", value: String(deliverables.length) },
         { label: "In progress", value: String(counts["in-progress"]) },
         { label: "Done", value: String(counts.done) },

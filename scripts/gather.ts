@@ -7,6 +7,10 @@
  * groups activity by deliverable, and writes content/weekly/YYYY-Www.md with
  * an empty Highlights section for a human to fill in before merge.
  *
+ * A repo maps to one deliverable by default, but a `milestoneMap` entry can
+ * route individual PRs/issues by their GitHub milestone, so a monorepo like
+ * cardano-scaling/hydra can feed several workstreams (ADR-6).
+ *
  * Run:  GITHUB_TOKEN=$(gh auth token) npx tsx scripts/gather.ts [options]
  * Options:
  *   --week 2026-W28      gather a specific ISO week instead of the prior one
@@ -166,7 +170,7 @@ async function gh<T>(path: string): Promise<T> {
       headers: {
         Accept: "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
-        "User-Agent": "devx-updates-gatherer",
+        "User-Agent": "hydra-updates-gatherer",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
     });
@@ -213,6 +217,8 @@ interface SearchIssue {
   html_url: string;
   user: { login: string } | null;
   pull_request?: unknown;
+  /** Present on the search response already, so routing by it costs no requests. */
+  milestone: { title: string } | null;
 }
 
 /** Run one issues-search query, honoring teamOnly by OR-ing per-author queries. */
@@ -244,11 +250,19 @@ async function searchIssues(
   return out;
 }
 
+/** An activity item plus the deliverable group it was routed to (ADR-6). */
+interface GroupedItem {
+  item: ActivityItem;
+  group: string;
+}
+
 interface RepoActivity {
-  items: ActivityItem[];
+  items: GroupedItem[];
   commits: number;
   comments: number;
   touched: boolean;
+  /** How many items a milestoneMap entry routed away from the repo default. */
+  attributed: number;
 }
 
 async function gatherRepo(
@@ -259,11 +273,23 @@ async function gatherRepo(
 ): Promise<RepoActivity> {
   const slug = `${repo.owner}/${repo.name}`;
   const range = `${ymd(start)}..${ymd(end)}`;
-  const items: ActivityItem[] = [];
+  const items: GroupedItem[] = [];
+  const fallback = repo.deliverable ?? REACTIVE_GROUP;
+  let attributed = 0;
 
-  const push = (type: ActivityItem["type"], raw: { title: string; html_url: string; login: string }) => {
+  const push = (
+    type: ActivityItem["type"],
+    raw: { title: string; html_url: string; login: string; milestone?: string | null },
+  ) => {
     if (isBot(raw.login)) return;
-    items.push({ type, title: raw.title, url: raw.html_url, repo: slug, author: raw.login });
+    // A milestone the repo maps routes this item to its own deliverable; anything
+    // else (unmilestoned, or a release milestone like "2.2.1") uses the default.
+    const routed = raw.milestone ? repo.milestoneMap[raw.milestone] : undefined;
+    if (routed) attributed++;
+    items.push({
+      item: { type, title: raw.title, url: raw.html_url, repo: slug, author: raw.login },
+      group: routed ?? fallback,
+    });
   };
 
   // Merged PRs, opened issues, closed issues (ADR-7: itemize signal).
@@ -271,7 +297,12 @@ async function gatherRepo(
   const mergedUrls = new Set<string>();
   for (const p of merged) {
     mergedUrls.add(p.html_url);
-    push("pr", { title: p.title, html_url: p.html_url, login: p.user?.login ?? "" });
+    push("pr", {
+      title: p.title,
+      html_url: p.html_url,
+      login: p.user?.login ?? "",
+      milestone: p.milestone?.title,
+    });
   }
 
   // PRs opened in-window (including drafts), regardless of target branch —
@@ -283,15 +314,32 @@ async function gatherRepo(
   const openedPrs = await searchIssues(repo, `is:pr created:${range}`, roster);
   for (const p of openedPrs)
     if (!mergedUrls.has(p.html_url))
-      push("pr-opened", { title: p.title, html_url: p.html_url, login: p.user?.login ?? "" });
+      push("pr-opened", {
+        title: p.title,
+        html_url: p.html_url,
+        login: p.user?.login ?? "",
+        milestone: p.milestone?.title,
+      });
 
   const opened = await searchIssues(repo, `is:issue created:${range}`, roster);
   for (const i of opened)
-    if (!i.pull_request) push("issue-opened", { title: i.title, html_url: i.html_url, login: i.user?.login ?? "" });
+    if (!i.pull_request)
+      push("issue-opened", {
+        title: i.title,
+        html_url: i.html_url,
+        login: i.user?.login ?? "",
+        milestone: i.milestone?.title,
+      });
 
   const closed = await searchIssues(repo, `is:issue closed:${range}`, roster);
   for (const i of closed)
-    if (!i.pull_request) push("issue-closed", { title: i.title, html_url: i.html_url, login: i.user?.login ?? "" });
+    if (!i.pull_request)
+      push("issue-closed", {
+        title: i.title,
+        html_url: i.html_url,
+        login: i.user?.login ?? "",
+        milestone: i.milestone?.title,
+      });
 
   // Releases (REST) — filter to the window and (if teamOnly) roster authors.
   interface Release {
@@ -374,7 +422,13 @@ async function gatherRepo(
     comments++;
   }
 
-  return { items, commits, comments, touched: items.length > 0 || commits > 0 || comments > 0 };
+  return {
+    items,
+    commits,
+    comments,
+    touched: items.length > 0 || commits > 0 || comments > 0,
+    attributed,
+  };
 }
 
 function endOfDay(d: Date): Date {
@@ -395,6 +449,7 @@ async function gatherWeek(
   console.error(`Gathering ${key} (${ymd(start)} … ${ymd(end)}) across ${repos.length} repo(s)…`);
 
   // Group activity by deliverable id (or the Reactive bucket), tracking per-repo commit counts.
+  // A repo can contribute to several groups when its milestoneMap routes items (ADR-6).
   const groups = new Map<string, { items: ActivityItem[]; commitCounts: Record<string, number> }>();
   const counters: WeeklyCounters = {
     prsMerged: 0,
@@ -409,10 +464,16 @@ async function gatherWeek(
 
   const failed: string[] = [];
 
+  const bucket = (key: string) => {
+    const existing = groups.get(key);
+    if (existing) return existing;
+    const fresh = { items: [] as ActivityItem[], commitCounts: {} as Record<string, number> };
+    groups.set(key, fresh);
+    return fresh;
+  };
+
   for (const repo of repos) {
     const slug = `${repo.owner}/${repo.name}`;
-    const groupKey = repo.deliverable ?? REACTIVE_GROUP;
-    const group = groups.get(groupKey) ?? { items: [], commitCounts: {} };
 
     // Isolate per-repo failures: a renamed/private/missing repo (or a transient
     // API error that outlives the retry budget) should log a warning and be
@@ -426,22 +487,33 @@ async function gatherWeek(
       continue;
     }
 
-    group.items.push(...activity.items);
-    if (activity.commits > 0) group.commitCounts[slug] = activity.commits;
-    groups.set(groupKey, group);
+    // Each item carries its own group: a repo's milestoneMap can spread it
+    // across several deliverables (ADR-6). Commits have no milestone, so they
+    // stay on the repo's default bucket.
+    for (const { item, group } of activity.items) bucket(group).items.push(item);
+    if (activity.commits > 0) {
+      bucket(repo.deliverable ?? REACTIVE_GROUP).commitCounts[slug] = activity.commits;
+    }
 
-    for (const it of activity.items) {
-      if (it.type === "pr") counters.prsMerged++;
-      else if (it.type === "pr-opened") counters.prsOpened++;
-      else if (it.type === "issue-closed") counters.issuesClosed++;
-      else if (it.type === "issue-opened") counters.issuesOpened++;
-      else if (it.type === "release") counters.releases++;
+    for (const { item } of activity.items) {
+      if (item.type === "pr") counters.prsMerged++;
+      else if (item.type === "pr-opened") counters.prsOpened++;
+      else if (item.type === "issue-closed") counters.issuesClosed++;
+      else if (item.type === "issue-opened") counters.issuesOpened++;
+      else if (item.type === "release") counters.releases++;
     }
     counters.commits += activity.commits;
     counters.comments += activity.comments;
     if (activity.touched) counters.reposTouched++;
+
+    // Surface thin milestone coverage: without it, a repo whose milestoneMap
+    // never matches looks identical to one that has no map at all.
+    const coverage =
+      Object.keys(repo.milestoneMap).length > 0
+        ? `, ${activity.attributed}/${activity.items.length} attributed by milestone`
+        : "";
     console.error(
-      `  ${slug}: ${activity.items.length} item(s), ${activity.commits} commit(s), ${activity.comments} comment(s)`,
+      `  ${slug}: ${activity.items.length} item(s), ${activity.commits} commit(s), ${activity.comments} comment(s)${coverage}`,
     );
   }
 
@@ -484,7 +556,14 @@ async function main() {
       ? args.repos.map((r) => {
           const [owner, name] = r.split("/");
           if (!owner || !name) throw new Error(`--repo must be owner/name, got "${r}"`);
-          return { url: `https://github.com/${r}`, owner, name, deliverable: null, teamOnly: false };
+          return {
+            url: `https://github.com/${r}`,
+            owner,
+            name,
+            deliverable: null,
+            teamOnly: false,
+            milestoneMap: {},
+          };
         })
       : config.repos;
 

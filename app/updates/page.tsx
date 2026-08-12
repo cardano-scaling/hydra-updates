@@ -7,7 +7,7 @@ import type { WeeklyUpdate } from "@/lib/types";
 export const metadata: Metadata = {
   title: "Updates",
   description:
-    "Weekly progress on the Cardano Developer Experience Initiative: gathered GitHub activity grouped by deliverable, plus a short narrative.",
+    "Weekly progress on Hydra: gathered GitHub activity grouped by deliverable, plus a short narrative.",
 };
 
 /** A plain-text teaser from the Markdown narrative for the archive list. */

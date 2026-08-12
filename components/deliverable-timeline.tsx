@@ -6,7 +6,7 @@ import { StatusBadge } from "./status-badge";
 
 // The program window the whole timeline is scaled to: Jun 1 2026 → Jan 31 2027.
 // Starts in June to cover the pre-funding backfill weeks (the last milestone,
-// DX.08, is due 15 Jan 2027).
+// M6.1, is due 30 Jan 2027).
 const WIN_START = Date.UTC(2026, 5, 1);
 const WIN_END = Date.UTC(2027, 0, 31);
 const SPAN = WIN_END - WIN_START;
