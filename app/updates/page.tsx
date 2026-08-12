@@ -47,8 +47,7 @@ export default function UpdatesPage() {
         </h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-muted">
           A weekly record of what shipped, gathered automatically from GitHub and grouped by
-          deliverable, with a short narrative from the team. Numbers are snapshots as of each
-          gather run.
+          deliverable, with a short narrative from the team.
         </p>
       </header>
 

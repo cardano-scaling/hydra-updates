@@ -74,7 +74,7 @@ export default function LinksPage() {
             const note =
               r.deliverable && r.deliverable !== REACTIVE_GROUP
                 ? `${r.deliverable} · ${titleById.get(r.deliverable) ?? r.deliverable}`
-                : "Reactive / other";
+                : "";
             return <LinkCard key={r.url} label={`${r.owner}/${r.name}`} url={r.url} note={note} />;
           })}
         </Section>

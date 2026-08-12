@@ -37,21 +37,12 @@ repos:
     deliverable: null
     teamOnly: false
     milestoneMap:
-      Performance: M2
+      "Performance": M2
       "Operational Excellence": M3
       "Ecosystem Support": M4
       "Maintenance and DevX": M5
-      # No workstream is named "Developer Experience"; it folds into M5, whose
-      # title is "Maintenance and DevX".
-      "Developer Experience": M5
   - url: "https://github.com/cardano-scaling/hydra-explorer"
-    deliverable: M4
-    teamOnly: false
-  - url: "https://github.com/cardano-scaling/hydra-tracker"
-    deliverable: M4
-    teamOnly: false
-  - url: "https://github.com/cardano-scaling/hydra-team-config"
-    deliverable: M3
+    deliverable: M5
     teamOnly: false
   - url: "https://github.com/cardano-scaling/hydra-updates"
     deliverable: M6
@@ -63,5 +54,3 @@ links:
     url: "https://hydra.family/head-protocol/"
   - label: Cardano Developer Portal
     url: "https://developers.cardano.org"
-  - label: Cardano Discord
-    url: "https://discord.gg/cardano"
