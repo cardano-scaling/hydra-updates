@@ -10,10 +10,6 @@ import {
   type DeliverableStatus,
   type DeliverableUpdate,
   type Milestone,
-  type GrowthMetric,
-  type ImpactConfig,
-  type ImpactSeries,
-  type PastMetric,
   type Quarter,
   type SiteConfig,
   type TrackedRepo,
@@ -165,6 +161,22 @@ function parseRepoUrl(url: string): { owner: string; name: string } | null {
   return { owner: m[1], name: m[2] };
 }
 
+/** GitHub milestone title -> deliverable id (ADR-6). Both sides must be strings. */
+function normalizeMilestoneMap(raw: unknown, where: string): Record<string, string> {
+  if (raw == null) return {};
+  if (typeof raw !== "object" || Array.isArray(raw)) {
+    fail("config.yaml", `${where}.milestoneMap is not a mapping`);
+  }
+  const out: Record<string, string> = {};
+  for (const [title, deliverable] of Object.entries(raw as Record<string, unknown>)) {
+    if (!asString(deliverable)) {
+      fail("config.yaml", `${where}.milestoneMap["${title}"] is not a deliverable id`);
+    }
+    out[title] = deliverable;
+  }
+  return out;
+}
+
 function normalizeTrackedRepo(raw: unknown, index: number): TrackedRepo {
   const where = `repos[${index}]`;
   if (typeof raw !== "object" || raw === null) fail("config.yaml", `${where} is not an object`);
@@ -179,6 +191,7 @@ function normalizeTrackedRepo(raw: unknown, index: number): TrackedRepo {
     name: parsed.name,
     deliverable,
     teamOnly: r.teamOnly === true,
+    milestoneMap: normalizeMilestoneMap(r.milestoneMap, where),
   };
 }
 
@@ -209,10 +222,15 @@ export function getTrackedRepos(): TrackedRepo[] {
 /**
  * Tracked repos that roll up to a given deliverable id — derived from the same
  * `config.yaml` list the gatherer reads, so the deliverable page and the
- * gathered activity can never drift out of sync.
+ * gathered activity can never drift out of sync. A repo counts if it either
+ * defaults to this deliverable or routes some of its milestones here (ADR-6).
  */
 export function getReposForDeliverable(deliverableId: string): TrackedRepo[] {
-  return getTrackedRepos().filter((r) => r.deliverable === deliverableId);
+  return getTrackedRepos().filter(
+    (r) =>
+      r.deliverable === deliverableId ||
+      Object.values(r.milestoneMap).includes(deliverableId),
+  );
 }
 
 /** Latest statusUpdatedAt across all deliverables — the site's "status as of" date. */
@@ -350,118 +368,3 @@ export function getLatestWeeklyUpdate(): WeeklyUpdate | undefined {
   return getWeeklyUpdates()[0];
 }
 
-// --- Proposal --------------------------------------------------------------
-
-let proposalCache: string | null = null;
-
-/** The proposal rendered as Markdown (ADR-12). Read once at build time. */
-export function getProposalMarkdown(): string {
-  if (proposalCache !== null) return proposalCache;
-  const raw = readFileSync(join(CONTENT_DIR, "proposal", "proposal.md"), "utf8");
-  if (!raw.trim()) fail("proposal/proposal.md", "proposal is empty");
-  proposalCache = raw;
-  return proposalCache;
-}
-
-let alignmentCache: string | null = null;
-
-/** The Community Alignment / DevX strategy document, as Markdown. */
-export function getCommunityAlignmentMarkdown(): string {
-  if (alignmentCache !== null) return alignmentCache;
-  const raw = readFileSync(join(CONTENT_DIR, "pledge.md"), "utf8");
-  if (!raw.trim()) fail("pledge.md", "document is empty");
-  alignmentCache = raw;
-  return alignmentCache;
-}
-
-// --- Impact ----------------------------------------------------------------
-
-function asNumberOrNull(v: unknown): number | null {
-  return typeof v === "number" && Number.isFinite(v) ? v : null;
-}
-
-function normalizeSeries(raw: unknown): ImpactSeries[] {
-  if (!Array.isArray(raw)) return [];
-  return raw.flatMap((s) => {
-    if (typeof s !== "object" || s === null) return [];
-    const obj = s as Record<string, unknown>;
-    if (!asString(obj.name)) return [];
-    const points = Array.isArray(obj.points)
-      ? obj.points.flatMap((p) => {
-          if (typeof p !== "object" || p === null) return [];
-          const pt = p as Record<string, unknown>;
-          if (asString(pt.label) && typeof pt.value === "number" && Number.isFinite(pt.value)) {
-            return [{ label: pt.label, value: pt.value }];
-          }
-          return [];
-        })
-      : [];
-    return [{ name: obj.name, points }];
-  });
-}
-
-function normalizeGrowthMetric(raw: unknown): GrowthMetric[] {
-  if (typeof raw !== "object" || raw === null) return [];
-  const m = raw as Record<string, unknown>;
-  if (!asString(m.name)) return [];
-  return [
-    {
-      name: m.name,
-      yLabel: asString(m.yLabel) ? m.yLabel : "",
-      illustrative: m.illustrative !== false,
-      series: normalizeSeries(m.series),
-    },
-  ];
-}
-
-function normalizePastMetric(raw: unknown): PastMetric[] {
-  if (typeof raw !== "object" || raw === null) return [];
-  const m = raw as Record<string, unknown>;
-  if (!asString(m.name)) return [];
-  return [
-    {
-      name: m.name,
-      note: asString(m.note) ? m.note : "",
-      baseline: asNumberOrNull(m.baseline),
-      target: asNumberOrNull(m.target),
-    },
-  ];
-}
-
-let impactCache: ImpactConfig | null = null;
-
-/** Ecosystem impact KPIs. Values may be illustrative until measured. */
-export function getImpact(): ImpactConfig {
-  if (impactCache) return impactCache;
-  const raw = readYaml("impact.yaml");
-  if (typeof raw !== "object" || raw === null) fail("impact.yaml", "expected an object");
-  const c = raw as Record<string, unknown>;
-  const direct = (c.direct ?? {}) as Record<string, unknown>;
-  const ecosystem = (c.ecosystem ?? {}) as Record<string, unknown>;
-  const past = (c.past ?? {}) as Record<string, unknown>;
-
-  impactCache = {
-    direct: {
-      title: asString(direct.title) ? direct.title : "",
-      summary: asString(direct.summary) ? direct.summary : "",
-      method: asString(direct.method) ? direct.method : "",
-      characteristics: Array.isArray(direct.characteristics)
-        ? direct.characteristics.filter(asString)
-        : [],
-    },
-    ecosystem: {
-      note: asString(ecosystem.note) ? ecosystem.note : "",
-      source: asString(ecosystem.source) ? ecosystem.source : "",
-      controls: Array.isArray(ecosystem.controls) ? ecosystem.controls.filter(asString) : [],
-      targetPct: asNumberOrNull(ecosystem.targetPct) ?? 0,
-      metrics: Array.isArray(ecosystem.metrics)
-        ? ecosystem.metrics.flatMap(normalizeGrowthMetric)
-        : [],
-    },
-    past: {
-      note: asString(past.note) ? past.note : "",
-      metrics: Array.isArray(past.metrics) ? past.metrics.flatMap(normalizePastMetric) : [],
-    },
-  };
-  return impactCache;
-}

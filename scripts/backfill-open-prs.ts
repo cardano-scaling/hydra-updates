@@ -36,7 +36,7 @@ async function gh<T>(path: string): Promise<T> {
       headers: {
         Accept: "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
-        "User-Agent": "devx-updates-backfill",
+        "User-Agent": "hydra-updates-backfill",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
     });

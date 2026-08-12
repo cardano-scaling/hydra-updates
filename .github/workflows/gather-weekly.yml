@@ -1,5 +1,3 @@
-# Weekly activity gatherer (docs/ARCHITECTURE.md ADR-8).
-#
 # Runs every Monday 08:00 UTC, covering the prior Mon–Sun calendar week, and
 # opens a DRAFT PR with the pre-filled weekly update. A human writes the
 # narrative and merges; merging is the publish action (deploy.yml takes over).
@@ -27,7 +25,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - run: npm ci
@@ -50,4 +48,4 @@ jobs:
             Auto-gathered weekly activity, grouped by deliverable.
 
             **Before merging:** fill in the **Highlights** section with the
-            week's narrative. Nothing publishes until this PR is merged (ADR-8).
+            week's narrative. Nothing publishes until this PR is merged.

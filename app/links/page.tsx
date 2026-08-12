@@ -5,7 +5,7 @@ import { REACTIVE_GROUP } from "@/lib/types";
 export const metadata: Metadata = {
   title: "Links",
   description:
-    "Curated jump-off points for the Cardano Developer Experience Initiative: tracked repositories and key ecosystem resources.",
+    "Curated jump-off points for Hydra: tracked repositories and key ecosystem resources.",
 };
 
 function host(url: string): string {
@@ -74,7 +74,7 @@ export default function LinksPage() {
             const note =
               r.deliverable && r.deliverable !== REACTIVE_GROUP
                 ? `${r.deliverable} · ${titleById.get(r.deliverable) ?? r.deliverable}`
-                : "Reactive / other";
+                : "";
             return <LinkCard key={r.url} label={`${r.owner}/${r.name}`} url={r.url} note={note} />;
           })}
         </Section>

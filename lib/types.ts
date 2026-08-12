@@ -1,4 +1,4 @@
-// Shared content types for the DevX Initiative tracker.
+// Shared content types for the Hydra tracker.
 
 export const DELIVERABLE_STATUSES = [
   "not-started",
@@ -28,7 +28,7 @@ export interface DeliverableUpdate {
 
 /**
  * A committed milestone within a workstream (from the contract's milestone
- * schedule, DX.xx). A workstream may hold more than one. `dueDate` is null for
+ * schedule, Mx.y). A workstream may hold more than one. `dueDate` is null for
  * milestones with no calendar deadline (e.g. "on signing of contract").
  *
  * `evidence`, `acceptanceCriteria`, `team`, and `thirdPartyAssurance` are
@@ -36,7 +36,7 @@ export interface DeliverableUpdate {
  * surfaced in the UI.
  */
 export interface Milestone {
-  id: string; // e.g. "DX.02"
+  id: string; // e.g. "M2.1"
   title: string;
   /** Committed deadline (YYYY-MM-DD), or null when there is no calendar date. */
   dueDate: string | null;
@@ -73,8 +73,13 @@ export interface Deliverable {
 
 /**
  * A curated repository the gatherer tracks (ADR-4/5/6). `deliverable` is the id
- * of the deliverable it maps to (D1…D8) or null to fall into the Reactive bucket.
+ * of the deliverable it maps to (M2…M6) or null to fall into the Reactive bucket.
  * `teamOnly` (ADR-5): for shared/external repos, count only roster-authored work.
+ *
+ * `milestoneMap` splits one repo across several deliverables (ADR-6): a GitHub
+ * milestone title maps an individual PR/issue to a deliverable id, overriding
+ * `deliverable` for that item. Needed because nearly all Hydra work lives in the
+ * one repo but spans several workstreams. Empty for single-purpose repos.
  */
 export interface TrackedRepo {
   url: string;
@@ -82,58 +87,7 @@ export interface TrackedRepo {
   name: string;
   deliverable: string | null;
   teamOnly: boolean;
-}
-
-// --- Impact (ecosystem KPIs we aim to influence but don't control) ---------
-
-export interface ImpactPoint {
-  label: string; // x-axis label, e.g. "Jul"
-  value: number;
-}
-
-export interface ImpactSeries {
-  name: string;
-  points: ImpactPoint[];
-}
-
-/** A relative-growth metric charted against control ecosystems. */
-export interface GrowthMetric {
-  name: string;
-  yLabel: string;
-  illustrative: boolean;
-  series: ImpactSeries[];
-}
-
-/** A metric benchmarked against Cardano's own past performance. */
-export interface PastMetric {
-  name: string;
-  note: string;
-  baseline: number | null;
-  target: number | null;
-}
-
-export interface ImpactConfig {
-  // Direct: the onboarding-difficulty experiment (two hackathons, before & after).
-  direct: {
-    title: string;
-    summary: string;
-    method: string;
-    characteristics: string[];
-  };
-  // Proxy — relative to the blockchain ecosystem (difference-in-differences vs
-  // control ecosystems, to control for industry-wide trends).
-  ecosystem: {
-    note: string;
-    source: string;
-    controls: string[];
-    targetPct: number;
-    metrics: GrowthMetric[];
-  };
-  // Proxy — relative to Cardano's own past years.
-  past: {
-    note: string;
-    metrics: PastMetric[];
-  };
+  milestoneMap: Record<string, string>;
 }
 
 export interface SiteConfig {
@@ -147,7 +101,6 @@ export interface SiteConfig {
   };
   proposal: {
     treasuryAskAda: number;
-    treasuryAskUsd: number;
     windowStart: string;
     windowEnd: string;
     lead: string;
@@ -182,7 +135,7 @@ export interface ActivityItem {
 }
 
 export interface WeeklyGroup {
-  /** A deliverable id (D1…D8) or REACTIVE_GROUP. */
+  /** A deliverable id (M2…M6) or REACTIVE_GROUP. */
   deliverable: string;
   items: ActivityItem[];
   /** Per-repo raw commit counts — noise summarized, not itemized (ADR-7). */

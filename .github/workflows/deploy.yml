@@ -27,15 +27,14 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - run: npm ci
 
       - name: Build static export
         env:
-          # Project site is served under /devx-updates (ADR-11).
-          NEXT_PUBLIC_BASE_PATH: /devx-updates
+          NEXT_PUBLIC_BASE_PATH: /hydra-updates
         run: npm run build
 
       - uses: actions/upload-pages-artifact@v3
