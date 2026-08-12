@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import Link from "next/link";
-import type { Deliverable, DeliverableUpdate } from "@/lib/types";
+import type { Deliverable, DeliverableUpdate, Milestone } from "@/lib/types";
 import { formatShort } from "@/lib/format";
 import { StatusBadge } from "./status-badge";
 
@@ -15,8 +15,17 @@ const MONTHS = ["Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"];
 // Leave a small gutter at each end so markers/labels never sit on the track edge.
 const EDGE = 3;
 
-const DUE_COLOR = "var(--status-progress)"; // amber — the committed deadline
-const DONE_COLOR = "var(--status-done)"; // green — actual delivery
+const DUE_COLOR = "var(--status-progress)"; // amber — deadline still outstanding
+const DONE_COLOR = "var(--status-done)"; // green — delivered, or a deadline already met
+
+/**
+ * A delivered date is proof of delivery on its own, so either signal counts —
+ * some milestones carry `deliveredDate` without their `status` being updated to
+ * `done`, and a met deadline should not still read as outstanding.
+ */
+function isComplete(m: Milestone): boolean {
+  return m.status === "done" || m.deliveredDate !== null;
+}
 
 const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
 /** Map a raw window fraction (0–1) to a percentage inside the gutters. */
@@ -99,18 +108,26 @@ function Marker({
   color,
   label,
   date,
+  title,
   centerLabel = false,
 }: {
   at: number;
   color: string;
   label: string;
   date: string;
+  /** Milestone title, revealed from the dot on hover/focus. */
+  title: string;
   /** Always center the label on the mark, ignoring edge clamping. */
   centerLabel?: boolean;
 }) {
   const labelPos = centerLabel
     ? { left: `${at}%`, transform: "translateX(-50%)" }
     : labelStyle(at);
+  const dotStyle = {
+    left: `${at}%`,
+    backgroundColor: color,
+    transform: "translate(-50%,-50%)",
+  };
   return (
     <>
       <span
@@ -118,11 +135,24 @@ function Marker({
         className="absolute inset-y-0 w-0.5"
         style={{ left: `${at}%`, backgroundColor: color, transform: "translateX(-50%)" }}
       />
+      {/* The dot is the hover target (the line is not), matching the update markers. */}
       <span
-        aria-hidden
-        className="absolute top-0 h-2 w-2 rounded-full"
-        style={{ left: `${at}%`, backgroundColor: color, transform: "translate(-50%,-50%)" }}
-      />
+        tabIndex={0}
+        aria-label={title}
+        className="group absolute top-0 z-20 h-2 w-2 cursor-help rounded-full focus-visible:outline-none"
+        style={dotStyle}
+      >
+        {/* Widens the hover/focus target without changing how the dot looks. */}
+        <span aria-hidden className="absolute -inset-1.5 rounded-full" />
+        {/* mb-6 clears the date label sitting just above the track. */}
+        <span
+          role="tooltip"
+          className="pointer-events-none absolute bottom-full z-30 mb-6 hidden w-52 rounded-md border border-border bg-surface p-3 text-left shadow-lg group-hover:block group-focus-visible:block"
+          style={tipStyle(at)}
+        >
+          <span className="block text-xs leading-snug text-foreground">{title}</span>
+        </span>
+      </span>
       <span
         className="absolute -top-5 hidden whitespace-nowrap font-mono text-[0.6rem] uppercase tracking-wider sm:block"
         style={{ ...labelPos, color }}
@@ -196,10 +226,26 @@ function Track({ d, ticks, today }: { d: Deliverable; ticks: number[]; today: nu
                 }}
               />
             )}
-            {/* the milestone id labels the deadline so multiple markers stay distinct */}
-            {due !== null && <Marker at={due} color={DUE_COLOR} label={m.id} date={m.dueDate!} />}
+            {/* the milestone id labels the deadline so multiple markers stay distinct;
+                a completed milestone's deadline goes green rather than staying amber */}
+            {due !== null && (
+              <Marker
+                at={due}
+                color={isComplete(m) ? DONE_COLOR : DUE_COLOR}
+                label={m.id}
+                date={m.dueDate!}
+                title={m.title}
+              />
+            )}
             {delivered !== null && (
-              <Marker at={delivered} color={DONE_COLOR} label="Shipped" date={m.deliveredDate!} centerLabel />
+              <Marker
+                at={delivered}
+                color={DONE_COLOR}
+                label="Shipped"
+                date={m.deliveredDate!}
+                title={m.title}
+                centerLabel
+              />
             )}
           </Fragment>
         );
@@ -215,9 +261,10 @@ function Track({ d, ticks, today }: { d: Deliverable; ticks: number[]; today: nu
 
 /**
  * Each deliverable rendered as a track on a shared Jun 2026→Jan 2027 timeline: thin
- * ticks mark weeks; the amber line is the committed deadline; the green line is
- * when it actually shipped (we aim to ship before the deadline); blue dots are
- * intermediate improvements that link to their weekly update.
+ * ticks mark weeks; amber is a deadline still outstanding; green is either the
+ * date something shipped or a deadline already met (we aim to ship before the
+ * deadline); blue dots are intermediate improvements linking to their weekly
+ * update.
  */
 export function DeliverableTimeline({ deliverables }: { deliverables: Deliverable[] }) {
   const ticks = weekTicks();
@@ -229,10 +276,10 @@ export function DeliverableTimeline({ deliverables }: { deliverables: Deliverabl
       {/* legend */}
       <div className="flex flex-wrap items-center gap-x-5 gap-y-1 font-mono text-[0.65rem] uppercase tracking-wider text-muted">
         <span className="inline-flex items-center gap-1.5">
-          <span className="h-2.5 w-0.5" style={{ backgroundColor: DUE_COLOR }} /> Deadline
+          <span className="h-2.5 w-0.5" style={{ backgroundColor: DUE_COLOR }} /> Deadline (open)
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="h-2.5 w-0.5" style={{ backgroundColor: DONE_COLOR }} /> Shipped
+          <span className="h-2.5 w-0.5" style={{ backgroundColor: DONE_COLOR }} /> Shipped / met
         </span>
         <span className="inline-flex items-center gap-1.5">
           <span className="h-2 w-2 rounded-full bg-primary" /> Update
