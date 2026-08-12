@@ -48,6 +48,11 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    # Runners now default the Actions runtime to Node 24, which uses its own
+    # bundled CA store and rejects the Pages deployment cert as "self-signed".
+    # Fall back to the runner's OS trust store (Node's own recommended fix).
+    env:
+      NODE_OPTIONS: --use-system-ca
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
