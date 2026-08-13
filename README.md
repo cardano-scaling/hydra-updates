@@ -17,7 +17,29 @@ Everything the site renders is committed YAML/Markdown under `content/`:
 | `weekly/YYYY-Www.md` | one gathered weekly update, with a human narrative |
 
 `scripts/gather.ts` drafts a weekly update from the GitHub API; a human writes
-the Highlights section and merges. See `docs/ARCHITECTURE.md` for the ADRs.
+the Highlights section and merges.
+
+## Generating weekly updates
+
+Weeks are ISO weeks, Mon–Sun, UTC. Each run writes
+`content/weekly/YYYY-Www.md`. CI does this every Monday (`gather-weekly.yml`);
+everything below is for running it by hand.
+
+```sh
+export GITHUB_TOKEN=$(gh auth token)   # unauthenticated is rate-limited to uselessness
+
+npx tsx scripts/gather.ts                              # the prior Mon–Sun week
+npx tsx scripts/gather.ts --week 2026-W30              # one specific week
+npx tsx scripts/gather.ts --week 2026-W30 --dry-run    # print to stdout, write nothing
+npx tsx scripts/gather.ts --from 2026-06-22 --to 2026-08-09   # every week overlapping the range
+```
+
+### Attribution
+
+Each PR/issue is routed to a workstream by its **GitHub milestone**, via
+`milestoneMap` in `content/config.yaml`. Unmilestoned items fall back to
+the repo's `deliverable`, then to Reactive. Commits, comments and releases carry
+no milestone, so they always use the repo default.
 
 ## Development
 
