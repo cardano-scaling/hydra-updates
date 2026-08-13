@@ -110,6 +110,8 @@ export interface SiteConfig {
   roster: string[];
   repos: TrackedRepo[];
   links: DeliverableLink[];
+  /** Sibling trackers, shown as a webring on the Links hub. */
+  otherTrackers: DeliverableLink[];
 }
 
 // --- Weekly updates (gathered activity, ADR-6/7) ---------------------------

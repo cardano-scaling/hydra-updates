@@ -7,6 +7,7 @@ import {
   type ActivityItem,
   type ActivityType,
   type Deliverable,
+  type DeliverableLink,
   type DeliverableStatus,
   type DeliverableUpdate,
   type Milestone,
@@ -210,7 +211,26 @@ export function getConfig(): SiteConfig {
     : fail("config.yaml", `expected "repos" to be a list`);
   const roster = Array.isArray(c.roster) ? c.roster.filter(asString) : [];
 
-  configCache = { ...(raw as SiteConfig), repos, roster };
+  // Default the link lists to empty: the pages iterate them unguarded, so a
+  // missing key would otherwise fail the build rather than render nothing.
+  const linkList = (raw: unknown): DeliverableLink[] =>
+    Array.isArray(raw)
+      ? raw.flatMap((l) => {
+          if (typeof l !== "object" || l === null) return [];
+          const link = l as Record<string, unknown>;
+          return asString(link.label) && asString(link.url)
+            ? [{ label: link.label, url: link.url }]
+            : [];
+        })
+      : [];
+
+  configCache = {
+    ...(raw as SiteConfig),
+    repos,
+    roster,
+    links: linkList(c.links),
+    otherTrackers: linkList(c.otherTrackers),
+  };
   return configCache;
 }
 

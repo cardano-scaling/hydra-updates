@@ -55,8 +55,17 @@
   slug: operations
   title: Operational Excellence
   quarter: Q3-2026
-  status: not-started
+  status: in-progress
   statusUpdatedAt: 2026-08-12
+  updates:
+    - date: "2026-07-09"
+      description: >-
+        Persistence hardened across restarts: pending deposits now survive
+        rotation, and a quirk with history API was fixed.
+      week: "2026-W28"
+    - date: "2026-07-20"
+      description: Selective partial fanout implemented.
+      week: "2026-W30"
   summary: >-
     A more resilient, observable and operator-friendly Hydra node, reducing
     friction for SPOs and dApp teams running production infrastructure.
@@ -136,6 +145,14 @@
   status: in-progress
   statusUpdatedAt: 2026-07-16
   updates:
+    - date: "2026-07-10"
+      description: >-
+        Test infrastructure overhauled: the hydra-node suite now runs in
+        parallel, and nightly CI was found to be silently running zero tests.
+      week: "2026-W28"
+    - date: "2026-07-15"
+      description: Hydra 2.3.0 released.
+      week: "2026-W29"
     - date: "2026-07-30"
       description: Improved documentation around benchmarks (only in unstable version at the moment).
       week: "2026-W31"
