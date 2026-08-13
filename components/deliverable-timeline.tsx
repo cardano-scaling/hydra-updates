@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import Link from "next/link";
-import type { Deliverable, DeliverableUpdate, Milestone } from "@/lib/types";
+import { isMilestoneComplete, type Deliverable, type DeliverableUpdate } from "@/lib/types";
 import { formatShort } from "@/lib/format";
 import { StatusBadge } from "./status-badge";
 
@@ -17,15 +17,6 @@ const EDGE = 3;
 
 const DUE_COLOR = "var(--status-progress)"; // amber — deadline still outstanding
 const DONE_COLOR = "var(--status-done)"; // green — delivered, or a deadline already met
-
-/**
- * A delivered date is proof of delivery on its own, so either signal counts —
- * some milestones carry `deliveredDate` without their `status` being updated to
- * `done`, and a met deadline should not still read as outstanding.
- */
-function isComplete(m: Milestone): boolean {
-  return m.status === "done" || m.deliveredDate !== null;
-}
 
 const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
 /** Map a raw window fraction (0–1) to a percentage inside the gutters. */
@@ -231,7 +222,7 @@ function Track({ d, ticks, today }: { d: Deliverable; ticks: number[]; today: nu
             {due !== null && (
               <Marker
                 at={due}
-                color={isComplete(m) ? DONE_COLOR : DUE_COLOR}
+                color={isMilestoneComplete(m) ? DONE_COLOR : DUE_COLOR}
                 label={m.id}
                 date={m.dueDate!}
                 title={m.title}

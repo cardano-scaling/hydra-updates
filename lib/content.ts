@@ -4,6 +4,7 @@ import { load as loadYaml } from "js-yaml";
 import {
   ACTIVITY_TYPES,
   DELIVERABLE_STATUSES,
+  isMilestoneComplete,
   type ActivityItem,
   type ActivityType,
   type Deliverable,
@@ -251,6 +252,23 @@ export function getReposForDeliverable(deliverableId: string): TrackedRepo[] {
       r.deliverable === deliverableId ||
       Object.values(r.milestoneMap).includes(deliverableId),
   );
+}
+
+/**
+ * The soonest-due milestone still outstanding, with the workstream it belongs
+ * to — the site's "what's next". Undelivered milestones with no calendar date
+ * are excluded, since they can't be ranked. Undefined once everything dated is
+ * delivered.
+ */
+export function getNextDueMilestone(): { deliverable: Deliverable; milestone: Milestone } | undefined {
+  return getDeliverables()
+    .flatMap((deliverable) =>
+      deliverable.milestones
+        .filter((m) => m.dueDate !== null && !isMilestoneComplete(m))
+        .map((milestone) => ({ deliverable, milestone })),
+    )
+    .sort((a, b) => (a.milestone.dueDate! < b.milestone.dueDate! ? -1 : 1))
+    .at(0);
 }
 
 /** Latest statusUpdatedAt across all deliverables — the site's "status as of" date. */

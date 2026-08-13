@@ -51,6 +51,15 @@ export interface Milestone {
 }
 
 /**
+ * Whether a milestone counts as delivered. A `deliveredDate` is proof on its
+ * own — some milestones carry one without their `status` being updated to
+ * `done`, and those must not read as still outstanding.
+ */
+export function isMilestoneComplete(m: Milestone): boolean {
+  return m.status === "done" || m.deliveredDate !== null;
+}
+
+/**
  * A workstream: a bucket of related work that rolls up gathered GitHub activity
  * (by `id`, see ADR-6) and holds one or more contract milestones. Ongoing work
  * (e.g. Reactive) has no milestones.

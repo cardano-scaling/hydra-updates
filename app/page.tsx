@@ -5,9 +5,11 @@ import {
     getConfig,
     getDeliverables,
     getLatestWeeklyUpdate,
+    getNextDueMilestone,
     getStatusAsOf,
 } from "@/lib/content";
-import { formatDateRange, weekParts } from "@/lib/format";
+import { daysUntil, formatDate, formatDateRange, weekParts } from "@/lib/format";
+import { DueCountdown } from "@/components/due-countdown";
 import type { DeliverableStatus } from "@/lib/types";
 
 function formatAda(amount: number): string {
@@ -27,6 +29,7 @@ export default function Home() {
     const deliverables = getDeliverables();
     const asOf = getStatusAsOf();
     const latest = getLatestWeeklyUpdate();
+    const nextDue = getNextDueMilestone();
 
     const counts = deliverables.reduce<Record<DeliverableStatus, number>>(
         (acc, d) => {
@@ -93,6 +96,56 @@ export default function Home() {
                     <DeliverableTimeline deliverables={deliverables} />
                 </div>
             </section>
+
+            {/* What's next: the soonest committed deadline still outstanding. */}
+            {nextDue && (
+                <section className="border-t border-border py-8">
+                    <div className="flex items-end justify-between gap-4">
+                        <div>
+                            <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground">
+                                Next due deliverable
+                            </h2>
+                            <p className="mt-1 text-sm text-muted">
+                                <span className="font-mono text-xs tracking-wider text-primary">
+                                    {nextDue.milestone.id}
+                                </span>{" "}
+                                · {nextDue.milestone.title}
+                            </p>
+                        </div>
+                        <Link
+                            href={`/deliverables/${nextDue.deliverable.slug}/`}
+                            className="shrink-0 font-mono text-xs uppercase tracking-wider text-(--on-primary-link) hover:underline"
+                        >
+                            View deliverable ↗
+                        </Link>
+                    </div>
+
+                    <dl className="mt-6 grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-3">
+                        <div className="bg-surface px-4 py-4">
+                            <dt className="font-mono text-[0.65rem] uppercase tracking-wider text-muted">
+                                Workstream
+                            </dt>
+                            <dd className="mt-1 font-display text-2xl font-semibold text-foreground">
+                                {nextDue.deliverable.id}
+                            </dd>
+                            <dd className="text-sm text-muted">{nextDue.deliverable.title}</dd>
+                        </div>
+                        <div className="bg-surface px-4 py-4">
+                            <dt className="font-mono text-[0.65rem] uppercase tracking-wider text-muted">
+                                Committed deadline
+                            </dt>
+                            <dd className="mt-1 font-display text-2xl font-semibold text-foreground">
+                                {formatDate(nextDue.milestone.dueDate!)}
+                            </dd>
+                        </div>
+                        {/* Recomputed in the browser so it can't go stale between deploys. */}
+                        <DueCountdown
+                            dueDate={nextDue.milestone.dueDate!}
+                            builtDays={daysUntil(nextDue.milestone.dueDate!)}
+                        />
+                    </dl>
+                </section>
+            )}
 
             {/* Latest weekly update — the living proof-of-work (FR-1). */}
             {latest && (
