@@ -54,3 +54,8 @@ links:
     url: "https://hydra.family/head-protocol/"
   - label: Cardano Developer Portal
     url: "https://developers.cardano.org"
+
+
+otherTrackers:
+  - label: Cardano DevX Initiative
+    url: "https://input-output-hk.github.io/devx-updates/"

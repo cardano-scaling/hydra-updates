@@ -88,8 +88,16 @@ export default function LinksPage() {
         </Section>
       )}
 
+      {config.otherTrackers.length > 0 && (
+        <Section title="Other trackers (Webring)">
+          {config.otherTrackers.map((l) => (
+            <LinkCard key={l.url} label={l.label} url={l.url} />
+          ))}
+        </Section>
+      )}
+
       <Section title="This tracker">
-        <LinkCard label="Source & content" url={config.site.repoUrl} note="Everything is git-reviewable" />
+        <LinkCard label="Source & content" url={config.site.repoUrl} note="Sourcecode for this website" />
       </Section>
     </div>
   );
