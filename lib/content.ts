@@ -406,3 +406,20 @@ export function getLatestWeeklyUpdate(): WeeklyUpdate | undefined {
   return getWeeklyUpdates()[0];
 }
 
+/**
+ * The published weeks either side of `slug`, for prev/next navigation.
+ *
+ * "Previous" is the next-oldest *published* week rather than the preceding
+ * calendar week: the archive can have gaps (a quiet week is skipped by a
+ * backfill run), and stepping over them beats dead-ending on a 404.
+ */
+export function getAdjacentWeeklyUpdates(slug: string): {
+  previous: WeeklyUpdate | undefined;
+  next: WeeklyUpdate | undefined;
+} {
+  const updates = getWeeklyUpdates(); // newest first
+  const i = updates.findIndex((u) => u.slug === slug.toLowerCase());
+  if (i === -1) return { previous: undefined, next: undefined };
+  return { previous: updates[i + 1], next: updates[i - 1] };
+}
+

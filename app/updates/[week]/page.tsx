@@ -3,8 +3,18 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Markdown } from "@/components/markdown";
 import { ActivityGroups, CounterStrip } from "@/components/weekly-update";
-import { getDeliverables, getWeeklyUpdateBySlug, getWeeklyUpdates } from "@/lib/content";
+import {
+  getAdjacentWeeklyUpdates,
+  getDeliverables,
+  getWeeklyUpdateBySlug,
+  getWeeklyUpdates,
+} from "@/lib/content";
 import { formatDate, formatDateRange, weekParts } from "@/lib/format";
+
+// One class for both ends, so they can't drift apart again. Matches the link
+// idiom used for "All updates ↗" elsewhere on the site.
+const WEEK_NAV_LINK =
+  "font-mono text-xs uppercase tracking-wider text-[color:var(--on-primary-link)] hover:underline";
 
 // Static export: pre-render one page per gathered week and 404 anything else.
 export const dynamicParams = false;
@@ -38,6 +48,7 @@ export default async function WeeklyUpdatePage({
   if (!update) notFound();
 
   const { label, year } = weekParts(update.week);
+  const { previous, next } = getAdjacentWeeklyUpdates(update.slug);
 
   return (
     <div className="mx-auto w-full max-w-4xl px-6 py-14">
@@ -77,6 +88,30 @@ export default async function WeeklyUpdatePage({
           </p>
           <ActivityGroups groups={update.groups} deliverables={getDeliverables()} />
         </section>
+      )}
+
+      {/* Step through the archive. The empty span is a zero-width flex item that
+          keeps a lone neighbour on its own edge under justify-between. */}
+      {(previous || next) && (
+        <nav
+          aria-label="Weekly updates"
+          className="mt-12 flex items-center justify-between gap-4 border-t border-border pt-6"
+        >
+          {previous ? (
+            <Link href={`/updates/${previous.slug}/`} className={WEEK_NAV_LINK}>
+              ← {weekParts(previous.week).label}
+            </Link>
+          ) : (
+            <span />
+          )}
+          {next ? (
+            <Link href={`/updates/${next.slug}/`} className={WEEK_NAV_LINK}>
+              {weekParts(next.week).label} →
+            </Link>
+          ) : (
+            <span />
+          )}
+        </nav>
       )}
     </div>
   );
