@@ -31,6 +31,11 @@
     - date: "2026-07-23"
       description: Delivered a stacked PR increasing end-to-end TPS by 10x.
       week: "2026-W30"
+    - date: "2026-08-14"
+      description: >-
+        Blockfrost backend sped up dramatically: a full head lifecycle on
+        preview drops from over an hour to about 13.5 minutes.
+      week: "2026-W33"
   milestones:
     - id: M2.1
       title: Increased TPS by at least 2x
