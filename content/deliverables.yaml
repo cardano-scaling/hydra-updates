@@ -34,7 +34,9 @@
     - date: "2026-08-14"
       description: >-
         Blockfrost backend sped up dramatically: a full head lifecycle on
-        preview drops from over an hour to about 13.5 minutes.
+        preview drops from over an hour to about 13.5 minutes, publishing
+        from ~10 minutes to ~32 seconds, and first seeding from ~30 minutes
+        to ~40 seconds.
       week: "2026-W33"
   milestones:
     - id: M2.1
