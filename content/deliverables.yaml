@@ -38,6 +38,13 @@
         from ~10 minutes to ~32 seconds, and first seeding from ~30 minutes
         to ~40 seconds.
       week: "2026-W33"
+    - date: "2026-08-17"
+      description: >-
+        Binary protocol improvements landed: persisted events switch from
+        JSON to CBOR (database 2.6x smaller), and the client API gains
+        opt-in binary CBOR (wire messages 2-3x smaller, encode/decode
+        3-21x faster).
+      week: "2026-W34"
   milestones:
     - id: M2.1
       title: Increased TPS by at least 2x
