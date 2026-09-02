@@ -80,6 +80,12 @@
     - date: "2026-07-20"
       description: Selective partial fanout implemented.
       week: "2026-W30"
+    - date: "2026-08-27"
+      description: >-
+        linux/arm64 hydra-node docker images published alongside amd64, so
+        Apple Silicon and arm64 Linux hosts run natively instead of hanging
+        under emulation.
+      week: "2026-W35"
   summary: >-
     A more resilient, observable and operator-friendly Hydra node, reducing
     friction for SPOs and dApp teams running production infrastructure.
@@ -170,6 +176,12 @@
     - date: "2026-07-30"
       description: Improved documentation around benchmarks (only in unstable version at the moment).
       week: "2026-W31"
+    - date: "2026-08-26"
+      description: >-
+        Specification migrated from LaTeX to Typst and formalised in Agda,
+        machine-checked on every spec build; the node and validator are now
+        differentially tested against the extracted Agda reference.
+      week: "2026-W35"
   summary: >-
     Improved developer experience, reduced technical debt, and more stable CI
     and tooling - covering test infrastructure, documentation, logging,
