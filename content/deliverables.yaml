@@ -182,6 +182,13 @@
         machine-checked on every spec build; the node and validator are now
         differentially tested against the extracted Agda reference.
       week: "2026-W35"
+    - date: "2026-09-02"
+      description: >-
+        Hydra 2.4.0 released with security fixes to incremental commits,
+        followed a day later by 2.4.1, a security release fixing a snapshot
+        validation vulnerability; all operators on 2.3.0 or 2.4.0 should
+        upgrade immediately.
+      week: "2026-W36"
   summary: >-
     Improved developer experience, reduced technical debt, and more stable CI
     and tooling - covering test infrastructure, documentation, logging,
