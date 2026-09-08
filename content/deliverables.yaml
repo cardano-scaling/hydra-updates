@@ -95,7 +95,7 @@
   milestones:
     - id: M3.1
       title: Metrics exposed and queryable
-      dueDate: "2026-11-25"
+      dueDate: "2026-11-15"
       description: >-
         The community of builders largely agrees with our strategy and is
         willing to adjust their work to accommodate it when needed.
