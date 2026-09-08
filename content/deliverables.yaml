@@ -105,7 +105,7 @@
         N/A
     - id: M3.2
       title: "\"hydra-recipes\" repo published"
-      dueDate: "2026-12-15"
+      dueDate: "2026-11-30"
       description: >-
         The community of builders largely agrees with our strategy and is
         willing to adjust their work to accommodate it when needed.
@@ -220,7 +220,7 @@
         N/A
     - id: M5.3
       title: Continued compatibility with cardano-node releases
-      dueDate: "2026-12-15"
+      dueDate: "2026-11-30"
       status: in-progress
       description: >-
         N/A
