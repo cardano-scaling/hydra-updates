@@ -191,6 +191,14 @@
         validation vulnerability; all operators on 2.3.0 or 2.4.0 should
         upgrade immediately.
       week: "2026-W36"
+    - date: "2026-09-08"
+      description: >-
+        etcd network component upgraded: bundled etcd 3.5.25 to 3.6.6 and the
+        gRPC client stack refreshed, so the large-message broadcast stall now
+        surfaces as a reconnectable error instead of blocking silently;
+        installation and tutorial docs corrected to reflect that hydra-node
+        embeds etcd.
+      week: "2026-W37"
   summary: >-
     Improved developer experience, reduced technical debt, and more stable CI
     and tooling - covering test infrastructure, documentation, logging,
