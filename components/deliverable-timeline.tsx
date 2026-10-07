@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import Link from "next/link";
 import { isMilestoneComplete, type Deliverable, type DeliverableUpdate } from "@/lib/types";
 import { formatShort } from "@/lib/format";
@@ -17,6 +16,29 @@ const EDGE = 3;
 
 const DUE_COLOR = "var(--status-progress)"; // amber — deadline still outstanding
 const DONE_COLOR = "var(--status-done)"; // green — delivered, or a deadline already met
+
+// Marker labels sit in rows above the track; a label that would run into a
+// neighbour's is bumped up a row. Collisions depend on pixel widths, so rows
+// are resolved for the track width at the low end of each Tailwind breakpoint
+// that shows labels (page max-w-6xl px-6, card sm:p-8), and CSS picks the row
+// for the current breakpoint through the --slot custom property.
+const TRACK_PX = { sm: 511, md: 639, lg: 895, xl: 1038 } as const;
+type Bp = keyof typeof TRACK_PX;
+const BPS = Object.keys(TRACK_PX) as Bp[];
+type PerBp = Record<Bp, number>;
+// Geist Mono at text-[0.6rem] with tracking-wider advances 0.65em per character.
+const CHAR_PX = 0.65 * 0.6 * 16;
+const LABEL_PAD_PX = 4; // px-1 on each side of the label box
+const LABEL_GAP_PX = 8;
+// Label geometry in rem: where row 0 sits above the track, the pitch between
+// rows, and the track's top margin at row 0.
+const LABEL_TOP_REM = 1.5;
+const ROW_REM = 1.25;
+const TRACK_MT_REM = 2;
+const SLOT_CLASS =
+  "[--slot:0] sm:[--slot:var(--slot-sm)] md:[--slot:var(--slot-md)] lg:[--slot:var(--slot-lg)] xl:[--slot:var(--slot-xl)]";
+const ROWS_CLASS =
+  "[--rows:0] sm:[--rows:var(--rows-sm)] md:[--rows:var(--rows-md)] lg:[--rows:var(--rows-lg)] xl:[--rows:var(--rows-xl)]";
 
 const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
 /** Map a raw window fraction (0–1) to a percentage inside the gutters. */
@@ -50,11 +72,50 @@ function monthMarks() {
 // Date.UTC normalizes month overflow (e.g. month 12 → Jan of next year), so the
 // Jul→Jan window maps correctly without special-casing the year boundary.
 
+const byBp = <T,>(f: (bp: Bp) => T): Record<Bp, T> =>
+  Object.fromEntries(BPS.map((bp) => [bp, f(bp)])) as Record<Bp, T>;
+
+/** Inline `--<name>-<bp>` custom properties, read by SLOT_CLASS / ROWS_CLASS. */
+function bpVars(name: string, values: PerBp): React.CSSProperties {
+  return Object.fromEntries(BPS.map((bp) => [`--${name}-${bp}`, values[bp]])) as React.CSSProperties;
+}
+
+type Align = "left" | "center" | "right";
+
 /** Keep marker labels inside the track edges. */
-function labelStyle(p: number): React.CSSProperties {
-  if (p <= 14) return { left: `${p}%` };
-  if (p >= 86) return { right: `${100 - p}%` };
+function labelAlign(p: number): Align {
+  if (p <= 14) return "left";
+  if (p >= 86) return "right";
+  return "center";
+}
+
+function labelPos(align: Align, p: number): React.CSSProperties {
+  if (align === "left") return { left: `${p}%` };
+  if (align === "right") return { right: `${100 - p}%` };
   return { left: `${p}%`, transform: "translateX(-50%)" };
+}
+
+/** First-fit row for each label when laid out on a track `trackPx` wide. */
+function assignRows(
+  labels: { at: number; text: string; align: Align }[],
+  trackPx: number,
+): number[] {
+  const boxes = labels.map(({ at, text, align }, i) => {
+    const x = (at / 100) * trackPx;
+    const w = text.length * CHAR_PX + 2 * LABEL_PAD_PX;
+    const x0 = align === "left" ? x : align === "right" ? x - w : x - w / 2;
+    return { i, x0, x1: x0 + w };
+  });
+  boxes.sort((a, b) => a.x0 - b.x0);
+  const rows: number[] = [];
+  const rowEnd: number[] = [];
+  for (const b of boxes) {
+    let r = rowEnd.findIndex((end) => end + LABEL_GAP_PX <= b.x0);
+    if (r < 0) r = rowEnd.length;
+    rowEnd[r] = b.x1;
+    rows[b.i] = r;
+  }
+  return rows;
 }
 
 /** Keep a marker's tooltip inside the track edges. */
@@ -94,37 +155,46 @@ function UpdateMarker({ u }: { u: DeliverableUpdate }) {
   );
 }
 
+interface MarkerSpec {
+  key: string;
+  at: number;
+  color: string;
+  /** Label text, e.g. "Shipped Jun 30". */
+  text: string;
+  /** Milestone title, revealed from the dot on hover/focus. */
+  title: string;
+  align: Align;
+}
+
 function Marker({
   at,
   color,
-  label,
-  date,
+  text,
   title,
-  centerLabel = false,
-}: {
-  at: number;
-  color: string;
-  label: string;
-  date: string;
-  /** Milestone title, revealed from the dot on hover/focus. */
-  title: string;
-  /** Always center the label on the mark, ignoring edge clamping. */
-  centerLabel?: boolean;
+  align,
+  rows,
+}: Omit<MarkerSpec, "key"> & {
+  /** Label row per breakpoint; row 0 sits just above the track. */
+  rows: PerBp;
 }) {
-  const labelPos = centerLabel
-    ? { left: `${at}%`, transform: "translateX(-50%)" }
-    : labelStyle(at);
   const dotStyle = {
     left: `${at}%`,
     backgroundColor: color,
     transform: "translate(-50%,-50%)",
   };
   return (
-    <>
+    // display: contents so --slot reaches the line, dot and label without adding a box.
+    <span className={`contents ${SLOT_CLASS}`} style={bpVars("slot", rows)}>
+      {/* The line runs up behind the label box and shows from its underline down. */}
       <span
         aria-hidden
-        className="absolute inset-y-0 w-0.5"
-        style={{ left: `${at}%`, backgroundColor: color, transform: "translateX(-50%)" }}
+        className="absolute bottom-0 w-0.5"
+        style={{
+          left: `${at}%`,
+          top: `calc(-${LABEL_TOP_REM}rem - var(--slot) * ${ROW_REM}rem)`,
+          backgroundColor: color,
+          transform: "translateX(-50%)",
+        }}
       />
       {/* The dot is the hover target (the line is not), matching the update markers. */}
       <span
@@ -135,22 +205,31 @@ function Marker({
       >
         {/* Widens the hover/focus target without changing how the dot looks. */}
         <span aria-hidden className="absolute -inset-1.5 rounded-full" />
-        {/* mb-6 clears the date label sitting just above the track. */}
+        {/* The bottom margin clears the date label in its row. */}
         <span
           role="tooltip"
-          className="pointer-events-none absolute bottom-full z-30 mb-6 hidden w-52 rounded-md border border-border bg-surface p-3 text-left shadow-lg group-hover:block group-focus-visible:block"
-          style={tipStyle(at)}
+          className="pointer-events-none absolute bottom-full z-30 hidden w-52 rounded-md border border-border bg-surface p-3 text-left shadow-lg group-hover:block group-focus-visible:block"
+          style={{
+            ...tipStyle(at),
+            marginBottom: `calc(${LABEL_TOP_REM}rem + var(--slot) * ${ROW_REM}rem)`,
+          }}
         >
           <span className="block text-xs leading-snug text-foreground">{title}</span>
         </span>
       </span>
+      {/* Underlined, and opaque so leaders from other markers pass behind it. */}
       <span
-        className="absolute -top-5 hidden whitespace-nowrap font-mono text-[0.6rem] uppercase tracking-wider sm:block"
-        style={{ ...labelPos, color }}
+        className="absolute z-10 hidden whitespace-nowrap border-b bg-surface px-1 pb-0.5 font-mono text-[0.6rem] uppercase leading-none tracking-wider sm:block"
+        style={{
+          ...labelPos(align, at),
+          color,
+          borderBottomColor: `color-mix(in oklab, ${color} 60%, transparent)`,
+          top: `calc(-${LABEL_TOP_REM}rem - var(--slot) * ${ROW_REM}rem)`,
+        }}
       >
-        {label} {formatShort(date)}
+        {text}
       </span>
-    </>
+    </span>
   );
 }
 
@@ -161,8 +240,45 @@ function Track({ d, ticks, today }: { d: Deliverable; ticks: number[]; today: nu
   const dated = d.milestones.filter((m) => m.dueDate || m.deliveredDate);
   const hasDeadline = dated.length > 0;
 
+  // The milestone id labels the deadline so multiple markers stay distinct; a
+  // completed milestone's deadline goes green rather than staying amber.
+  const markers = dated.flatMap((m) => {
+    const out: MarkerSpec[] = [];
+    if (m.dueDate) {
+      const at = pct(m.dueDate);
+      out.push({
+        key: `${m.id}-due`,
+        at,
+        color: isMilestoneComplete(m) ? DONE_COLOR : DUE_COLOR,
+        text: `${m.id} ${formatShort(m.dueDate)}`,
+        title: m.title,
+        align: labelAlign(at),
+      });
+    }
+    if (m.deliveredDate) {
+      out.push({
+        key: `${m.id}-shipped`,
+        at: pct(m.deliveredDate),
+        color: DONE_COLOR,
+        text: `Shipped ${formatShort(m.deliveredDate)}`,
+        title: m.title,
+        align: "center",
+      });
+    }
+    return out;
+  });
+  const rowsByBp = byBp((bp) => assignRows(markers, TRACK_PX[bp]));
+  const extraRows = byBp((bp) => Math.max(0, ...rowsByBp[bp]));
+
   return (
-    <div className="relative mt-7 h-14 rounded-lg border border-border bg-surface-2 shadow-inner">
+    // Extra label rows push the track down so they stay inside the row's padding.
+    <div
+      className={`relative h-14 rounded-lg border border-border bg-surface-2 shadow-inner ${ROWS_CLASS}`}
+      style={{
+        marginTop: `calc(${TRACK_MT_REM}rem + var(--rows) * ${ROW_REM}rem)`,
+        ...bpVars("rows", extraRows),
+      }}
+    >
       {/* thin week ticks */}
       {ticks.map((left, i) => (
         <span
@@ -199,48 +315,29 @@ function Track({ d, ticks, today }: { d: Deliverable; ticks: number[]; today: nu
         />
       )}
 
+      {/* progress connector from delivery to deadline, when delivered early */}
       {dated.map((m) => {
         const due = m.dueDate ? pct(m.dueDate) : null;
         const delivered = m.deliveredDate ? pct(m.deliveredDate) : null;
+        if (delivered === null || due === null || delivered >= due) return null;
         return (
-          <Fragment key={m.id}>
-            {/* progress connector from delivery to deadline, when delivered early */}
-            {delivered !== null && due !== null && delivered < due && (
-              <span
-                aria-hidden
-                className="absolute inset-y-6 rounded-full"
-                style={{
-                  left: `${delivered}%`,
-                  width: `${due - delivered}%`,
-                  backgroundColor: DONE_COLOR,
-                  opacity: 0.25,
-                }}
-              />
-            )}
-            {/* the milestone id labels the deadline so multiple markers stay distinct;
-                a completed milestone's deadline goes green rather than staying amber */}
-            {due !== null && (
-              <Marker
-                at={due}
-                color={isMilestoneComplete(m) ? DONE_COLOR : DUE_COLOR}
-                label={m.id}
-                date={m.dueDate!}
-                title={m.title}
-              />
-            )}
-            {delivered !== null && (
-              <Marker
-                at={delivered}
-                color={DONE_COLOR}
-                label="Shipped"
-                date={m.deliveredDate!}
-                title={m.title}
-                centerLabel
-              />
-            )}
-          </Fragment>
+          <span
+            key={m.id}
+            aria-hidden
+            className="absolute inset-y-6 rounded-full"
+            style={{
+              left: `${delivered}%`,
+              width: `${due - delivered}%`,
+              backgroundColor: DONE_COLOR,
+              opacity: 0.25,
+            }}
+          />
         );
       })}
+
+      {markers.map(({ key, ...k }, i) => (
+        <Marker key={key} {...k} rows={byBp((bp) => rowsByBp[bp][i])} />
+      ))}
 
       {/* intermediate improvements along the way */}
       {d.updates.map((u) => (
