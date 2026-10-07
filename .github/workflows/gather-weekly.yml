@@ -16,6 +16,9 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  # Search results are filtered to what the token may read; without this,
+  # `is:issue` searches come back empty while `is:pr` ones work.
+  issues: read
 
 jobs:
   gather:
