@@ -161,17 +161,22 @@ interface MarkerSpec {
   color: string;
   /** Label text, e.g. "Shipped Jun 30". */
   text: string;
-  /** Milestone title, revealed from the dot on hover/focus. */
-  title: string;
   align: Align;
+  /** A hollow ring marks a ship date; a filled dot marks a deadline. */
+  hollow: boolean;
+  /** Tooltip from the dot on hover/focus: a mono heading and an optional line of detail. */
+  tipHead: string;
+  tipBody?: string;
 }
 
 function Marker({
   at,
   color,
   text,
-  title,
   align,
+  hollow,
+  tipHead,
+  tipBody,
   rows,
 }: Omit<MarkerSpec, "key"> & {
   /** Label row per breakpoint; row 0 sits just above the track. */
@@ -179,8 +184,8 @@ function Marker({
 }) {
   const dotStyle = {
     left: `${at}%`,
-    backgroundColor: color,
     transform: "translate(-50%,-50%)",
+    ...(hollow ? { borderColor: color } : { backgroundColor: color }),
   };
   return (
     // display: contents so --slot reaches the line, dot and label without adding a box.
@@ -199,8 +204,10 @@ function Marker({
       {/* The dot is the hover target (the line is not), matching the update markers. */}
       <span
         tabIndex={0}
-        aria-label={title}
-        className="group absolute top-0 z-20 h-2 w-2 cursor-help rounded-full focus-visible:outline-none"
+        aria-label={tipBody ? `${tipHead}: ${tipBody}` : tipHead}
+        className={`group absolute top-0 z-20 cursor-help rounded-full focus-visible:outline-none ${
+          hollow ? "h-2.5 w-2.5 border-2 bg-surface" : "h-2 w-2"
+        }`}
         style={dotStyle}
       >
         {/* Widens the hover/focus target without changing how the dot looks. */}
@@ -214,7 +221,12 @@ function Marker({
             marginBottom: `calc(${LABEL_TOP_REM}rem + var(--slot) * ${ROW_REM}rem)`,
           }}
         >
-          <span className="block text-xs leading-snug text-foreground">{title}</span>
+          <span className="block font-mono text-[0.6rem] uppercase tracking-wider" style={{ color }}>
+            {tipHead}
+          </span>
+          {tipBody && (
+            <span className="mt-1 block text-xs leading-snug text-foreground">{tipBody}</span>
+          )}
         </span>
       </span>
       {/* Underlined, and opaque so leaders from other markers pass behind it. */}
@@ -251,8 +263,10 @@ function Track({ d, ticks, today }: { d: Deliverable; ticks: number[]; today: nu
         at,
         color: isMilestoneComplete(m) ? DONE_COLOR : DUE_COLOR,
         text: `${m.id} ${formatShort(m.dueDate)}`,
-        title: m.title,
         align: labelAlign(at),
+        hollow: false,
+        tipHead: `${m.id} · Due ${formatShort(m.dueDate)}`,
+        tipBody: m.title,
       });
     }
     if (m.deliveredDate) {
@@ -261,8 +275,11 @@ function Track({ d, ticks, today }: { d: Deliverable; ticks: number[]; today: nu
         at: pct(m.deliveredDate),
         color: DONE_COLOR,
         text: `Shipped ${formatShort(m.deliveredDate)}`,
-        title: m.title,
         align: "center",
+        hollow: true,
+        tipHead: `${m.id} · Shipped ${formatShort(m.deliveredDate)}`,
+        // The deadline marker carries the title; repeat it only when there is none.
+        tipBody: m.dueDate ? undefined : m.title,
       });
     }
     return out;
@@ -350,9 +367,9 @@ function Track({ d, ticks, today }: { d: Deliverable; ticks: number[]; today: nu
 /**
  * Each deliverable rendered as a track on a shared Jun 2026→Jan 2027 timeline: thin
  * ticks mark weeks; amber is a deadline still outstanding; green is either the
- * date something shipped or a deadline already met (we aim to ship before the
- * deadline); blue dots are intermediate improvements linking to their weekly
- * update.
+ * date something shipped (a hollow ring) or a deadline already met (we aim to
+ * ship before the deadline); blue dots are intermediate improvements linking to
+ * their weekly update.
  */
 export function DeliverableTimeline({ deliverables }: { deliverables: Deliverable[] }) {
   const ticks = weekTicks();
@@ -367,7 +384,14 @@ export function DeliverableTimeline({ deliverables }: { deliverables: Deliverabl
           <span className="h-2.5 w-0.5" style={{ backgroundColor: DUE_COLOR }} /> Deadline (open)
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="h-2.5 w-0.5" style={{ backgroundColor: DONE_COLOR }} /> Shipped / met
+          <span className="h-2.5 w-0.5" style={{ backgroundColor: DONE_COLOR }} /> Deadline (met)
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span
+            className="h-2.5 w-2.5 rounded-full border-2 bg-surface"
+            style={{ borderColor: DONE_COLOR }}
+          />{" "}
+          Shipped
         </span>
         <span className="inline-flex items-center gap-1.5">
           <span className="h-2 w-2 rounded-full bg-primary" /> Update
