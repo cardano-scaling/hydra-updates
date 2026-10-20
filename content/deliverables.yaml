@@ -216,7 +216,7 @@
   milestones:
     - id: M5.1
       title: Documentation revised to version 2.2.0+ of Hydra
-      dueDate: "2026-10-20"
+      dueDate: "2026-10-25"
       status: in-progress
       description: >-
         N/A
