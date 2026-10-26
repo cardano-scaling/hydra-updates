@@ -171,7 +171,7 @@
   title: Maintenance and DevX
   quarter: Q3-2026
   status: in-progress
-  statusUpdatedAt: 2026-07-16
+  statusUpdatedAt: 2026-10-26
   updates:
     - date: "2026-07-10"
       description: >-
@@ -217,11 +217,11 @@
     - id: M5.1
       title: Documentation revised to version 2.2.0+ of Hydra
       dueDate: "2026-10-28"
-      status: in-progress
+      deliveredDate: "2026-10-22"
+      status: done
       description: >-
-        N/A
-      evidence: |-
-        N/A
+        Documentation revised for Hydra 2.4.2.
+      evidence: "https://github.com/cardano-scaling/hydra/releases/tag/2.4.2"
       acceptanceCriteria: |-
         N/A
     - id: M5.2
