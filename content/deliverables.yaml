@@ -170,8 +170,8 @@
   slug: maintenance
   title: Maintenance and DevX
   quarter: Q3-2026
-  status: in-progress
-  statusUpdatedAt: 2026-10-26
+  status: done
+  statusUpdatedAt: 2026-10-29
   updates:
     - date: "2026-07-10"
       description: >-
@@ -197,6 +197,11 @@
         validation vulnerability; all operators on 2.3.0 or 2.4.0 should
         upgrade immediately.
       week: "2026-W36"
+    - date: "2026-10-22"
+      description: >-
+        Hydra 2.4.2 released with benchmark documentation and compatibility
+        with cardano-node 11.1.3.
+      week: "2026-W43"
     - date: "2026-09-08"
       description: >-
         etcd network component upgraded: bundled etcd 3.5.25 to 3.6.6 and the
@@ -227,21 +232,21 @@
     - id: M5.2
       title: Improved documentation around benchmarks
       dueDate: "2026-11-15"
-      status: in-progress
+      deliveredDate: "2026-10-22"
+      status: done
       description: >-
-        N/A
-      evidence: |-
-        N/A
+        Benchmark documentation, including a metrics reference, included in Hydra 2.4.2.
+      evidence: "https://github.com/cardano-scaling/hydra/blob/2.4.2/docs/benchmarks/metrics.md"
       acceptanceCriteria: |-
         N/A
     - id: M5.3
       title: Continued compatibility with cardano-node releases
       dueDate: "2026-11-30"
-      status: in-progress
+      deliveredDate: "2026-10-22"
+      status: done
       description: >-
-        N/A
-      evidence: |-
-        N/A
+        Hydra 2.4.2 is tested with cardano-node 11.1.3; compatibility remains ongoing maintenance.
+      evidence: "https://github.com/cardano-scaling/hydra/releases/tag/2.4.2"
       acceptanceCriteria: |-
         N/A
   links: []
