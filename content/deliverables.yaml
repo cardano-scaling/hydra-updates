@@ -72,7 +72,7 @@
   title: Operational Excellence
   quarter: Q3-2026
   status: in-progress
-  statusUpdatedAt: 2026-08-12
+  statusUpdatedAt: 2026-11-04
   updates:
     - date: "2026-07-09"
       description: >-
@@ -88,6 +88,11 @@
         Apple Silicon and arm64 Linux hosts run natively instead of hanging
         under emulation.
       week: "2026-W35"
+    - date: "2026-10-29"
+      description: >-
+        Expanded Prometheus metrics, Grafana dashboards and example alerts
+        merged, completing M3.1: metrics exposed and queryable.
+      week: "2026-W44"
   summary: >-
     A more resilient, observable and operator-friendly Hydra node, reducing
     friction for SPOs and dApp teams running production infrastructure.
@@ -98,11 +103,13 @@
     - id: M3.1
       title: Metrics exposed and queryable
       dueDate: "2026-11-10"
+      deliveredDate: "2026-10-29"
+      status: done
       description: >-
-        The community of builders largely agrees with our strategy and is
-        willing to adjust their work to accommodate it when needed.
-      evidence: |-
-        N/A
+        Prometheus metrics expose snapshot progress, queues, network delivery,
+        L1 operations and persistence, with Grafana dashboards, example alerts
+        and a documented metrics reference.
+      evidence: "https://github.com/cardano-scaling/hydra/pull/2925"
       acceptanceCriteria: |-
         N/A
     - id: M3.2
