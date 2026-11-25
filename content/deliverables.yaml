@@ -118,8 +118,7 @@
       description: >-
         The community of builders largely agrees with our strategy and is
         willing to adjust their work to accommodate it when needed.
-      evidence: |-
-        N/A
+      evidence: "https://github.com/cardano-scaling/hydra-recipes"
       acceptanceCriteria: |-
         N/A
 
