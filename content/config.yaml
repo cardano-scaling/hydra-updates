@@ -41,6 +41,9 @@ repos:
       "Operational Excellence": M3
       "Ecosystem Support": M4
       "Maintenance and DevX": M5
+  - url: "https://github.com/cardano-scaling/hydra-recipes"
+    deliverable: M3
+    teamOnly: false
   - url: "https://github.com/cardano-scaling/hydra-explorer"
     deliverable: M5
     teamOnly: false
